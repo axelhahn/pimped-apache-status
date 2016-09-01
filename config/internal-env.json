@@ -1,0 +1,40 @@
+{
+    "project": {
+        "title": "Pimped Apache Status",
+        "version": "2.00.02 BETA",
+        "releasedate": "2016-01-26",
+        "license": "GPL 3.0"
+    },
+    "active": [],
+    "links": {
+        "project": {
+            "projecthome": {
+                "url": "http:\/\/sourceforge.net\/projects\/pimpapachestat\/",
+                "label": "Sourceforge (en)",
+                "target": "_blank"
+            },
+            "projecthome2": {
+                "url": "http:\/\/www.axel-hahn.de\/apachestatus.php",
+                "label": "axel-hahn.de (de)",
+                "target": "_blank"
+            },
+            "doc": {
+                "url": "http:\/\/www.axel-hahn.de\/docs\/apachestatus\/usage.htm",
+                "label": "Documentation :: usage (en)",
+                "target": "_blank"
+            }
+        },
+        "update": {
+            "check": {
+                "url": "http:\/\/www.axel-hahn.de\/versions\/pimpedapachestatus_[VERSION].txt",
+                "label": "",
+                "target": ""
+            },
+            "download": {
+                "url": "http:\/\/sourceforge.net\/projects\/pimpapachestat\/files\/latest\/download",
+                "label": "",
+                "target": ""
+            }
+        }
+    }
+}

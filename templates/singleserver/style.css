@@ -1,0 +1,423 @@
+body{background:#ccc; color: #444; font-family: arial; margin: 0;}
+*{font-size: 12px;}
+
+/* ---------------------------------------------------------------------- 
+   menu bar
+   ---------------------------------------------------------------------- */
+#divmenu{padding: 10px 2% 10px 1%;
+    background:#f8f8f8; 
+    width: 97%;
+    z-index: 10000;
+    background-image: linear-gradient(to bottom, #fcfcfc, #e8e8e8, #e8e8e8, #e0e0e0);
+    box-shadow: 0 7px 8px rgba(0, 0, 0, 0.3);
+    background:#222; 
+    background-image: linear-gradient(to bottom, #444, #222, #333, #000);
+    border-bottom: 3px solid #555;
+    
+    margin: 0; text-align: left; color: #888;
+    
+    border-radius: 0px; 
+    position: fixed;
+    
+    }
+    
+    #divmenu select{background:#666; border: 0px;}
+    #divmenu option{background:#888; padding-left: 15px;}
+
+    #divmenu option.group{font-weight: bold; background:#779; color:#ccc; 
+          padding-left: 5px;
+          border: 1px solid #ccc;
+          border-bottom: 0px;
+    }
+    #divmenu option.active{font-style: italic;}
+    input.button{border-radius: 5px; border: 1px solid #aaa;}
+    
+    
+    h1.title{font-size:150%; color:#77c; margin: 0; padding: 0px; }     
+    h1.title span{color:#c55;}
+ 
+/* ---------------------------------------------------------------------- 
+   tiles bar
+   ---------------------------------------------------------------------- */
+#divtiles{
+    padding-left: 1%; height: 75px; background: #aaa;
+    border-bottom: 3px solid #999;
+    padding-top: 75px;
+    position: relative;
+    }
+    
+
+    .tile{float: left; height: 50px; padding: 5px; 
+        background:#88b; 
+        background-image: linear-gradient(to bottom, #88b, #99c, #aad, #88b);
+        margin: 5px 10px 0 0; 
+        text-align: center;
+        color:#337;
+        border: 1px solid #668;
+        border-radius: 5px; 
+    }
+    .tile .counter{font-weiht: bold; font-size: 160%; color:#eee;}
+
+/* ---------------------------------------------------------------------- 
+   logs
+   ---------------------------------------------------------------------- */
+
+    .logs{background:#fec; padding: 3px 3px 1px; margin: 10px 3%; border-radius: 10px;}
+    .logs *{margin-bottom: 3px; border-left: 13px solid #ccc; padding-left: 5px; border-radius: 10px;}
+    .logs .type{display: none;}
+    .logs .warning{color:#a86; background:#fe9; border-color: #cb0;}
+    .logs .error{color:#c00; background:#ecc; border-color: #c00;}
+    .logs .info{color:#888; background:#eee; border-color: #999;}
+
+        
+        
+/* ---------------------------------------------------------------------- 
+   content
+   ---------------------------------------------------------------------- */
+
+    #divmainbody{width: 97%; margin-left: 1%; margin-top: 10px; clear: both;
+        border-top: 0px;
+        }
+    #divmaincontent{background: #fff; padding: 10px; clear: both;
+        border-radius: 0 0 10px 10px;
+        box-shadow: 0 5px 10px #aaa;
+        min-height: 400px;
+    }
+
+    /* tabbed menu */
+    ul.tabs {
+            margin: 0 ;
+            padding: 0;
+            float: left;
+            list-style: none;
+            height: 27px; /*--Set height of tabs--*/
+            border-bottom: 1px solid #ccc;
+            width: 100%;
+    }
+    ul.tabs li {
+            float: left;
+            margin: 0 3px 0 0;
+            padding: 0;
+            height: 26px; /*--Subtract 1px from the height of the unordered list--*/
+            line-height: 26px; /*--Vertically aligns the text within the tab--*/
+            border: 1px solid #ddd;
+            border-bottom: 0px;
+            border-top-left-radius: 7px;
+            border-top-right-radius: 7px;
+            margin-bottom: -1px; /*--Pull the list item down 1px--*/
+            overflow: hidden;
+            position: relative;
+            background: #e8e8e8;
+            background-image: linear-gradient(to bottom, #e0e0e0, #f0f0f0);
+            /* background-image: linear-gradient(to bottom, #f8f8f8, #e4e4e4, #f8f8f8);*/
+    }
+    ul.tabs li a {
+            text-decoration: none;
+            color: #aaa;
+            display: block;
+            font-size: 1.2em;
+            padding: 0 20px;
+            border-top-left-radius: 7px;
+            border-top-right-radius: 7px;
+            border: 1px solid #fff; /*--Gives the bevel look with a 1px white border inside the list item--*/
+            outline: none;
+        -webkit-transition: all 0.4s ease-out;
+        -moz-transition: all 0.4s ease-out;
+        -o-transition: all 0.4s ease-out;
+        -ms-transition: all 0.4s ease-out;
+        transition: all 0.4s ease-out;
+
+    }
+    ul.tabs li a:hover {
+            color: #888;
+            background: #fff;
+    }
+    html ul.tabs li.active{
+            background: #fff;
+            border-bottom: 1px solid #fff; /*--Makes the active tab look like it's connected with its content--*/
+            border-top: 2px solid #fd8; /*--Makes the active tab look like it's connected with its content--*/
+    }
+    html ul.tabs li.active, html ul.tabs li.active a{ /*--Makes sure that the active tab does not listen to the hover properties--*/
+            color: #66c;
+            font-weight: bold;
+    }
+    .export ul{float: left; list-style: none; margin: 0; padding: 0;}
+    .export ul li {float: left; margin: 0; border-right: 1px dotted #ccc; padding: 0 ;}
+    .export ul li a{padding: 0 10px;}
+    .export ul li a:hover{background: #eef;}
+    
+    /* headlines */   
+    h2{font-size:200%; color:#88e; margin: 0px 0 10px; padding: 5px; 
+                       text-shadow: 1px 1px 0px #fff, 2px 2px 3px #ccc;
+                       }
+    h3{font-size:120%; color:#55a;margin: 5px 0 0; padding: 5px; 
+        border-bottom: 1px solid #aad; 
+        background:#cce; 
+        background-image: linear-gradient(to bottom, #cce, #ddf,#cce);
+        text-shadow: 1px 1px 0 #fff;
+        /*background-image: linear-gradient(to bottom, #eef, #ddf, #eef);
+
+        box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
+        */
+        border-radius: 5px;
+    }
+    h4{background: #fff8d0; padding: 5px; color:#88a; border-radius: 5px;}
+
+
+    /* boxes below headlines */
+
+    div.h2 {margin-left: 0px; margin-bottom: 30px; }
+    div.h3 {margin-left: 10px; margin-bottom: 30px; padding-left: 10px; padding: 5px 5px 15px; border-left: 0px dotted #aaa; border-bottom: 0px dotted #aaa; border-bottom-left-radius: 10px;
+        box-shadow: -1px 1px 3px rgba(0,0,0,0.1);
+    }
+    div.h4 {margin-left: 10px; margin-bottom: 10px; padding-left: 10px; border-left: 1px dotted #ccc; border-bottom: 1px dotted #ccc; border-bottom-left-radius: 10px;}
+
+
+    .hintbox{background: #fcfcd8; 
+            background-image: linear-gradient(to bottom, #fcfcd0, #ffe, #fcfcd0);
+            border: 0px solid #fff;
+            border-radius: 5px; 
+            padding: 10px; margin: 10px 20px 10px 0 ;
+            color:#a96;
+    }
+
+
+    /* Links */   
+
+    a{text-decoration: none; color:#22f;}
+
+
+    /* pre */   
+    pre{background: #f8f8f8; color: #888; padding: 5px; font-size: 90%; display: inline-block;}
+
+    /* tables */   
+
+    table{border-spacing: 1px;}
+    table *{font-size: 11px;}
+    table a{color: #000; background: none !important;}
+    table a:hover{text-decoration: underline;}
+    tr{
+        border-bottom: 1px solid #888;
+    }
+
+    .dataTables_wrapper {
+        min-height: 0;
+    }
+    .dataTables_wrapper table{border: 2px solid #fff; border-radius: 6px;
+        box-shadow: 0 0 3px #ccc;
+        margin: 10px 0;
+    }
+    .dataTables_wrapper th{padding: 5px 20px 5px 5px; border-bottom: 2px solid #aaa; 
+        border-radius: 5px 5px 0 0;
+    }
+
+    .dataTables_filter {
+        width: auto;
+        float: none;
+        text-align: left;
+    }
+    .dataTables_filter input{width: 200px; border: 1px solid #eee; border-radius:5px; padding: 2px;}
+    .dataTables_filter a{
+        border: 1px solid #fdd;
+        border-radius: 4px;
+        background: #fff8f8;
+        color: #cbb;
+        padding: 0px 4px;
+        margin-left: 3px;
+        font-weight: bold;
+    }
+    .dataTables_filter a:hover{
+        border: 1px solid #caa;
+        color: #c88;
+        background: #fee;
+    }
+    .dataTables_length {
+        float: left;
+        width: 15%;
+    }    
+.sorting_asc {
+	background: #cce url('../../javascript/datatables/media/images/sort_asc.png') no-repeat center right;
+	background-image: url('../../javascript/datatables/media/images/sort_asc.png'), linear-gradient(to bottom, #ddf, #bbd);
+        border-left: 1px solid #fff;
+        border-right: 1px solid #aaa;
+}
+
+.sorting_desc {
+	background: #cce url('../../javascript/datatables/media/images/sort_desc.png') no-repeat center right;
+	background-image: url('../../javascript/datatables/media/images/sort_desc.png'), linear-gradient(to bottom, #bbd, #f0f0f8);
+        border-left: 1px solid #fff;
+        border-right: 1px solid #aaa;
+}
+
+.sorting {
+	background: #e8e8e8 url('../../javascript/datatables/media/images/sort_both.png') no-repeat center right;
+        border-left: 1px solid #fff;
+        border-right: 1px solid #ddd;
+}
+
+.sorting_asc_disabled {
+	background: url('../../javascript/datatables/media/images/sort_asc_disabled.png') no-repeat center right;
+}
+
+.sorting_desc_disabled {
+	background: url('../../javascript/datatables/media/images/sort_desc_disabled.png') no-repeat center right;
+}
+
+/*
+ * Sorting classes for columns
+ */
+/* For the standard odd/even */
+tr.odd td.sorting_1 {
+	/* background-color: #D3D6FF; */
+	background-color: #f0f0f8;
+}
+
+tr.odd td.sorting_2 {
+	background-color: #DADCFF;
+}
+
+tr.odd td.sorting_3 {
+	background-color: #E0E2FF;
+}
+
+tr.even td.sorting_1 {
+	/* background-color: #EAEBFF;*/
+	background-color: #e8e8f8;
+}
+
+tr.even td.sorting_2 {
+	background-color: #F2F3FF;
+}
+
+tr.even td.sorting_3 {
+	background-color: #F9F9FF;
+}
+
+.paging_full_numbers {
+	width: 400px;
+	height: 22px;
+	line-height: 22px;
+}
+
+.paging_full_numbers span.paginate_button,
+ 	.paging_full_numbers span.paginate_active {
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	padding: 2px 5px;
+	margin: 0 3px;
+	cursor: pointer;
+	*cursor: hand;
+}
+
+.paging_full_numbers span.paginate_button {
+	background-color: #ddd;
+        background-image: linear-gradient(to bottom, #f8f8f8, #ddd, #f8f8f8);
+}
+
+.paging_full_numbers span.paginate_button:hover {
+	background-color: #ccc;
+}
+
+.paging_full_numbers span.paginate_active {
+	background-color: #99B3FF;
+        background-image: linear-gradient(to bottom, #f8f8f8, #bbe, #f8f8f8);
+}
+
+table.display tr.even.row_selected td {
+	background-color: #B0BED9;
+}
+
+table.display tr.odd.row_selected td {
+	background-color: #9FAFD1;
+}
+
+
+.dataTables_info {
+	width: 17%;
+	float: none;
+}
+
+.dataTables_paginate {
+	width: 50px;
+	text-align: left;
+        float: left;
+}
+
+    /* bars in the worker table */
+    .barTotal{background:#ccc; border: 1px solid #aaa; height: 7px;}
+    .barBusyWorker{background:#9f9; height: 7px; float: left;}
+    .barIdleWorker{background:#999; height: 7px;float: left;}
+
+    /* colors for http action */
+    .methodoptions{background:#f0f0f0; color: #888;}
+    .methodhead{background:#ddf;}
+    .methodpost{background:#bfb; color: #333;}
+    .methodpropfind{background:#ddf;}
+    .methodget, .methodget *{background:#dfd; color: #333;}
+
+
+    /* colors for request method
+    "_" Waiting for Connection, "S" Starting up, "R" Reading Request,
+    "W" Sending Reply, "K" Keepalive (read), "D" DNS Lookup,
+    "C" Closing connection, "L" Logging, "G" Gracefully finishing,
+    "I" Idle cleanup of worker, "." Open slot with no current process
+    */
+    .actdot,         .actdot * {background:#ddd; color: #aaa;}
+    .actunderscore,  .actunderscore *{background:#eee; color: #666;}
+    .actS,           .actS * {background:#f8fff8;}
+    .actR,           .actR * {background:#cfc;}
+    .actW,           .actW * {font-weight: bold; }
+    .actK, .actK * {}
+    .actD, .actD * {}
+    .actC, .actC * {background:#fdd;}
+    .actL, .actL * {}
+    .actG, .actG * {background:#fdd;}
+    .actI, .actI * {background:#fcc;}
+
+    /* colors for long running requests */
+    .exectimewarn,     .exectimewarn * {color:#f55;}
+    .exectimecritical, .exectimecritical * {color:#f00; font-weight: bold;}
+
+
+/* go top div */
+
+#divgotop{
+    background: #333;
+    background: rgba(0,0,0,0.6);
+    color:#eee;
+    position: fixed;
+    bottom: 10px; left: 0px;
+    padding: 10px 20px 10px 10px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+    #divgotop a {color:#eee; padding: 15px 5px 15px 5px;
+        -webkit-transition: all 0.4s ease-out;
+        -moz-transition: all 0.4s ease-out;
+        -o-transition: all 0.4s ease-out;
+        -ms-transition: all 0.4s ease-out;
+        transition: all 0.4s ease-out;
+    }
+    #divgotop a span { display: none; }
+    #divgotop a:hover span { display: inline;}
+
+
+/* footer */
+
+#divfooter{text-align: center; 
+        margin-top: 70px;
+        background: #ddd;
+        border-top: 2px solid #eee; 
+        padding: 20px 0;
+        box-shadow: 0 -5px 10px #aaa;
+}
+
+    #divfooter ul {margin: 0;}
+    #divfooter ul li{ list-style: none; }
+    #divfooter ul li a{ color:#888;}
+    #divfooter ul li a:hover{ text-decoration: underline;}
+
+    
+/* dump */
+.ok{}
+.miss{background: #fcc;}
