@@ -1,0 +1,64 @@
+{
+    "auth": {
+            "user": "admin",
+            "password": false
+    },
+    "autoreload": [
+        false,
+        10,
+        30,
+        60,
+        300
+    ],
+    "checkupdate": 86400,
+    "datatableOptions": "{ \n        \"bPaginate\": false, \n        \"bLengthChange\": false, \n        \"bFilter\": true, \n        \"bSort\": true, \n        \"bAutoWidth\": false, \n        \"bStateSave\": true,\n        \"sPaginationType\": \"full_numbers\",\n        \"dom\": 'C<\"clear\">lfrtip',\n        \"oLanguage\": __LANG__ \n        }",
+    "defaultTemplate": "out_html.php",
+    "defaultView": false,
+    "debug": false,
+    "execTimeRequest": {
+        "warning": "1000",
+        "critical": "5000"
+    },
+    "hideRows": [],
+    "icons": {
+        "admin": "<i class=\"fa fa-cog\"><\/i> ",
+        "leaveadmin": "<i class=\"fa fa-tachometer\"><\/i> ",
+        "adminServers": "<i class=\"fa fa-cubes\"><\/i> ",
+        "adminSettings": "<i class=\"fa fa-bars\"><\/i> ",
+        "adminUpdate": "<i class=\"fa fa-flash\"><\/i> ",
+        
+        "title": "<i class=\"fa fa-square\"><\/i> ",
+        "group": "<i class=\"fa fa-folder-o\"><\/i> ",
+        "time": "<i class=\"fa fa-clock-o\"><\/i> ",
+        "refresh": "<i class=\"fa fa-refresh\"><\/i> ",
+        "skin": "<i class=\"fa fa-tint\"><\/i> ",
+        "lang": "<i class=\"fa fa-comment\"><\/i> ",
+        "export": "<i class=\"fa fa-download\"><\/i> ",
+        "serverinfos.php": "<i class=\"fa fa-tasks\"><\/i>",
+        "performance-check.php": "<i class=\"fa fa-line-chart\"><\/i>",
+        "allrequests.php": "<i class=\"fa fa-navicon\"><\/i>",
+        "original.php": "<i class=\"fa fa-file-text-o\"><\/i>",
+        "help.php": "<i class=\"fa fa-question-circle\"><\/i>",
+        "help-doc": "<i class=\"fa fa-book\"><\/i>",
+        "help-color": "<i class=\"fa fa-tint\"><\/i>",
+        "help-thanks": "<i class=\"fa fa-comment-o\"><\/i>",
+        "update.php": "<i class=\"fa fa-rocket\"><\/i>"
+    },
+    "lang": "en",
+    "selectLang": "en,de",
+    "selectSkin": "default,summer,ice",
+    "showHint": true,
+    "skin": "default",
+    "tdbars": [
+        "thCount",
+        "__DISABLED__Req"
+    ],
+    "tdlink": [],
+    "views": [
+        "serverinfos.php",
+        "performance-check.php",
+        "allrequests.php",
+        "original.php",
+        "help.php"
+    ]
+}

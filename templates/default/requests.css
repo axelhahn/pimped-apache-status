@@ -1,0 +1,45 @@
+
+/* bars in the worker table */
+.barTotal{
+    background:#ddd !important; 
+    background:linear-gradient(#ccc,#eee,#ddd) !important; 
+    border: 0px solid #aaa; height: 1.1em;}
+.barBusyWorker, 
+     .barValue{
+         background:#aeb !important; 
+         background:linear-gradient(10deg,#8ca,#aeb,#afb) !important; 
+         height: 1.1em;float: left;}
+.barIdleWorker{
+    background:#abc !important; 
+    background:linear-gradient(#abc,#ace,#abc) !important; 
+    height: 1.1em; float: left;}
+
+/* colors for http action */
+.methodoptions{background:#f0f0f0; color: #888;}
+.methodhead{background:#dde;}
+.methodpost{background:#bfb; color: #333;}
+.methodpropfind{background:#ddf;}
+.methodget, .methodget *{background:#ded; color: #333;}
+
+
+/* colors for request method
+"_" Waiting for Connection, "S" Starting up, "R" Reading Request,
+"W" Sending Reply, "K" Keepalive (read), "D" DNS Lookup,
+"C" Closing connection, "L" Logging, "G" Gracefully finishing,
+"I" Idle cleanup of worker, "." Open slot with no current process
+*/
+.actdot,         .actdot * {background:#ddd; color: #aaa;}
+.actunderscore,  .actunderscore *{background:#f8f8f8; color: #666;}
+.actS,           .actS * {background:#f8fff8;}
+.actR,           .actR * {background:#efe;}
+.actW,           .actW * {font-weight: bold; }
+.actK, .actK * {}
+.actD, .actD * {}
+.actC, .actC * {background:#fdd;}
+.actL, .actL * {}
+.actG, .actG * {background:#fdd;}
+.actI, .actI * {background:#fcc;}
+
+/* colors for long running requests */
+.exectimewarn,     .exectimewarn * {color:#c55;}
+.exectimecritical, .exectimecritical * {color:#c00; font-weight: bold;}

@@ -1,0 +1,53 @@
+@import url("../default/style.css");
+/* ---------------------------------------------------------------------- 
+   ... and now put your override definitions below:
+   ---------------------------------------------------------------------- */
+
+#divfooter , #brand{
+    background:#fca; 
+    background: linear-gradient(4deg, #fca,#fec,#fca); 
+}
+
+nav .nav a i {color: #ace;}
+nav .nav a span {color: #fc3;}
+nav .nav a span.caret {color: #0d0;}
+
+#checkversion .version-updateavailable *{color:#b92;}
+#checkversion .version-updateerror{color:#822;}
+
+
+#divtiles {
+    background: linear-gradient(4deg, #bdf, #fff,#eef); 
+    border-bottom: 2px solid #dde;
+}
+.tile{background: rgba(255,255,255,0.5);}
+
+
+#h3menu{background: linear-gradient(4deg, #fca,#fec,#fca);}
+h1 a{color:#89a;}
+h1 a:hover{color:#ace;}
+
+
+#divmainbody ul.nav li.active a{
+    color: #972 !important;
+    background: #fec;
+    background: linear-gradient(4deg, #fdb,#fec,#fdb); 
+}
+#divmainbody ul.nav li.active a i{
+}
+
+
+h3{color:#8ad !important;}
+
+.hintbox {
+    background: #fff8e8;
+}
+
+div.subh3 .console,
+div.subh3 .console *
+{
+    background:#f0f8f0;
+}
+    div.subh3 .console h1{
+        color: #4a6;
+    }

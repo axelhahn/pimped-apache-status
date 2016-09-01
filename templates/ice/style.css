@@ -1,0 +1,83 @@
+@import url("../default/style.css");
+
+body{background: #eee url('images/bg_body.png');  color: #444; font-family: arial; margin: 0;}
+
+/* ---------------------------------------------------------------------- 
+   menu bar
+   ---------------------------------------------------------------------- */
+nav.navbar{background: #d0dce8; 
+           background-image: linear-gradient(-1deg, #abe,#f0f8f8,#cdf);
+           border: 0;
+}
+#brand{background:none; border-right: 1px solid #cde;}
+h1 a:hover{color:#456; text-decoration: none;}
+#checkversion .version-updateavailable *{color:#a92;}
+
+nav .nav a i {color: #337;}
+nav .nav a {text-shadow: none !important; }
+
+.navbar-nav > li > a {color:#66a !important;}
+.navbar-nav > li > a:hover{color:#aae !important;}
+.navbar-nav > li > a span{color:#88a !important;}
+
+
+/* ---------------------------------------------------------------------- 
+   tiles bar
+   ---------------------------------------------------------------------- */
+#divtiles{background: none; border: 0;}
+.tile{
+    background:#ddf url('images/bg_tile.png');
+    color:#68c;
+    border: 2px solid #fff;
+    box-shadow: 3px 3px 5px #ddd;
+    border-radius: 5px; 
+}
+.tile .counter{font-weiht: bold; font-size: 160%; color:#69c;
+               text-shadow: 1px 1px 0px #eef, 2px 2px 1px #abc;}
+.tile .dial{color:#abd; background-color: #cde;}
+
+/* ---------------------------------------------------------------------- 
+   content
+   ---------------------------------------------------------------------- */
+
+
+#divmaincontent{background: none;}
+
+
+#divmainbody ul.nav li.active a,
+#h3menu
+{
+    background: linear-gradient(6deg, #fff,#cdf,#fff); 
+}
+
+h3{color:#569 !important;}
+.hintbox{background: #fcfcd8 url('images/bg_hint.png'); 
+         background: linear-gradient(6deg, #fff,#def,#fff);
+         border: 2px solid #fff;
+         box-shadow: 3px 3px 5px #eee;
+         border-radius: 5px; 
+         padding: 10px; margin: 10px 20px 10px 0 ;
+         color:#89a;
+}
+
+
+/* Links */   
+
+a{text-decoration: none; color:#22f;}
+
+
+/* pre */   
+pre{font-size: 80%; display: inline-block;}
+
+/* tables */   
+
+/* footer */
+
+#divfooter{text-align: center; padding: 20px; border-top: 1px solid #ace; background: #def;
+           background-image: linear-gradient(to bottom, #def, #fff);
+}
+
+#divfooter ul {margin: 0;}
+#divfooter ul li{ list-style: none; }
+#divfooter ul li a{ color:#888;}
+#divfooter ul li a:hover{ text-decoration: underline;}
