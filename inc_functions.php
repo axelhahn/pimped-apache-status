@@ -18,7 +18,7 @@
  */
 function getNewQs($aQueryParams = array()) {
     $s = false;
-    $aDelParams=array("doinstall", "action");
+    $aDelParams=array("doinstall");
     
     if ($_GET) {
         $aDefaults=$_GET;

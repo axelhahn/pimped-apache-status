@@ -12,6 +12,12 @@ $content = '<h3><i class="fa fa-flash"></i> Update</h3>'
 
 $content = '';
 
+// TODO BETA: DISABLE UPDATE FOR USERS
+$content .= "<h3>Work in progress</h3>file: " . __FILE__ . "<p>Update feature is disabled so far.</p>";
+if (!strpos($_SERVER["SERVER_NAME"], "axel-hahn.de")){
+    return true;
+}
+
 $sApproot=dirname(__DIR__);
 
 

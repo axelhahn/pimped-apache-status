@@ -314,6 +314,7 @@ $aLangTxt = array(
     
         'AdminMenuSettings'=>'Settings',
         'AdminMenuServers'=>'Servers',
+        'AdminMenuLang'=>'Languages',
         'AdminMenuUpdate'=>'Update',
     
         'AdminMenuSettingsCompare'=>'Compare',    

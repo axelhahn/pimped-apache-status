@@ -26,6 +26,7 @@
         "adminServers": "<i class=\"fa fa-cubes\"><\/i> ",
         "adminSettings": "<i class=\"fa fa-bars\"><\/i> ",
         "adminUpdate": "<i class=\"fa fa-flash\"><\/i> ",
+        "adminLang": "<i class=\"fa fa-comment\"><\/i> ",
         
         "title": "<i class=\"fa fa-square\"><\/i> ",
         "group": "<i class=\"fa fa-folder-o\"><\/i> ",

@@ -51,6 +51,7 @@ foreach (array("aUserCfg", "aEnv", "aSrvStatus") as $myvar) {
 // ----------------------------------------------------------------------
 // add languages
 // ----------------------------------------------------------------------
+/*
 $aTmp = $aLangTxt; // backup
 $aAllLang = array();
 $sTh = "    <th>key</th>\n";
@@ -99,7 +100,7 @@ $aTab[$myvar] = array(
     'label' => "$" . $myvar,
     'onclick' => 'return showTab(\'#h3' . md5($myvar) . '\');',
 );
-
+*/
 
 // ----------------------------------------------------------------------
 // Output

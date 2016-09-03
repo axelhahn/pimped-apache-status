@@ -1,13 +1,18 @@
 {
     "project": {
         "title": "Pimped Apache Status",
-        "version": "2.00.02 BETA",
-        "releasedate": "2016-01-26",
+        "version": "2.00.03 BETA",
+        "releasedate": "2016-09-03",
         "license": "GPL 3.0"
     },
     "active": [],
     "links": {
         "project": {
+            "projecthomebeta": {
+                "url": "https:\/\/github.com\/axelhahn\/pimped-apache-status\/tree\/beta-v2",
+                "label": "Git - beta-v2 (en)",
+                "target": "_blank"
+            },
             "projecthome": {
                 "url": "http:\/\/sourceforge.net\/projects\/pimpapachestat\/",
                 "label": "Sourceforge (en)",

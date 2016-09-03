@@ -26,7 +26,7 @@ $sAppAction=(array_key_exists('appaction', $_POST))?$_POST['appaction']:$sAppAct
 $aTabs=array(
     'leave'=> array(
         "label" => $aCfg['icons']['leaveadmin'] . $aLangTxt['menuLeaveAdmin'],
-        "url" => '../'.getNewQs(),
+        "url" => '../'.getNewQs(array('action'=>'')),
         "class" => 'adminlink',
         "active" => false
     ),
@@ -38,6 +38,11 @@ $aTabs=array(
     'settings'=>array(
         'label' => $aCfg['icons']['adminSettings'] . $aLangTxt['AdminMenuSettings'],
         'url' => getNewQs(array('action'=>'settings')),
+        'active'=>false
+    ),
+    'lang'=>array(
+        'label' => $aCfg['icons']['adminLang'] . $aLangTxt['AdminMenuLang'],
+        'url' => getNewQs(array('action'=>'lang')),
         'active'=>false
     ),
     'update'=>array(
@@ -68,6 +73,7 @@ $content = '';
 $oLog->add('include inc_'.$sAction.'.php');
 ob_start();
 switch ($sAction){
+    case 'lang':
     case 'servers':
     case 'update':
     case 'settings':
