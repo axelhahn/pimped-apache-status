@@ -55,6 +55,7 @@ Ressources for version 1.x:
 ## INSTALL
 
 ### (1)
+Download the software https://github.com/axelhahn/pimped-apache-status/archive/beta-v2.zip
 Extract the files somewhere below webroot on your webserver. You 
 can put to any subdirectory. It is not a must to have it in the 
 webroot.
