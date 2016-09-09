@@ -59,13 +59,6 @@ Extract the files somewhere below webroot on your webserver. You
 can put to any subdirectory. It is not a must to have it in the 
 webroot.
 
--- OR --
-
-checkout sources with svn client:
-
-    cd [webroot-directory]
-    svn checkout http://svn.code.sf.net/p/pimpapachestat/code/trunk apachestatus
-
 ### (2)
 Allow your server to access the server-status page on the systems 
 you want to monitor, i.e. in apache 2.2 syntax:
@@ -84,7 +77,7 @@ Open http://localhost/apachestatus/ in your webbrowser.
 ### (4)
 Go to the admin subdirectory: http://localhost/apachestatus/admin/
 There you can add groups and servers.
-And you can change the settings in a json file.
+(You can change the settings in the json files below ./config/ too).
 
 
 ## UPGRADE from version 1.x
