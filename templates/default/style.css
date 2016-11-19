@@ -209,7 +209,6 @@ pre.active{background: #e0f0e0; color: #060; }
 .raw{font-family: Menlo,Monaco,Consolas,"Courier New",monospace; /* background: #445 !important; color:#eef !important; */};
 
 /* tables */   
-div.dataTables_wrapper{float: left; text-align: left;}
 div.dataTables_filter{float: left !important;}
 div.dataTables_length{min-width: 200px;}
 table.dataTable{width: auto; min-width: 600px; margin: 0;}
@@ -219,6 +218,7 @@ table.dataTable a{background: none;}
 
 
 /* */
+.dataTables_wrapper {float: left; text-align: left;}
 .dataTables_filter {
     width: auto;
     float: none;

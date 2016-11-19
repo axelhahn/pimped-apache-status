@@ -646,6 +646,47 @@ class Datarenderer {
         return $sReturn;
     }
 
+    private function _genChart($aTable, $sTableId){
+        $sReturn='';
+        $sJs='';
+        /*
+            Morris.Donut({
+              element: 'donut-example',
+              data: [
+                {label: "Download Sales", value: 12},
+                {label: "In-Store Sales", value: 30},
+                {label: "Mail-Order Sales", value: 20}
+              ]
+            });
+         
+         */
+        foreach ($aTable as $row) {
+            if(count($row) != 2){
+                return false;
+            }
+            // $sReturn.='- '.print_r($row, 1).'<br>';
+            $aVal=array_values($row);
+            if (is_int($aVal[0])){
+                $sJs.=$sJs ? ',': '';
+                $sJs.='{label: "'.$aVal[1].'", value: '.$aVal[0].'}';
+            }
+        }
+        $sDivIdDonut='divChartDonut'.$sTableId;
+        $sDivIdBars='divChartBars'.$sTableId;
+        $sJsOut='Morris.Donut({element: \''.$sDivIdDonut.'\', data: ['.$sJs.'], resize: true }); '
+            . 'Morris.Bar({element: \''.$sDivIdBars.'\', data: ['.$sJs.'], xkey: \'label\', ykeys: [\'value\'], labels: [\'n\'] });';
+        $sReturn.=''
+                . '<div style="max-width: 50%;float: left;">'
+                    . '<div id="'.$sDivIdBars.'" style="max-width: 55%; float: left;"></div>'
+                    . '<div id="'.$sDivIdDonut.'" style="max-width: 40%; float: left;"></div>'
+                    . '<script>' . $sJsOut . '</script>'
+                . '</div>'
+                ;
+        
+        return $sReturn;
+    }
+
+
     /**
      * renderTable shows the array from function dataFilter
      * It additionally fills the global variable $sJsOnReady
@@ -715,7 +756,13 @@ class Datarenderer {
             $sOptions = preg_replace("/\ }$/", ", " . $sDatatableOptions . " }", $aCfg['datatableOptions']);
         }
         if ($sHtml) {
-            $sHtml = '<table id="' . $sTableId . '" class="table table-hover datatable" >' . utf8_encode($sHtml) . '</tbody></table><div style="clear: both;"><br></div>';
+            $sHtml = ''
+                    .'<table id="' . $sTableId . '" class="table table-hover datatable" style="float: left;">'
+                    // . '<tbody>' 
+                    . utf8_encode($sHtml) 
+                    . '</tbody></table>'
+                    . $this->_genChart($aTable, $sTableId)
+                    . '<div style="clear: both;"><br></div>';
         }
         $sJsResetOnclick = '$(\\\'#' . $sTableId . '_filter>INPUT\\\').val(\\\'\\\'); $(\\\'#' . $sTableId . '\\\').dataTable().fnFilter(\\\'\\\');';
         $sHtmlReset = '<a class="btnclose" href="#" onclick="' . $sJsResetOnclick . '; return false; ">X</a>';
@@ -1020,6 +1067,25 @@ class Datarenderer {
     }
 
     /**
+     * try to flip table: wide tables with a single line will be flipped
+     * @param array   $aTData
+     * @return array
+     */
+    private function _tryFlip($aTData){
+        if(count($aTData)==1){
+            $aTmp=array();
+            $iCount=0;
+            foreach($aTData[0] as $sKey=>$value){
+                $iCount++;
+                $aTmp[]=array('key'=>'<span style="display: none;">'.$iCount.'</span>'.$sKey, 'value'=>$value);
+            }
+            // echo '<pre>'; print_r($aTData);print_r($aTmp);die();
+            $aTData=$aTmp;
+        }
+        return $aTData;
+    }
+    
+    /**
      * render table with worker status: total/ active/ waiting workers
      * @global type $aLangTxt   language dependend texts
      * @global array $aCfg  user configuration
@@ -1035,6 +1101,7 @@ class Datarenderer {
         }
 
         $aTData = $this->_getWorkersData($aSrvStatus, true);
+        // $aTData = $this->_tryFlip($this->_getWorkersData($aSrvStatus, true));
         /*
           $sExport = '<ul><li>'
           . $aUserCfg['icons']['export']

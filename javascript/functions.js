@@ -20,7 +20,7 @@ function initDrawH3list() {
         sH3id = this.id ? this.id : "h3" + this.innerHTML.replace(/\W/g, '');
         if (!this.id)
             this.id = sH3id;
-        if (this.id != "h3menu") {
+        if (this.id !== "h3menu") {
             i++;
             sHtml += '<a href="#' + sH3id + '" class="scroll-link">' + this.innerHTML.replace(/(<([^>]+)>)/ig, "") + '</a>';
         }
@@ -46,7 +46,7 @@ function initSoftscroll() {
     $(function () {
         // $('a[href*=#]:not([href=#])').click(function() {
         $('a.scroll-link').click(function () {
-            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+            if (location.pathname.replace(/^\//, '') === this.pathname.replace(/^\//, '') && location.hostname === this.hostname) {
                 var target = $(this.hash);
                 target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
                 if (target.length) {
@@ -151,7 +151,6 @@ function initServerFilter(){
  */
 function initKnob(){
     var i=0;
-    var iValue=false;
     var sTilename=false;
     var aData=false;
     var sFgColor=$('.tile .dial').css("color");
@@ -165,10 +164,9 @@ function initKnob(){
         sSrv=sId.replace(/\-.*/, '');
         sTilename=sId.replace(/^.*\-/, '');
         if (sTilename){
-            iValue=$(this).val();
             var oCounter = new counterhistory(sSrv, sTilename);
             aData=oCounter.getLast(50);
-            console.log(aData);
+            // console.log(aData);
             if(aData){
 
                 $(this).knob({

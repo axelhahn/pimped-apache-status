@@ -19,6 +19,7 @@ class ServerStatus {
         CURLOPT_FAILONERROR => 1,
         CURLOPT_SSL_VERIFYHOST => 0,
         CURLOPT_SSL_VERIFYPEER => 0,
+        CURLOPT_USERAGENT => 'pimped apache status',
             // CURLMOPT_MAXCONNECTS => 10
     );
 

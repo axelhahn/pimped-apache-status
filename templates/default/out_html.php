@@ -17,6 +17,8 @@ $sHead = '<link rel="stylesheet" type="text/css" href="' . $sSelfURL . '/templat
         . '<link href="' . $sDirBS . '/css/bootstrap-theme.min.css" rel="stylesheet">'
         . '<script src="' . $sDirBS . '/js/bootstrap.min.js" type="text/javascript"></script>'
         . '<script src="' . $sSelfURL . '/javascript/knob/jquery.knob.min.js" type="text/javascript"></script>'
+        . '<script src="' . $sSelfURL . '/javascript/raphaeljs/raphael.min.js" type="text/javascript"></script>'
+        . '<script src="' . $sSelfURL . '/javascript/morrisjs/morris.min.js" type="text/javascript"></script>'
         ;
 
 // add a meta refresh tag if needed

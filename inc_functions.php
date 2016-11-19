@@ -74,8 +74,7 @@ function httpGet($url, $bHeaderOnly = false) {
     }
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-    curl_setopt($ch, CURLOPT_USERAGENT, 'php-curl :: pimped apache status');
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_USERAGENT, 'pimped apache status');
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 
     $res = curl_exec($ch);
