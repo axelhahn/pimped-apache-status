@@ -671,14 +671,21 @@ class Datarenderer {
                 $sJs.='{label: "'.$aVal[1].'", value: '.$aVal[0].'}';
             }
         }
-        $sDivIdDonut='divChartDonut'.$sTableId;
+
         $sDivIdBars='divChartBars'.$sTableId;
-        $sJsOut='Morris.Donut({element: \''.$sDivIdDonut.'\', data: ['.$sJs.'], resize: true }); '
-            . 'Morris.Bar({element: \''.$sDivIdBars.'\', data: ['.$sJs.'], xkey: \'label\', ykeys: [\'value\'], labels: [\'n\'] });';
+        $sIdBars='Bars'.$sTableId;
+        $sDivIdDonut='divChartDonut'.$sTableId;
+        $sIdDonut='Donut'.$sTableId;
+        
+        $sBarsCallback='function(index, options, content) {'.$sIdDonut.'.select(index); return \'<div>\'+content+\'</div>\'; }';
+        $sJsOut='var '.$sIdDonut.' = Morris.Donut({element: \''.$sDivIdDonut.'\', data: ['.$sJs.'], resize: true }); '
+            . 'var '.$sIdBars.' = Morris.Bar({element: \''.$sDivIdBars.'\', data: ['.$sJs.'], xkey: \'label\', ykeys: [\'value\'], labels: [\'n\'], hoverCallback: '.$sBarsCallback.' });'
+                . '$(\'.morris-hover\').css("display", "none");'
+            ;
         $sReturn.=''
-                . '<div style="max-width: 50%;float: left;">'
-                    . '<div id="'.$sDivIdBars.'" style="max-width: 55%; float: left;"></div>'
-                    . '<div id="'.$sDivIdDonut.'" style="max-width: 40%; float: left;"></div>'
+                . '<div class="chartsfortable" style="">'
+                    . '<div id="'.$sDivIdBars.'" class="divbars"></div>'
+                    . '<div id="'.$sDivIdDonut.'" class="divdonut"></div>'
                     . '<script>' . $sJsOut . '</script>'
                 . '</div>'
                 ;
