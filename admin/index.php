@@ -22,45 +22,12 @@ $sAction=(array_key_exists('action', $_POST))?$_POST['action']:$sAction;
 $sAppAction=(array_key_exists('appaction', $_GET))?$_GET['appaction']:false;
 $sAppAction=(array_key_exists('appaction', $_POST))?$_POST['appaction']:$sAppAction;
 
-// TODO:  Icons into config
-$aTabs=array(
-    'leave'=> array(
-        "label" => $aCfg['icons']['leaveadmin'] . $aLangTxt['menuLeaveAdmin'],
-        "url" => '../'.getNewQs(array('action'=>'')),
-        "class" => 'adminlink',
-        "active" => false
-    ),
-    'servers'=>array(
-        'label' => $aCfg['icons']['adminServers'] . $aLangTxt['AdminMenuServers'],
-        'url' =>  getNewQs(array('action'=>'')),
-        'active'=>false
-    ),
-    'settings'=>array(
-        'label' => $aCfg['icons']['adminSettings'] . $aLangTxt['AdminMenuSettings'],
-        'url' => getNewQs(array('action'=>'settings')),
-        'active'=>false
-    ),
-    'lang'=>array(
-        'label' => $aCfg['icons']['adminLang'] . $aLangTxt['AdminMenuLang'],
-        'url' => getNewQs(array('action'=>'lang')),
-        'active'=>false
-    ),
-    'update'=>array(
-        'label' => $aCfg['icons']['adminUpdate'] . $aLangTxt['AdminMenuUpdate'],
-        'url' =>  getNewQs(array('action'=>'update')),
-        'active'=>false
-    ),
-);
-if(array_key_exists($sAction,$aTabs)){
-    $aTabs[$sAction]['active']=true;
+
+if(array_key_exists($sAction,$aCfg['viewsadmin'])){
+    $aCfg['viewsadmin'][$sAction]['active']=true;
 } else {
-    $aTabs['overview']['active']=true;
+    $aCfg['viewsadmin']['overview']['active']=true;
 }
-
-// TODO
-
-$sTabNavi = $oDatarenderer->renderTabs($aTabs);
-
 
 $content = '<div id="divtiles">'
             . '<h2>'
@@ -82,7 +49,11 @@ switch ($sAction){
     default:
         include 'inc_servers.php';
 }
-$content .= ob_get_contents();
+$content .= $oDatarenderer->themeBox(
+        $aCfg['icons']['admin'. $sAction] .' '. $aLangTxt['AdminMenu'.$sAction]
+        , ob_get_contents()
+);
+
 ob_end_clean();
 // echo '<br><br><br><br>';
 
@@ -143,11 +114,14 @@ switch ($oPage->getOutputtype()) {
         $oPage->setHeader($sHeader . '<script>var aLang='.json_encode($aLangJs).';</script>');
 
         $oPage->setFooter('
-            <div id="divfooter">
-                Axel pimped the Apache status 4U - v' . $aEnv["project"]["version"] . ' (' . $aEnv["project"]["releasedate"] . ')
+            <footer class="main-footer">
+                <div class="pull-right hidden-xs">
+                  <b>Version</b> ' . $aEnv["project"]["version"] . ' (' . $aEnv["project"]["releasedate"] . ')
+                </div>
+                <strong>Axel pimped the Apache status 4U</strong>
                 <ul>' . $oDatarenderer->renderLI($aEnv["links"]["project"]) . '</ul>
-                    <script>initPage();</script>
-            </div>');
+            </footer>
+        ');
         break;
     default:
 }

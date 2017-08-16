@@ -111,11 +111,15 @@ switch ($oPage->getOutputtype()) {
         $oPage->setHeader($sHeader . '<script>var aLang='.json_encode($aLangJs).';</script>');
 
         $oPage->setFooter('
-            <div id="divfooter">
-                Axel pimped the Apache status 4U - v' . $aEnv["project"]["version"] . ' (' . $aEnv["project"]["releasedate"] . ')
+            <footer class="main-footer">
+                <div class="pull-right hidden-xs">
+                  <b>Version</b> ' . $aEnv["project"]["version"] . ' (' . $aEnv["project"]["releasedate"] . ')
+                </div>
+                <strong>Axel pimped the Apache status 4U</strong>
                 <ul>' . $oDatarenderer->renderLI($aEnv["links"]["project"]) . '</ul>
-                    <script>initPage();</script>
-            </div>');
+            </footer>
+            <script>initPage();</script>
+            ');
         break;
     default:
 }

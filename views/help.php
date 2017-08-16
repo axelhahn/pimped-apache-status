@@ -31,36 +31,24 @@
 // Output
 // ----------------------------------------------------------------------
 
-$content='
-        <h3>'.$aCfg['icons']['help-doc'] .' '. $aLangTxt['lblHelpDoc'].'</h3>
-        <div class="subh3">
-            <div class="hintbox">'. 
-                $aLangTxt['lblHintHelpDoc'].
-            '</div>'.
-            $aLangTxt['lblHelpDocContent'].
-            '<ul>' . $oDatarenderer->renderLI($aEnv["links"]["project"]) . '</ul>'.
-        '
-            <p>'.
-                $aLangTxt['lblHelpBookmarklet'].
-                $oDatarenderer->genBookmarklet().'
-            </p>
-        </div>
-        <br>
-        
-        <h3>'.$aCfg['icons']['help-color'] .' '. $aLangTxt['lblHelpColors'].'</h3>
-        <div class="subh3">
-            <div class="hintbox">'. 
-                $aLangTxt['lblHintHelpColors'].
-            '</div>'.
-            $s.
-        '</div>
-            
-        <h3>'.$aCfg['icons']['help-thanks'] .' '. $aLangTxt['lblHelpThanks'].'</h3>
-        <div class="subh3">
-            <div class="hintbox">'. 
-                $aLangTxt['lblHintHelpThanks'].
-            '</div>'
-        . 
-            $aLangTxt['lblHelpThanksContent']
-        .'</div>'
-        ;
+$content=
+        $oDatarenderer->themeBox(
+                $aCfg['icons']['help-doc'] .' '. $aLangTxt['lblHelpDoc'],
+                $aLangTxt['lblHelpDocContent'].
+                '<ul>' . $oDatarenderer->renderLI($aEnv["links"]["project"]) . '</ul>'
+                .'<p>'.
+                    $aLangTxt['lblHelpBookmarklet'].
+                    $oDatarenderer->genBookmarklet().'
+                </p>',
+                $aLangTxt['lblHintHelpDoc']
+        )
+        .$oDatarenderer->themeBox(
+                $aCfg['icons']['help-color'] .' '. $aLangTxt['lblHelpColors'],
+                $s,
+                $aLangTxt['lblHintHelpColors']
+        )
+        .$oDatarenderer->themeBox(
+                $aCfg['icons']['help-thanks'] .' '. $aLangTxt['lblHelpThanks'],
+                $aLangTxt['lblHelpThanksContent'],
+                $aLangTxt['lblHintHelpThanks']
+        );

@@ -2,7 +2,7 @@
 
   Axel pimped the Apache-status
 
-  http://www.axel-hahn.de/apachestatus.php
+  https://www.axel-hahn.de/apachestatus
   http://sourceforge.net/projects/pimpapachestat/
 
   GNU GPL v 3.0

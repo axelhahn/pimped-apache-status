@@ -23,10 +23,10 @@
     "icons": {
         "admin": "<i class=\"fa fa-cog\"><\/i> ",
         "leaveadmin": "<i class=\"fa fa-tachometer\"><\/i> ",
-        "adminServers": "<i class=\"fa fa-cubes\"><\/i> ",
-        "adminSettings": "<i class=\"fa fa-bars\"><\/i> ",
-        "adminUpdate": "<i class=\"fa fa-flash\"><\/i> ",
-        "adminLang": "<i class=\"fa fa-comment\"><\/i> ",
+        "adminservers": "<i class=\"fa fa-cubes\"><\/i> ",
+        "adminsettings": "<i class=\"fa fa-bars\"><\/i> ",
+        "adminupdate": "<i class=\"fa fa-flash\"><\/i> ",
+        "adminlang": "<i class=\"fa fa-comment\"><\/i> ",
         
         "title": "<i class=\"fa fa-square\"><\/i> ",
         "group": "<i class=\"fa fa-folder-o\"><\/i> ",
@@ -61,5 +61,11 @@
         "allrequests.php",
         "original.php",
         "help.php"
+    ],
+    "viewsadmin": [
+        "servers",
+        "settings",
+        "lang",
+        "update"
     ]
 }

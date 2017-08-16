@@ -632,10 +632,12 @@ class Datarenderer {
         }
 
         foreach ($aLinks as $aLink) {
-            $sReturn.='<li';
+            $sClass="treeview";
             if (array_key_exists("active", $aLink) && $aLink["active"]) {
-                $sReturn.=' class="active"';
+                $sClass.=' active';
+                // $sReturn.=' class="active"';
             }
+            $sReturn.='<li class="'.$sClass.'"';
             $sReturn.='>' . $this->renderA($aLink);
 
             if (array_key_exists("subitems", $aLink)) {
@@ -649,6 +651,7 @@ class Datarenderer {
     private function _genChart($aTable, $sTableId){
         $sReturn='';
         $sJs='';
+        $iMaxJsValues=10;
         /*
             Morris.Donut({
               element: 'donut-example',
@@ -660,6 +663,8 @@ class Datarenderer {
             });
          
          */
+        $iCount=0;
+        $iRest=0;
         foreach ($aTable as $row) {
             if(count($row) != 2){
                 return false;
@@ -667,9 +672,17 @@ class Datarenderer {
             // $sReturn.='- '.print_r($row, 1).'<br>';
             $aVal=array_values($row);
             if (is_int($aVal[0])){
-                $sJs.=$sJs ? ',': '';
-                $sJs.='{label: "'.$aVal[1].'", value: '.$aVal[0].'}';
+                if($iMaxJsValues>$iCount){
+                    $sJs.=$sJs ? ',': '';
+                    $sJs.='{label: "'.$aVal[1].'", value: '.$aVal[0].'}';
+                } else {
+                    $iRest+=$aVal[0];
+                }
+                $iCount++;
             }
+        }
+        if($iRest){
+            $sJs.=',{label: "(...)", value: '.$iRest.'}';
         }
 
         $sDivIdBars='divChartBars'.$sTableId;
@@ -1122,6 +1135,43 @@ class Datarenderer {
 
         return $this->themeTable($aLangTxt["lblTable_status_workers"], $this->renderRequestTable($aTData, ""), $aLangTxt["lblTableHint_status_workers"], $sExport);
     }
+    /**
+     * render output box with title, hint and data table
+     * @param string $sTitle    title for h3
+     * @param string $sContent  html content
+     * @param string $sHint     hint text (optional)
+     * @return string 
+     */
+    public function themeBox($sTitle, $sContent, $sHint = false) {
+
+        $sReturn = '<!-- Default box -->
+      <div class="box box-primary box-solid">
+        <div class="box-header with-border">
+          <h3 class="box-title">' . $sTitle . '</h3>
+          <!--
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+              <i class="fa fa-minus"></i></button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+              <i class="fa fa-times"></i></button>
+          </div>
+          -->
+        </div>
+        <div class="box-body">';
+        if ($sHint) {
+            $sReturn.='<div class="hintbox">' . $sHint . '</div>';
+        }
+        $sReturn.= $sContent . '
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer">
+          Footer
+        </div>
+        <!-- /.box-footer-->
+      </div>
+      <!-- /.box -->';
+        return $sReturn;
+    }
 
     /**
      * render output section with title, hint and data table
@@ -1135,7 +1185,7 @@ class Datarenderer {
         global $aLangTxt;
         global $aCfg;
 
-        $sContent = '<h3>' . $sTitle . '</h3><div class="subh3">';
+        $sContent = '';
         if ($sHint) {
             $sContent.='<div class="hintbox">' . $sHint . '</div>';
         }
@@ -1151,10 +1201,7 @@ class Datarenderer {
             </ul>
         </div>';
         }
-        $sContent.= $sTable
-                . $sExport
-                . '</div>';
-        return $sContent;
+        return $this->themeBox($sTitle, $sTable.$sExport,$sHint);
     }
 
 }

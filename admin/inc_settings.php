@@ -178,8 +178,7 @@ $sHtml.='
 // ----------------------------------------------------------------------
 // output
 // ----------------------------------------------------------------------
-echo '<h3>' . $aLangTxt['AdminMenuSettings'] . '</h3>'
- . '<div class="subh2"><h3><i class="fa fa-bars"></i> Overview </h3>'
+echo '<div class="subh2"><h3><i class="fa fa-bars"></i> Overview </h3>'
  . $oDatarenderer->renderTabs($aTab)
  . '<div style="clear: both"></div><br>'
  . $sHtml

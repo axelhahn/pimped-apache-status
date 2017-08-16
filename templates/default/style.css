@@ -22,14 +22,15 @@ body{background:#ccc; color: #444; margin: 0;}
 #h3menu a{display: block; color:#337; padding: 0.3em 1em;}
 #h3menu a:hover{text-decoration: underline;}
 
+h1{margin: 0 !important; padding:0;}
 #brand{/* background:#346; background: linear-gradient(4deg, #124,#457,#346); */  padding: 0.2em 1em; border-right: 1px solid #567;}
 h1.title{font-size:150%; color:#89a; margin: 0; padding: 0px; text-decoration: none;}
-h1.title span{color:#789;font-size:70%; }
-h1 a{color:#89a; color:#abe; text-decoration: none;}
+h1.title span{font-size:70%; }
+h1 a{ color:#fff; text-decoration: none;}
 h1 a:hover{color:#def; text-decoration: none;}
 
 nav .nav a i{color:#fc8;}
-nav .nav a span{color:#89c;}
+nav .nav a span{color:#cde;}
 nav .nav a span.caret{color:#89a;}
 #divmainbody ul.nav li a {color:#aaa;}
 #divmainbody ul.nav li a i{font-size: 130%;}
@@ -98,32 +99,29 @@ nav .nav a span.caret{color:#89a;}
     border-bottom: 3px solid #999;
     padding-top: 75px;
     position: relative;
-    */
     background: #f4f4f4;
     border-bottom: 3px solid #e8e8e8;
+    */
     height: 6em; 
-    padding: 6em 1em; 
+    padding: 1em 1em 1em 0; 
 }
 
 
 .tile{float: left; height: 6em; padding: 5px; 
-      background:#c0c4d0; 
-      background:#fff; 
       margin: -15px 10px 0 0; 
       text-align: center;
+      border-right: 1px dotted #fa2;
       color:#667;
-      border: 0px solid #bbb;
-      border-radius: 0px; 
 }
-.tile .counter{font-size: 160%; color:#8ac;}
-.tile .dial{color:#cde; background-color: #f8f8f8;}
+.tile .counter{font-size: 200%;}
+.tile .dial{color:#fa2; background-color: #eee;}
 .tile canvas{display: block; float: left; margin-right: 0.5em;}
 
 /* ---------------------------------------------------------------------- 
    logs
    ---------------------------------------------------------------------- */
 
-.logs{background:#eee; padding: 3px 3px 1px; margin: 10px 3%; }
+.logs{background:#eee; padding: 3px 3px 1px; margin: 0.5em 0 2em; }
 .logs *{margin-bottom: 3px; border-left: 13px solid #ccc; padding: 0.5em; }
 .logs .type{display: none;}
 .logs .warning{color:#a86; background:#fe9; border-color: #cb0;}
@@ -146,11 +144,12 @@ nav .nav a span.caret{color:#89a;}
 
 
 /* headlines */   
+/*
 h2{font-size:200%; color:#88e; margin: 0px 0 10px; padding: 5px; 
    text-shadow: 1px 1px 0px #fff, 2px 2px 3px #ccc;
 }
 h3{color:#57a !important; padding: 0em 0 0 0;}
-
+*/
 
 /* boxes below headlines */
 
@@ -177,13 +176,12 @@ div.subh3 {
 div.subh4 {margin-left: 10px; margin-bottom: 10px; padding-left: 10px; border-left: 1px dotted #ccc; border-bottom: 1px dotted #ccc; border-bottom-left-radius: 10px;}
 
 
-.hintbox{background: #fcfcd8; 
-         background-image: linear-gradient(to bottom, #fcfcd0, #ffe, #fcfcd0);
-         background: #f0f4f8;
+.hintbox{
+         background: #fcf0d0;
          border: 0px solid #fff;
          border-radius: 5px; 
          padding: 10px; margin: 0 0 1em;
-         color:#888;
+         color:#245;
 }
 
 .divNew{display: none; background: #cec;}
@@ -251,14 +249,14 @@ table.dataTable a{background: none;}
 }    
 .sorting_asc {
     background: #cce url('../../javascript/datatables/media/images/sort_asc.png') no-repeat center right;
-    background-image: url('../../javascript/datatables/media/images/sort_asc.png'), linear-gradient(to bottom, #dde, #bbd) !important;
+    background-image: url('../../javascript/datatables/media/images/sort_asc.png'), linear-gradient(to bottom, #6be, #7ce) !important;
     border-left: 1px solid #fff;
     border-right: 1px solid #aaa;
 }
 
 .sorting_desc {
     background: #cce url('../../javascript/datatables/media/images/sort_desc.png') no-repeat center right;
-    background-image: url('../../javascript/datatables/media/images/sort_desc.png'), linear-gradient(to bottom, #bbd, #dde)  !important;
+    background-image: url('../../javascript/datatables/media/images/sort_desc.png'), linear-gradient(to bottom, #7ce, #6be)  !important;
     border-left: 1px solid #fff;
     border-right: 1px solid #aaa;
 }
@@ -283,28 +281,28 @@ table.dataTable a{background: none;}
 /* For the standard odd/even */
 tr.odd td.sorting_1 {
     /* background-color: #D3D6FF; */
-    background-color: #f0f0f8;
+    background-color: #e0f0f8;
 }
 
 tr.odd td.sorting_2 {
-    background-color: #DADCFF;
+    background: rgba(0,0,0,0.05);
 }
 
 tr.odd td.sorting_3 {
-    background-color: #E0E2FF;
+    background: rgba(0,0,0,0.03);
 }
 
 tr.even td.sorting_1 {
     /* background-color: #EAEBFF;*/
-    background-color: #e8e8f8;
+    background-color: #d8e8f0;
 }
 
 tr.even td.sorting_2 {
-    background-color: #F2F3FF;
+    background: rgba(0,0,0,0.1);
 }
 
 tr.even td.sorting_3 {
-    background-color: #F9F9FF;
+    background: rgba(0,0,0,0.07);
 }
 
 
@@ -374,7 +372,7 @@ plotter
 .plotter{position: absolute; 
          background: #f8f8f8; 
          background: linear-gradient(15deg,#f8f8f8,#ddd,#f8f8f8); 
-         border: 1em solid #fff; top: 12em; left: 10em; box-shadow: 0 0 1em #aaa; z-index: 1000;
+         border: 1em solid #fff; top: 16em; left: 24em; box-shadow: 0 0 1em #aaa; z-index: 1000;
          display: none;
 }
 .plotter .btnclose{background: #f88; color:#fff; float: right; padding: 0.5em 1em; display: none; cursor: pointer;}

@@ -13,19 +13,11 @@
         <title>Pimped Apache Status</title>
 
         {{HEADER}}
-        
-        <!-- adminlte -->
-        <script src="{{APPDIR}}/vendor/adminlte/dist/js/app.min.js" type="text/javascript"></script>
-        <link rel="stylesheet" href="{{APPDIR}}/vendor/adminlte/dist/css/AdminLTE.min.css">
-        <link rel="stylesheet" href="{{APPDIR}}/vendor/adminlte/dist/css/skins/_all-skins.min.css">
 
-    </head>
-    <body class="hold-transition skin-blue sidebar-mini">
-    <div class="wrapper">
+    </head><body>
 
         {{CONTENT}}
 
         {{FOOTER}}{{JSONREADY}}
-    </div>
     </body>
 </html>

@@ -40,4 +40,7 @@ foreach($aSrvStatus as $sServer=>$aData){
         </div>';
 }
 
+$content=$oDatarenderer->themeBox(
+        $aCfg['icons']['original.php'] .' '. $aLangTxt['view_original.php_label']
+        , $content);
 // echo $content;

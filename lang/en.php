@@ -312,10 +312,10 @@ $aLangTxt = array(
         'ActionOK'=>'OK',
         'ActionOKHint'=>'Save changes',
     
-        'AdminMenuSettings'=>'Settings',
-        'AdminMenuServers'=>'Servers',
-        'AdminMenuLang'=>'Languages',
-        'AdminMenuUpdate'=>'Update',
+        'AdminMenusettings'=>'Settings',
+        'AdminMenuservers'=>'Servers',
+        'AdminMenulang'=>'Languages',
+        'AdminMenuupdate'=>'Update',
     
         'AdminMenuSettingsCompare'=>'Compare',    
         'AdminHintSettingsCompare'=>'You see all default variables and which of them the user config overrides.<br>',
@@ -387,6 +387,7 @@ $aLangTxt = array(
         'cfg-skin'=>'Currently active default skin.',
         'cfg-tdbars'=>'Table rows that show a bar.',
         'cfg-tdlink'=>'special links for table rows.',
-        'cfg-views'=>'list of the visible tabs',
+        'cfg-views'=>'list of the visible menu items',
+        'cfg-viewsadmin'=>'list of the visible admin menu items',
         'cfg-'=>'',
 );

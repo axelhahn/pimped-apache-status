@@ -39,25 +39,41 @@ foreach ($aServergroups as $sGroup => $aServers) {
 // ------------------------------------------------------------
 // available views
 // ------------------------------------------------------------
+/*
 $aEnv["links"]["views"]['admin'] = array(
     "label" =>  $aCfg['icons']['admin'] . $aLangTxt['menuAdmin'],
     "url" => './admin/'.getNewQs(),
     "class" => 'adminlink',
     "active" => false,
 );
+*/
+
 foreach ($aCfg['views'] as $s) {
     $sLabel = '';
     if (array_key_exists($s, $aCfg['icons'])) {
         $sLabel.=$aCfg['icons'][$s] . ' ';
     }
-    $sLabel .= $aLangTxt['view_' . $s . '_label'] ? $aLangTxt['view_' . $s . '_label'] : $s;
+    $sLabel .= '<span>'.($aLangTxt['view_' . $s . '_label'] ? $aLangTxt['view_' . $s . '_label'] : $s).'</span>';
     $aEnv["links"]["views"][$s] = array(
         "label" => $sLabel,
-        "url" => getNewQs(array("view" => $s)),
+        "url" => $sSelfURL . '/'. getNewQs(array("view" => $s, 'action'=>'')),
         "active" => ($s == $aEnv["active"]["view"]),
     );
 }
-
+foreach ($aCfg['viewsadmin'] as $s) {
+    $sLabel = '';
+    if (array_key_exists('admin'.$s, $aCfg['icons'])) {
+        $sLabel.=$aCfg['icons']['admin'.$s] . ' ';
+    }
+    $sLabel .= '<span>'.(array_key_exists('AdminMenu' . $s . '', $aLangTxt) ? $aLangTxt['AdminMenu' . $s . ''] : $s).'</span>';
+    $aEnv["links"]["viewsadmin"][$s] = array(
+        'url' =>  getNewQs(array('action'=>'update')),
+        
+        "label" => $sLabel,
+        "url" => $sSelfURL . '/admin/'.getNewQs(array('action'=>$s, 'view'=>'')),
+        "active" => false,
+    );
+}
 // ------------------------------------------------------------
 // available languages
 // ------------------------------------------------------------
