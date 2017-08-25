@@ -6,21 +6,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         
         <meta name="robots" content="noindex, nofollow" />
+
+        <title>Pimped Apache Status 2</title>
+        
         <script src="{{APPDIR}}/javascript/functions.js" type="text/javascript"></script>
         <script src="{{APPDIR}}/javascript/counterhistory.class.js" type="text/javascript"></script>
-        <script src="{{APPDIR}}/javascript/datatables/media/js/jquery.js" type="text/javascript"></script>
-        <script src="{{APPDIR}}/javascript/datatables/media/js/jquery.dataTables.min.js" type="text/javascript"></script>
-        <title>Pimped Apache Status</title>
 
         {{HEADER}}
         
-        <!-- adminlte -->
-        <script src="{{APPDIR}}/vendor/adminlte/dist/js/app.min.js" type="text/javascript"></script>
-        <link rel="stylesheet" href="{{APPDIR}}/vendor/adminlte/dist/css/AdminLTE.min.css">
-        <link rel="stylesheet" href="{{APPDIR}}/vendor/adminlte/dist/css/skins/_all-skins.min.css">
 
     </head>
-    <body class="hold-transition skin-blue sidebar-mini">
+    <body class="hold-transition sidebar-mini {{SKIN}}">
     <div class="wrapper">
 
         {{CONTENT}}

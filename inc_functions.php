@@ -18,12 +18,12 @@
  */
 function getNewQs($aQueryParams = array()) {
     $s = false;
-    $aDelParams=array("doinstall");
-    
+    $aDelParams = array("doinstall");
+
     if ($_GET) {
-        $aDefaults=$_GET;
-        foreach ($aDelParams as $sParam){
-            if (array_key_exists($sParam, $aDefaults)){
+        $aDefaults = $_GET;
+        foreach ($aDelParams as $sParam) {
+            if (array_key_exists($sParam, $aDefaults)) {
                 unset($aDefaults[$sParam]);
             }
         }
@@ -32,7 +32,7 @@ function getNewQs($aQueryParams = array()) {
 
     foreach ($aQueryParams as $var => $value) {
         if ($value)
-            $s.="&amp;" . $var . "=" . urlencode($value);
+            $s .= "&amp;" . $var . "=" . urlencode($value);
     }
     $s = "?" . $s;
     return $s;
@@ -200,4 +200,54 @@ function hasNewVersion($sUpdateOut = '') {
     $sResult = $sUpdateOut ? $sUpdateOut : checkUpdate(true);
     // echo htmlentities($sResult);
     return (strpos($sResult, "UPDATE") > 0 ? true : false);
+}
+
+function getHtmlHead($aLangTxt) {
+    require_once(__DIR__ . './classes/cdnorlocal.class.php');
+    
+    $sVendorUrl=(strpos($_SERVER['REQUEST_URI'], '/admin/?') ? '.' : '') . './vendor/';
+    $oCdn = new axelhahn\cdnorlocal(array(
+        'vendordir'=>__DIR__ . '/vendor', 
+        'vendorurl'=>$sVendorUrl, 
+        'debug'=>0
+    ));
+    $aLangJs = array();
+    
+    foreach ($aLangTxt as $sKey => $sVal) {
+        if (strpos($sKey, 'js::') === 0) {
+            $aLangJs[str_replace('js::', '', $sKey)] = $sVal;
+        }
+    }
+    
+    $sHeader = '<script>var aLang=' . json_encode($aLangJs) . ';</script>' . "\n"
+
+            // jQuery
+            . '<script src="' . $oCdn->getFullUrl("jquery/3.2.1/jquery.min.js") . '"></script>' . "\n"
+
+            // datatbles
+            . '<script src="' . $oCdn->getFullUrl("datatables/1.10.15/js/jquery.dataTables.min.js") . '"></script>' . "\n"
+            . '<link rel="stylesheet" href="' . $oCdn->getFullUrl("datatables/1.10.15/css/jquery.dataTables.min.css") . '">' . "\n"
+
+            // Admin LTE
+            . '<script src="' . $oCdn->getFullUrl("admin-lte/2.3.11/js/app.min.js") . '" type="text/javascript"></script>' . "\n"
+            . '<link rel="stylesheet" href="' . $oCdn->getFullUrl("admin-lte/2.3.11/css/AdminLTE.min.css") . '">' . "\n"
+            . '<link rel="stylesheet" href="' . $oCdn->getFullUrl("admin-lte/2.3.11/css/skins/_all-skins.min.css") . '">' . "\n"
+
+            // Bootstrap    
+            . '<link href="' . $oCdn->getFullUrl('twitter-bootstrap/3.3.7/css/bootstrap.min.css') . '" rel="stylesheet">'
+            . '<link href="' . $oCdn->getFullUrl('twitter-bootstrap/3.3.7/css/bootstrap-theme.min.css') . '" rel="stylesheet">'
+            . '<script src="' . $oCdn->getFullUrl('twitter-bootstrap/3.3.7/js/bootstrap.min.js') . '" type="text/javascript"></script>'
+
+            // Font awesome
+            . '<link href="' . $oCdn->getFullUrl('font-awesome/4.7.0/css/font-awesome.min.css') . '" rel="stylesheet">'
+
+            // Morris
+            . '<script src="' . $oCdn->getFullUrl("raphael/2.2.7/raphael.min.js") . '"></script>' . "\n"
+            . '<script src="' . $oCdn->getFullUrl("morris.js/0.5.1/morris.min.js") . '"></script>' . "\n"
+
+            // Knob
+            . '<script src="' . $oCdn->getFullUrl("jQuery-Knob/1.2.13/jquery.knob.min.js") . '"></script>' . "\n"
+
+    ;
+    return $sHeader;
 }

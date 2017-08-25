@@ -13,12 +13,15 @@
 // default CSS and JS
 $sDirBS = $sSelfURL . '/javascript/bootstrap3';
 $sHead = '<link rel="stylesheet" type="text/css" href="' . $sSelfURL . '/templates/' . basename(dirname(__FILE__)) . '/style.css" media="screen">'
+        /*
         . '<link href="' . $sDirBS . '/css/bootstrap.min.css" rel="stylesheet">'
         . '<link href="' . $sDirBS . '/css/bootstrap-theme.min.css" rel="stylesheet">'
         . '<script src="' . $sDirBS . '/js/bootstrap.min.js" type="text/javascript"></script>'
         . '<script src="' . $sSelfURL . '/javascript/knob/jquery.knob.min.js" type="text/javascript"></script>'
-        . '<script src="' . $sSelfURL . '/javascript/raphaeljs/raphael.min.js" type="text/javascript"></script>'
-        . '<script src="' . $sSelfURL . '/javascript/morrisjs/morris.min.js" type="text/javascript"></script>'
+         * 
+         */
+        // . '<script src="' . $sSelfURL . '/javascript/raphaeljs/raphael.min.js" type="text/javascript"></script>'
+        // . '<script src="' . $sSelfURL . '/javascript/morrisjs/morris.min.js" type="text/javascript"></script>'
         ;
 
 // add a meta refresh tag if needed
@@ -160,10 +163,14 @@ $sBody = '
     <section class="sidebar">
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
+      
+        
         <li class="header">MAIN NAVIGATION</li>
         '
         .$oDatarenderer->renderLI($aEnv["links"]["views"])
         .'
+            
+
         <li class="header">SETTINGS</li>
         '
         .$oDatarenderer->renderLI($aEnv["links"]["viewsadmin"])

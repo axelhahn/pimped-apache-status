@@ -1,5 +1,7 @@
+/*
 @import url("../../javascript/font-awesome/css/font-awesome.min.css");
 @import url("../../javascript/datatables/media/css/jquery.dataTables.min.css");
+*/
 @import url("requests.css");
 
 body{background:#ccc; color: #444; margin: 0;}
@@ -248,31 +250,31 @@ table.dataTable a{background: none;}
     width: 15%;
 }    
 .sorting_asc {
-    background: #cce url('../../javascript/datatables/media/images/sort_asc.png') no-repeat center right;
-    background-image: url('../../javascript/datatables/media/images/sort_asc.png'), linear-gradient(to bottom, #6be, #7ce) !important;
+    background: #cce url('../../images/sort_asc.png') no-repeat center right;
+    background-image: url('../../images/sort_asc.png'), linear-gradient(to bottom, #6be, #7ce) !important;
     border-left: 1px solid #fff;
     border-right: 1px solid #aaa;
 }
 
 .sorting_desc {
-    background: #cce url('../../javascript/datatables/media/images/sort_desc.png') no-repeat center right;
-    background-image: url('../../javascript/datatables/media/images/sort_desc.png'), linear-gradient(to bottom, #7ce, #6be)  !important;
+    background: #cce url('../../images/sort_desc.png') no-repeat center right;
+    background-image: url('../../images/sort_desc.png'), linear-gradient(to bottom, #7ce, #6be)  !important;
     border-left: 1px solid #fff;
     border-right: 1px solid #aaa;
 }
 
 .sorting {
-    background: #e8e8e8 url('../../javascript/datatables/media/images/sort_both.png') no-repeat center right;
+    background: #e8e8e8 url('../../images/sort_both.png') no-repeat center right;
     border-left: 1px solid #fff;
     border-right: 1px solid #ddd;
 }
 
 .sorting_asc_disabled {
-    background: url('../../javascript/datatables/media/images/sort_asc_disabled.png') no-repeat center right;
+    background: url('../../images/sort_asc_disabled.png') no-repeat center right;
 }
 
 .sorting_desc_disabled {
-    background: url('../../javascript/datatables/media/images/sort_desc_disabled.png') no-repeat center right;
+    background: url('../../images/sort_desc_disabled.png') no-repeat center right;
 }
 
 /*

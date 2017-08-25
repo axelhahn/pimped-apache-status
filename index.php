@@ -83,46 +83,10 @@ if (!@include(__DIR__ . '/views/' . $aEnv["active"]["view"])) {
 }
 $oLog->add(__FILE__ . ' view done');
 
+$oLog->add(__FILE__ . ' inc_pagetemplate.php start');
 include ('./inc_pagetemplate.php');
 $oLog->add(__FILE__ . ' inc_pagetemplate.php done');
 
-$oPage->setAppDir($sSelfURL);
-
-switch ($oPage->getOutputtype()) {
-    case 'html':
-        // v1.13: version check
-        $sUpdateInfos = checkUpdate();
-        $oLog->add('update check done');
-        $oPage->setContent(str_replace('<span id="checkversion"></span>', $sUpdateInfos, $oPage->getContent()));
-        
-        $oPage->setJsOnReady($sJsOnReady);
-        if (!$aCfg["showHint"]) {
-            $sHeader = $oPage->getHeader($sHead);
-            $oPage->setHeader($sHeader . '<style>.hintbox{display: none;}</style>');
-        }
-        // @since v1.22 map langtxt for javascript
-        $sHeader = $oPage->getHeader($sHead);
-        $aLangJs=array();
-        foreach($aLangTxt as $sKey => $sVal){
-            if (strpos($sKey, 'js::')===0){
-                $aLangJs[str_replace('js::','',$sKey)]=$sVal;
-            }
-        }
-        $oPage->setHeader($sHeader . '<script>var aLang='.json_encode($aLangJs).';</script>');
-
-        $oPage->setFooter('
-            <footer class="main-footer">
-                <div class="pull-right hidden-xs">
-                  <b>Version</b> ' . $aEnv["project"]["version"] . ' (' . $aEnv["project"]["releasedate"] . ')
-                </div>
-                <strong>Axel pimped the Apache status 4U</strong>
-                <ul>' . $oDatarenderer->renderLI($aEnv["links"]["project"]) . '</ul>
-            </footer>
-            <script>initPage();</script>
-            ');
-        break;
-    default:
-}
 $oLog->add('sending page');
 if($aCfg["debug"]){
     $oPage->addContent($oLog->render());

@@ -1145,7 +1145,7 @@ class Datarenderer {
     public function themeBox($sTitle, $sContent, $sHint = false) {
 
         $sReturn = '<!-- Default box -->
-      <div class="box box-primary box-solid">
+      <div class="box ">
         <div class="box-header with-border">
           <h3 class="box-title">' . $sTitle . '</h3>
           <!--
@@ -1163,10 +1163,11 @@ class Datarenderer {
         }
         $sReturn.= $sContent . '
         </div>
-        <!-- /.box-body -->
+        <!-- /.box-body
         <div class="box-footer">
           Footer
         </div>
+         -->
         <!-- /.box-footer-->
       </div>
       <!-- /.box -->';
