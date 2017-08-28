@@ -23,6 +23,16 @@ class Datarenderer {
         'requests_mostrequested',
         'requests_longest',
     );
+    
+    private $aIcons = array(
+        'server_count'=>'fa fa-hdd-o',
+        'server_responsetime'=>'fa fa-clock-o',
+        'requests_all'=>'fa fa-ticket',
+        'requests_running'=>'fa fa-ticket',
+        'requests_clients'=>'fa fa-laptop',
+        'requests_mostrequested'=>'fa fa-file-o',
+        'requests_longest'=>'fa fa-hourglass-end',
+    );
 
     /**
      * allowed tablenames - these keys have predefined filter rules
@@ -912,6 +922,7 @@ class Datarenderer {
 
         $sTitle = $aLangTxt['lblTile_' . $sTilename] ? $aLangTxt['lblTile_' . $sTilename] : $sTilename;
         $sHint = $aLangTxt['lblTileHint_' . $sTilename] ? $aLangTxt['lblTileHint_' . $sTilename] : $sTilename;
+        $sIcon = isset($this->aIcons[$sTilename]) ? $this->aIcons[$sTilename] : '';
         $sContent = '';
 
         $sType = $this->aFilterPresets[$sTilename]['sType'];
@@ -1000,7 +1011,9 @@ class Datarenderer {
                     . '</span><br>'
                     . $sReq . '';
             return 
-                    '<div '
+                    ''
+                    /*
+                    .'<div '
                     . 'title="' . $sHint . '" '
                     . 'class="tile ' . $sTilename . '" '
                     . 'onmouseover="showGraph(\'' . $sSrvIndex . '\', \'' . $sTilename . '\', \'' . $sTitle . '\');" '
@@ -1010,7 +1023,33 @@ class Datarenderer {
                     . $sKnob
                     . '<span class="title">' . $sTitle . '</span>:<br><span class="content">' . $sContent . '</span>'
                     . '</div>'
-                    . $sJsCounter;
+                     */
+                    .'<!-- Apply any bg-* class to to the info-box to color it -->
+                    <div class="info-box bg-aqua tile ' . $sTilename . '" style="float: left; width: auto; margin: 0 1em 1em 0;" '
+                        . 'title="' . $sHint . '" '
+                        . 'onmouseover="showGraph(\'' . $sSrvIndex . '\', \'' . $sTilename . '\', \'' . $sTitle . '\');" '
+                        . 'onmouseout="hideGraph();" '
+                        . 'onclick="stickyGraph(\'' . $sSrvIndex . '\', \'' . $sTilename . '\', \'' . $sTitle . '\');" '
+                    .'>
+                      <span class="info-box-icon"><i class="'.$sIcon.'"></i></span>
+                      <div class="info-box-content">
+                        <span class="info-box-text">'
+                        . '<span style="float: right;">'.$sKnob.'</span>'
+                        . $sTitle
+                    .'</span>
+                        <span class="info-box-number">'.$iCount.$sUnit.'</span>
+                        <!-- The progress section is optional
+                        <div class="progress"><div class="progress-bar" style="width: '.$iCount.'%"></div></div>
+                        -->
+                        <span class="progress-description">
+                          '.$sReq.'
+                        </span>
+                      </div>
+                      <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->'                    
+                    . $sJsCounter
+                    ;
         }
         return false;
     }

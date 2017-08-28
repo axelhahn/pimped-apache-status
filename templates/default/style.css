@@ -32,7 +32,7 @@ h1 a{ color:#fff; text-decoration: none;}
 h1 a:hover{color:#def; text-decoration: none;}
 
 nav .nav a i{color:#fc8;}
-nav .nav a span{color:#cde;}
+nav .nav a span{color:rgba(255,255,255,0.6);}
 nav .nav a span.caret{color:#89a;}
 #divmainbody ul.nav li a {color:#aaa;}
 #divmainbody ul.nav li a i{font-size: 130%;}
@@ -104,19 +104,25 @@ nav .nav a span.caret{color:#89a;}
     background: #f4f4f4;
     border-bottom: 3px solid #e8e8e8;
     */
+    /*
     height: 6em; 
     padding: 1em 1em 1em 0; 
+    */
 }
 
 
-.tile{float: left; height: 6em; padding: 5px; 
+.tile{float: left; height: 6em; 
       margin: -15px 10px 0 0; 
       text-align: center;
-      border-right: 1px dotted #fa2;
       color:#667;
 }
 .tile .counter{font-size: 200%;}
-.tile .dial{color:#fa2; background-color: #eee;}
+.tile .dial{color:#fa2; background-color: #eee;
+     color:#00e0ff;
+     background-color: #00a0c0; 
+     color:rgba(255,255,255,0.5);
+     background-color: rgba(0,0,0,0.1); 
+}
 .tile canvas{display: block; float: left; margin-right: 0.5em;}
 
 /* ---------------------------------------------------------------------- 
@@ -381,11 +387,11 @@ plotter
 .plotter .btnclose:hover{background: #f66;}
 .plotter .graph {}
 .plotter .graph .infos{position: absolute; background: rgba(255,255,255,0.7); padding: 0.5em; margin: 0.5em 0.5em 0.5em;}
-.plotter .graph .title{background: rgba(0,0,0,0.2); background: linear-gradient(90deg,rgba(0,0,0,0.2),rgba(0,0,0,0.2),rgba(0,0,0,0.0)); color:#fff; font-weight: bold; padding: 0.5em; margin: 0 0 0.5em;}
+.plotter .graph .title{background: #00a0c0; background: linear-gradient(90deg,#000,#00a0c0, rgba(0,0,0,0.0)); color:#fff; font-weight: bold; padding: 0.5em; margin: 0 0 0.5em;}
 .plotter .graph .barcontainer{float: left; }
 .plotter .graph .barcontainer:hover {background: rgba(0,0,0,0.05);}
-.plotter .graph .bar{background: #ace; background: linear-gradient(90deg,#89a,#ace);}
-.plotter .graph .bar:hover {background: linear-gradient(90deg,#9ab,#bdf);}
-.plotter .graph .barcur{background: #3a3;background: linear-gradient(90deg,#383,#6b6,#383);}
-.plotter .graph .current{position: absolute; left: 0; border-top: 1px solid #191; width: 100%;}
+.plotter .graph .bar{background: #ace; background: linear-gradient(90deg,#00a0c0,#00c0ef);}
+.plotter .graph .bar:hover {background: linear-gradient(90deg,#00a0c0,#00e0ff,#00a0c0);}
+.plotter .graph .barcur{background: #3a3;background: linear-gradient(90deg,#fa2,#fc2,#fa2);}
+.plotter .graph .current{position: absolute; left: 0; border-top: 1px solid #fc2; width: 100%;}
 .plotter .graph .avg{position: absolute; left: 0; border-top: 1px dashed #a33; width: 100%;}
