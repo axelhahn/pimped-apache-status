@@ -21,8 +21,6 @@
     },
     "hideRows": [],
     "icons": {
-        "admin": "<i class=\"fa fa-cog\"><\/i> ",
-        "leaveadmin": "<i class=\"fa fa-tachometer\"><\/i> ",
         "adminservers": "<i class=\"fa fa-cubes\"><\/i> ",
         "adminsettings": "<i class=\"fa fa-bars\"><\/i> ",
         "adminupdate": "<i class=\"fa fa-flash\"><\/i> ",
@@ -43,7 +41,16 @@
         "help-doc": "<i class=\"fa fa-book\"><\/i>",
         "help-color": "<i class=\"fa fa-tint\"><\/i>",
         "help-thanks": "<i class=\"fa fa-comment-o\"><\/i>",
-        "update.php": "<i class=\"fa fa-rocket\"><\/i>"
+        "update.php": "<i class=\"fa fa-rocket\"><\/i>",
+        
+        "server_count": "<i class=\"fa fa-hdd-o\"><\/i>",
+        "server_responsetime": "<i class=\"fa fa-clock-o\"><\/i>",
+        "requests_all": "<i class=\"fa fa-ticket\"><\/i>",
+        "requests_running": "<i class=\"fa fa-ticket\"><\/i>",
+        "requests_clients": "<i class=\"fa fa-laptop\"><\/i>",
+        "requests_mostrequested": "<i class=\"fa fa-file-o\"><\/i>",
+        "requests_longest": "<i class=\"fa fa-hourglass-end\"><\/i>"
+        
     },
     "lang": "en",
     "selectLang": "en,de",

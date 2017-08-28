@@ -23,16 +23,6 @@ class Datarenderer {
         'requests_mostrequested',
         'requests_longest',
     );
-    
-    private $aIcons = array(
-        'server_count'=>'fa fa-hdd-o',
-        'server_responsetime'=>'fa fa-clock-o',
-        'requests_all'=>'fa fa-ticket',
-        'requests_running'=>'fa fa-ticket',
-        'requests_clients'=>'fa fa-laptop',
-        'requests_mostrequested'=>'fa fa-file-o',
-        'requests_longest'=>'fa fa-hourglass-end',
-    );
 
     /**
      * allowed tablenames - these keys have predefined filter rules
@@ -905,7 +895,7 @@ class Datarenderer {
      */
     public function renderTile($sTilename = false) {
         $this->log(__FUNCTION__ . "($sTilename) - start");
-        global $aSrvStatus, $aSrvMeta, $aLangTxt;
+        global $aSrvStatus, $aSrvMeta, $aLangTxt, $aCfg;
 
         if (!$sTilename) {
             return false;
@@ -922,7 +912,7 @@ class Datarenderer {
 
         $sTitle = $aLangTxt['lblTile_' . $sTilename] ? $aLangTxt['lblTile_' . $sTilename] : $sTilename;
         $sHint = $aLangTxt['lblTileHint_' . $sTilename] ? $aLangTxt['lblTileHint_' . $sTilename] : $sTilename;
-        $sIcon = isset($this->aIcons[$sTilename]) ? $this->aIcons[$sTilename] : '';
+        $sIcon = isset($aCfg['icons'][$sTilename]) ? $aCfg['icons'][$sTilename] : '';
         $sContent = '';
 
         $sType = $this->aFilterPresets[$sTilename]['sType'];
@@ -1031,7 +1021,7 @@ class Datarenderer {
                         . 'onmouseout="hideGraph();" '
                         . 'onclick="stickyGraph(\'' . $sSrvIndex . '\', \'' . $sTilename . '\', \'' . $sTitle . '\');" '
                     .'>
-                      <span class="info-box-icon"><i class="'.$sIcon.'"></i></span>
+                      <span class="info-box-icon">'.$sIcon.'</span>
                       <div class="info-box-content">
                         <span class="info-box-text">'
                         . '<span style="float: right;">'.$sKnob.'</span>'
