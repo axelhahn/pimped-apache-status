@@ -183,6 +183,15 @@ class Page {
         return $this->sType = $sOutputType;
     }
 
+    /**
+     * set a (new) replacement
+     * @param string  $s         search text, i.e. "{{EXAMPLE}}"
+     * @param string  $sReplace  replacement
+     * @return boolean
+     */
+    public function setReplacement($s, $sReplace) {
+        return $this->aReplace[$s] = $sReplace;
+    }
 
 
     // ----------------------------------------------------------------------

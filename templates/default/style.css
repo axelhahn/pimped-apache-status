@@ -31,6 +31,8 @@ h1.title span{font-size:70%; }
 h1 a{ color:#fff; text-decoration: none;}
 h1 a:hover{color:#def; text-decoration: none;}
 
+section h1{color:#578; font-size: 130%;}
+
 nav .nav a i{color:#fc8;}
 nav .nav a span{color:rgba(255,255,255,0.6);}
 nav .nav a span.caret{color:#89a;}

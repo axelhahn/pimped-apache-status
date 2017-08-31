@@ -19,7 +19,7 @@ switch ($oPage->getOutputtype()) {
         $oLog->add('update check done');
         $oPage->setContent(str_replace('<span id="checkversion"></span>', $sUpdateInfos, $oPage->getContent()));
         
-        $sJsOnReady.='$("body").addClass("'.$aEnv['active']['skin'].'");';
+        $oPage->setReplacement('{{SKIN}}', $aEnv['active']['skin']);
         $oPage->setJsOnReady($sJsOnReady);
         $sHeader = $oPage->getHeader($sHead);
         if (!$aCfg["showHint"]) {

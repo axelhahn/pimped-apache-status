@@ -56,22 +56,21 @@ $sBody = '
     
     <header class="main-header">
     <!-- Logo -->
-    <a href="../../index2.html" class="logo">
-      <!-- mini logo for sidebar mini 50x50 pixels -->
+    <a href="#" class="logo">
       <span class="logo-mini"></span>
-      <!-- logo for regular state and mobile devices -->
       <span class="logo-lg"></span>
     </a>
     
     <nav class="navbar navbar-static-top">
     
-        <!-- Sidebar toggle button-->
+        <!-- Sidebar toggle button
         <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
           <span class="sr-only">Toggle navigation</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </a>
+        -->
       
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -161,6 +160,19 @@ $sBody = '
   <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
+        <ul class="sidebar-menu">
+        <li><a><span style="font-size:150%; white-space: normal;">'
+                // . $aCfg['icons']['title'] 
+                . $aEnv["project"]["title"]
+                . '
+                </span>
+                <br>
+                <span>v' . $aEnv["project"]["version"] . '</span><br>
+                <span id="checkversion"></span><br>
+            </a>
+        </li>
+        </ul>
+        
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
       
@@ -171,10 +183,11 @@ $sBody = '
         .'
             
 
-        <li class="header">SETTINGS</li>
+        <li class="header">ADMIN</li>
         '
         .$oDatarenderer->renderLI($aEnv["links"]["viewsadmin"])
         .'
+        <!-- 
         <li class="header">DUMMIES BELOW</li>
         <li class="treeview">
           <a href="#">
@@ -183,7 +196,6 @@ $sBody = '
         </li>
         
 
-        <!-- 
         <li class="header">DUMMIES BELOW</li>
         <li class="treeview">
           <a href="#">
@@ -368,7 +380,7 @@ $sBody = '
   
     <!-- Content Header (Page header) -->
     
-    
+    <!--
     <section class="content-header">
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -376,17 +388,11 @@ $sBody = '
         <li class="active">Blank page</li>
       </ol>
     </section>
-
+    -->
 
 
     <!-- Main content -->
     <section class="content">
-          <h1>'
-                . $aCfg['icons']['title'] . $aEnv["project"]["title"] 
-                . '
-          </h1>
-        <span>v' . $aEnv["project"]["version"] . '</span>
-        <span id="checkversion"></span>
 
       <!-- Default box -->
       

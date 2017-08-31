@@ -71,7 +71,7 @@ foreach ($aCfg['viewsadmin'] as $s) {
         
         "label" => $sLabel,
         "url" => $sSelfURL . '/admin/'.getNewQs(array('action'=>$s, 'view'=>'')),
-        "active" => false,
+        "active" => ($s == $aEnv["active"]["view"]),
     );
 }
 // ------------------------------------------------------------

@@ -87,6 +87,7 @@ $aCfg['datatableOptions'] = str_replace("__LANG__", $sData, $aCfg['datatableOpti
 // --- view
 $aEnv["active"]["view"] = array_key_exists("view", $_GET) ? $_GET["view"] : $aCfg['defaultView'];
 $aEnv["active"]["view"] = $aEnv["active"]["view"] ? $aEnv["active"]["view"] : $aCfg['views'][0];
+$aEnv["active"]["view"] = array_key_exists("action", $_GET) ? $_GET["action"] : $aEnv["active"]["view"];
 
 // --- skins
 $aEnv["active"]["skin"] = array_key_exists("skin", $_GET) ? $_GET["skin"] : $aCfg['skin'];
