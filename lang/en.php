@@ -48,6 +48,17 @@ $aLangTxt = array(
     // ------------------------------------------------------------
     // for all tables in the views
     // ------------------------------------------------------------
+        // ............................................................
+        'lblInitialSetup'=>'Initial Setup',
+        'lblHelplblInitialSetup'=>'
+            Welcome to the Pimped Apache status.<br>
+            First of all: protect the tool and setup an admin user.
+        ',
+        'lblUsername'=>'Username',
+        'lblPassword'=>'Password',
+        'lblRepeatPassword'=>'Repeat password',
+        'lblInitialSetupSaved'=>'OK, data were saved.',
+        'lblInitialSetupSaveFailed'=>'Something went wrong. Please enter a username and twice the same password.',
 
         // ............................................................
         'lblTable_status_workers'=>'Worker status',
@@ -306,6 +317,7 @@ $aLangTxt = array(
         'ActionAddServer'=>'Add server',
         'ActionAddServergroup'=>'Add server group',
         'ActionEdit'=>'Edit',
+        'ActionContinue'=>'Continue',
         'ActionClose'=>'Close',
         'ActionDelete'=>'Delete',
         'ActionDeleteHint'=>'Delete this entry. If you are sure.',
@@ -389,5 +401,6 @@ $aLangTxt = array(
         'cfg-tdlink'=>'special links for table rows.',
         'cfg-views'=>'list of the visible menu items',
         'cfg-viewsadmin'=>'list of the visible admin menu items',
+        'cfg-wrongitem'=>'!!wrong key!!',
         'cfg-'=>'',
 );

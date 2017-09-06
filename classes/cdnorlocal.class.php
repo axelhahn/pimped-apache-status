@@ -47,6 +47,8 @@ class cdnorlocal {
     var $sCdnUrl='https://cdnjs.cloudflare.com/ajax/libs';
     
 
+    var $_aLibs=array();
+    
     // ----------------------------------------------------------------------
     // 
     // INIT
@@ -95,7 +97,7 @@ class cdnorlocal {
     
     // ----------------------------------------------------------------------
     // 
-    // getter and setter
+    // getter and setter for single libs
     // 
     // ----------------------------------------------------------------------
 
@@ -173,6 +175,95 @@ class cdnorlocal {
         return $this->sVendorUrl=$sNewValue;
     }
     
+    // ----------------------------------------------------------------------
+    // 
+    // getter and setter for libs
+    // 
+    // ----------------------------------------------------------------------
+
+    /**
+     * add a library into lib stack
+     * @param string $sReldir  relative dir and version (i.e. "jquery/3.2.1")
+     * @param string $sFile    optional file (behind relpath)
+     * @return boolean
+     */
+    public function addLib($sReldir, $sFile=false){
+        $this->_wd(__METHOD__ . "($sReldir,$sFile)");
+        if (!array_key_exists($sReldir, $this->_aLibs)){
+            $aTmp=preg_split('#\/#', $sReldir);
+            $this->_aLibs[$sReldir]=array(
+                'lib' => $aTmp[0],
+                'version' => $aTmp[1],
+                'relpath' => $sReldir,
+                'islocal' => !!$this->getLocalfile($sReldir),
+                'files'=>array(),
+                );
+        }
+        if($sFile){
+            $this->_aLibs[$sReldir]['files'][$sFile]=array(
+                'islocal' => !!$this->getLocalfile($sReldir.'/'.$sFile)
+            );
+        }
+        ksort($this->_aLibs);
+        return true;
+    }
+    /**
+     * return all libs from lib stack ... TODO
+     * @return array
+     */
+    public function getLibs(){
+        $this->_wd(__METHOD__ . "()");
+        return $this->_aLibs;
+    }
+    
+    /**
+     * find item with a value and return other value
+     * @param string $sScanItem    item to search (one of lib|version|relpath)
+     * @param $sReldir$sScanValue  needed value
+     * @param $sReldir$sReturnKey  return key (one of lib|version|relpath)
+     * @return varia
+     */
+    public function _getLibItem($sScanItem, $sScanValue, $sReturnKey){
+        $this->_wd(__METHOD__ . "($sScanItem, $sScanValue, $sReturnKey)");
+        foreach($this->_aLibs as $sRelpath=>$aLibdata){
+            if ($aLibdata[$sScanItem]===$sScanValue){
+                return $aLibdata[$sReturnKey];
+            }
+        }
+        return false;
+    }
+    /**
+     * get the (first) version of a lib in the lib stack
+     * @param string  $sLib  name of the library (i.e. "jquery"; relpath without version)
+     * @return string
+     */
+    public function getLibVersion($sLib){
+        return $this->_getLibItem('lib', $sLib, 'version');
+    }
+    /**
+     * get the (first) version of a lib in the lib stack
+     * @param string  $sLib  name of the library (i.e. "jquery"; relpath without version)
+     * @return string
+     */
+    public function getLibRelpath($sLib){
+        return $this->_getLibItem('lib', $sLib, 'relpath');
+    }
+    /**
+     * set an array of lib items to the lib 
+     * @param array  $aLibs  array of relpath (i.e. "jquery/3.2.1")
+     * @return boolean
+     */
+    public function setLibs($aLibs){
+        $this->_wd(__METHOD__ . "([array])");
+        if(!is_array($aLibs)){
+            return false;
+        }
+        $this->_aLibs=array();
+        foreach($aLibs as $sReldir){
+            $this->addLib($sReldir);
+        }
+        return true;
+    }
     
     // ----------------------------------------------------------------------
     // 

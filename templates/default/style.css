@@ -202,6 +202,7 @@ div.subh4 {margin-left: 10px; margin-bottom: 10px; padding-left: 10px; border-le
 
 tr.default{}
 tr.user{ color:#080; background:#efe;}
+tr.error{ color:#800; background:#fcc;}
 
 /* Links */   
 

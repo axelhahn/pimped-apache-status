@@ -16,7 +16,7 @@ global $aServergroups, $aDefaultCfg, $aCfg;
 global $sJsOnReady;
 $sJsOnReady = '';
 $aServers2Collect = array();
-$sGetStarted = '<br>see documentation <a href="http://www.axel-hahn.de/docs/apachestatus/get_started.htm">get started<a>.';
+$sGetStarted = '<br>see documentation <a href="https://www.axel-hahn.de/docs/apachestatus/get_started.htm">get started<a>.';
 
 $sSelfURL=str_replace('\\','/',str_replace(realpath($_SERVER['DOCUMENT_ROOT']), '', __DIR__));
 
@@ -46,6 +46,9 @@ if (!is_array($aDefaultCfg) || !count($aDefaultCfg)) {
 }
 // repeated in admin/inc_settings.php
 $aUserCfg=$oCfg->get("config_user");
+if (!is_array($aUserCfg)|| !count($aUserCfg)) {
+    $_GET["view"]='install.php';
+}
 $aCfg = array_merge($aDefaultCfg, $aUserCfg);
 
 $aServergroups=$oCfg->get("config_servers");

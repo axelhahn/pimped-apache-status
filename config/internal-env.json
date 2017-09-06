@@ -1,8 +1,8 @@
 {
     "project": {
         "title": "Pimped Apache Status",
-        "version": "2.00.09 BETA",
-        "releasedate": "2017-08-31",
+        "version": "2.00.10 BETA",
+        "releasedate": "2017-09-07",
         "license": "GPL 3.0"
     },
     "active": [],
@@ -41,5 +41,16 @@
                 "target": ""
             }
         }
-    }
+    },
+    "vendor": [
+        "admin-lte/2.3.11",
+        "jQuery-Knob/1.2.13",
+        "datatables/1.10.15",
+        "font-awesome/4.7.0",
+        "jquery/3.2.1",
+        "morris.js/0.5.1",
+        "raphael/2.2.7",
+        "twitter-bootstrap/3.3.7"
+    ]
+    
 }

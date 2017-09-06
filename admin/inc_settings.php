@@ -153,9 +153,12 @@ foreach ($aDefaultCfg as $sKey => $val) {
         $sClass = "user";
         $value = $aCfgUser[$sKey];
     }
+    if (!isset($aLangTxt['cfg-' . $sKey])) {
+        $sClass = "error";
+    }
     $sTable.='<tr class="' . $sClass . '">' . "\n"
             . '<td>' . $sKey . '</td>' . "\n"
-            . '<td>' . $aLangTxt['cfg-' . $sKey] . '</td>' . "\n"
+            . '<td>' . (isset($aLangTxt['cfg-' . $sKey]) ? $aLangTxt['cfg-' . $sKey] : $aLangTxt['cfg-wrongitem'] ) . '</td>' . "\n"
             // . '<td><pre>' . htmlentities(print_r($val, 1)) . '</pre></td>' . "\n"
             . '<td><pre' . (!array_key_exists($sKey, $aCfgUser) ? ' class="default"': '' ) 
                 . '>'.htmlentities(print_r($val, 1)) 
