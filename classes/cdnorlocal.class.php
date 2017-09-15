@@ -190,6 +190,7 @@ class cdnorlocal {
     public function addLib($sReldir, $sFile=false){
         $this->_wd(__METHOD__ . "($sReldir,$sFile)");
         if (!array_key_exists($sReldir, $this->_aLibs)){
+            $this->_wd(__METHOD__ . " add $sReldir");
             $aTmp=preg_split('#\/#', $sReldir);
             $this->_aLibs[$sReldir]=array(
                 'lib' => $aTmp[0],
@@ -198,6 +199,8 @@ class cdnorlocal {
                 'islocal' => !!$this->getLocalfile($sReldir),
                 'files'=>array(),
                 );
+        } else {
+            $this->_wd(__METHOD__ . " SORRY $sReldir was added already");
         }
         if($sFile){
             $this->_aLibs[$sReldir]['files'][$sFile]=array(
@@ -205,6 +208,7 @@ class cdnorlocal {
             );
         }
         ksort($this->_aLibs);
+        $this->_wd(__METHOD__ . " ... ".print_r($this->_aLibs, 1));
         return true;
     }
     /**

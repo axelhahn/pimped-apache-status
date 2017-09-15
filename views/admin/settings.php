@@ -103,7 +103,7 @@ foreach (array(
         'label' => $myvar,
         'onclick' => 'return showTab(\'#h3' . md5($myvar) . '\');',
     );
-    $sData = file_get_contents(dirname(__DIR__) . '/config/' . $sCfgfile . '.json');
+    $sData = file_get_contents(dirname(__DIR__) . '../../config/' . $sCfgfile . '.json');
     $sOut=$aSettings['edit']
             ? '<form class="form" method="post" action="'.getNewQs(array()).'">'
                 . '<input name="appaction" value="updateconfig" type="hidden">'

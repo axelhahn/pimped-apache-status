@@ -234,14 +234,18 @@ table.dataTable a{background: none;}
     text-align: left;
 }
 .dataTables_filter input{
-    width: 200px; border: 1px solid #ddd; border-radius:5px; padding: 2px;
-    background: #fff;
+    width: 200px; border: 1px solid #f8f8f8; border-radius:0px; padding: 2px;
     background: linear-gradient(#eee, #fff, #fff);
+    background: #f8f8f8;
     color:#b30;
+}
+.dataTables_filter input:focus{
+    border: 1px solid #ddd;
+    background: #fff;
 }
 .dataTables_filter a{
     border: 1px solid #daa;
-    border-radius: 4px;
+    border-radius: 2px;
     background: #fcc;
     background: linear-gradient(#fcc, #fee, #fcc);
     color: #daa;
@@ -250,9 +254,9 @@ table.dataTable a{background: none;}
     font-weight: bold;
 }
 .dataTables_filter a:hover{
-    border: 1px solid #caa;
-    color: #c88;
-    background: #fee;
+    background: #a33;
+    color: #fcc;
+    text-decoration: none;
 }
 .dataTables_length {
     float: left;

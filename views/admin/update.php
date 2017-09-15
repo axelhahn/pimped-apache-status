@@ -2,14 +2,6 @@
 if (!isset($adminindex)){
     die("Abort." . __FILE__);
 }
-
-$sHtml = '<h3><i class="fa fa-flash"></i> Update</h3>'
-        . '<div class="hintbox">'
-        . $aLangTxt['AdminHintUpdates']
-        . '</div>'
-        . $oMsg->render()
-        . '';
-
 $sHtml = '';
 
 // TODO BETA: DISABLE UPDATE FOR USERS

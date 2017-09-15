@@ -157,11 +157,11 @@ $sBody = '
   <!-- =============================================== -->
 
   <!-- Left side column. contains the sidebar -->
-  <aside class="main-sidebar">
+  <aside class="main-sidebar" style="padding-top: 0; z-index: 1050;">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
         <ul class="sidebar-menu">
-        <li><a><span style="font-size:150%; white-space: normal;">'
+        <li><a href="?"><span style="font-size:150%; white-space: normal;">'
                 // . $aCfg['icons']['title'] 
                 . $aEnv["project"]["title"]
                 . '

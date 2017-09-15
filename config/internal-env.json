@@ -1,8 +1,8 @@
 {
     "project": {
         "title": "Pimped Apache Status",
-        "version": "2.00.10 BETA",
-        "releasedate": "2017-09-07",
+        "version": "2.00.11 BETA",
+        "releasedate": "2017-09-15",
         "license": "GPL 3.0"
     },
     "active": [],

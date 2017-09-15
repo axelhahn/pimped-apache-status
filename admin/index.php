@@ -37,8 +37,14 @@ $content = '<div id="divtiles">'
         // . $oDatarenderer->renderTabs($aTabs)
         ;
 $content = '';
-$oLog->add('include inc_'.$sAction.'.php');
+$sIncView='admin/'.($sAction ? $sAction : 'servers').'.php';
+
+$oLog->add('include '.$sIncView);
 ob_start();
+if (!@include(__DIR__ . '/../views/' . $sIncView)) {
+    $oMsg->add('View could not be included: ' . $sIncView, 'error');
+}
+/*
 switch ($sAction){
     case 'lang':
     case 'servers':
@@ -49,6 +55,8 @@ switch ($sAction){
     default:
         include 'inc_servers.php';
 }
+ * 
+ */
 $content .= $oDatarenderer->themeBox(
         $aCfg['icons']['admin'. $sAction] .' '. $aLangTxt['AdminMenu'.$sAction]
         , ob_get_contents()

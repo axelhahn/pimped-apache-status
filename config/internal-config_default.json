@@ -24,7 +24,11 @@
         "adminservers": "<i class=\"fa fa-cubes\"><\/i> ",
         "adminsettings": "<i class=\"fa fa-bars\"><\/i> ",
         "adminupdate": "<i class=\"fa fa-flash\"><\/i> ",
+        "adminvendor": "<i class=\"fa fa-puzzle-piece\"><\/i> ",
         "adminlang": "<i class=\"fa fa-comment\"><\/i> ",
+        
+        "vendorCDN": "<i class=\"fa fa-globe\"><\/i> ",
+        "vendorLocal": "<i class=\"fa fa-folder-o\"><\/i> ",
         
         "title": "<i class=\"fa fa-square\"><\/i> ",
         "group": "<i class=\"fa fa-folder-o\"><\/i> ",
@@ -75,6 +79,7 @@
         "servers",
         "settings",
         "lang",
+        "vendor",
         "update"
     ]
 }
