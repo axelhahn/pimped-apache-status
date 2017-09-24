@@ -375,7 +375,11 @@ $aLangTxt = array(
         'AdminMessageSettings-update-ok' => 'OK: user config file was saved.',
         'AdminMessageSettings-wrong-key' => 'WARNING: user config key [%s] is not a valid setting. This information is useless: ',
         
-        'AdminHintVendor'=>'Used vendor libraries and the place where they are loaded from<br>',
+        'AdminHintVendor'=>'Used vendor libraries and the place where they are loaded from.<br>Download the libaries to increase the speed of this web app and/ or to run it without additional internet access.',
+        'AdminVendorLib'=>'Library',
+        'AdminVendorVersion'=>'Version',
+        'AdminVendorLocal'=>'Local',
+        'AdminVendorRemote'=>'Remote',
     
         'AdminHintUpdates'=>'Update this web application.<br>',
     

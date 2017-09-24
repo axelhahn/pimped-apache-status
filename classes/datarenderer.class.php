@@ -1021,10 +1021,12 @@ class Datarenderer {
                         . 'onmouseout="hideGraph();" '
                         . 'onclick="stickyGraph(\'' . $sSrvIndex . '\', \'' . $sTilename . '\', \'' . $sTitle . '\');" '
                     .'>
-                      <span class="info-box-icon">'.$sIcon.'</span>
+                      <span class="info-box-icon">'
+                        .$sIcon
+                        . '<span style="float: right; position: absolute;">'.$sKnob.'</span>'
+                      .'</span>
                       <div class="info-box-content">
                         <span class="info-box-text">'
-                        . '<span style="float: right;">'.$sKnob.'</span>'
                         . $sTitle
                     .'</span>
                         <span class="info-box-number">'.$iCount.$sUnit.'</span>
