@@ -174,8 +174,8 @@ function initKnob(){
                     fgColor: sFgColor,
                     bgColor: sBgColor,
                     'max': aData['max'],
-                    'width': '50px',
-                    'height': '50px',
+                    'width': '90px',
+                    'height': '90px',
                     thickness: 0.4
                 });
 

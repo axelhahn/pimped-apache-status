@@ -62,11 +62,15 @@ if (!isset($adminindex)){
                 .'<td>'
                 .($aLib['islocal']
                 
-                    ? '<a href="'. getNewQs(array('delete'=>$aLib['lib'])).'" class="btn btn-default">'.$aCfg['icons']['vendorLocal'].' delete</a></td>'
+                    ? '<button onclick="location.href=\''. getNewQs(array('delete'=>$aLib['lib'])).'\';" class="btn btn-danger"'
+                        . ' title="'.$aLangTxt['ActionDeleteHint'].'"'
+                        . '>'.$aCfg['icons']['actionDelete'].$aLangTxt['ActionDelete'].'</button></td>'
                         .'</td><td></td>'
                 
                     : '</td><td>'
-                            .'<a href="'. getNewQs(array('download'=>$aLib['lib'])).'" class="btn btn-default">'.$aCfg['icons']['vendorCDN'].'download</a></td>'
+                            .'<button onclick="location.href=\''. getNewQs(array('download'=>$aLib['lib'])).'\';" class="btn btn-success"'
+                        . ' title="'.$aLangTxt['ActionDownloadHint'].'"'
+                        . '>'.$aCfg['icons']['actionDownload'].$aLangTxt['ActionDownload'].'</a></td>'
                 )
                 // .'<br>'
                 .'</tr>'

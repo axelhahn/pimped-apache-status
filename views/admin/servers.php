@@ -132,7 +132,7 @@ if (count($oCS->getGroups())) {
     $sDivNewGroup = 'divAddGroup';
     $sHtml.=''
             . '<button class="btn btn-success" onclick="$(\'#' . $sDivNewGroup . '\').slideToggle();">'
-            . '<i class="fa fa-plus"></i> ' . $aLangTxt['ActionAddServergroup']
+                . $aCfg['icons']['actionAdd'] . $aLangTxt['ActionAddServergroup']
             . '</button>'
             . '<br>'
             . '<div class="divServergroup">'
@@ -149,7 +149,7 @@ if (count($oCS->getGroups())) {
                 . $oCS->renderFormGroup($sGroup) . '<br>'
                 . '<div style="margin-left: 3%" class="">'
                 . '<button class="btn btn-success" onclick="$(\'#' . $sDivNew . '\').slideToggle();">'
-                . '<i class="fa fa-plus"></i> ' . $aLangTxt['ActionAddServer']
+                    . $aCfg['icons']['actionAdd'] . $aLangTxt['ActionAddServer']
                 . '</button>'
                 . '<br>'
                 . '<div id="' . $sDivNew . '" class="divNew">'

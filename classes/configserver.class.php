@@ -443,7 +443,7 @@ class configServer {
      * @return string
      */
     public function renderFormServer($sGroup, $sId=false){
-        global $aLangTxt;
+        global $aLangTxt, $aCfg;
         $bNew=!($sId>'');
         
         $sHtml='';
@@ -463,12 +463,12 @@ class configServer {
                     . '<input type="hidden" name="oldlabel" value="'.$sId.'"/>'
                     . '<button type="submit" class="btn btn-danger" title="'.$aLangTxt['ActionDeleteHint'].'" '
                         . 'onclick="return confirm(\''.sprintf($aLangTxt['AdminLblServers-ConfirmDelete'], $aSrv['label'].'; '. $aSrv['status-url']) .'\');"'
-                        . '><i class="fa fa-close"></i> '.$aLangTxt['ActionDelete']
+                        . '>'. $aCfg['icons']['actionDelete'] . $aLangTxt['ActionDelete']
                     . '</button>'
                     . '</form>'
                     
                     . '<button class="btn btn-default" onclick="$(\'#'.$sFormId.'\').slideToggle();">'
-                    . '<i class="fa fa-pencil"></i> ' . $aLangTxt['ActionEdit']
+                    . $aCfg['icons']['actionEdit'] . $aLangTxt['ActionEdit']
                     . '</button>'
                     . ' <strong><i class="fa fa-hdd-o"></i> '.$aSrv['label'].'</strong>'
                     . ' ('.$aSrv['status-url'].')'
@@ -501,7 +501,7 @@ class configServer {
         }
         
         $sHtml.='<button type="submit" class="btn '.$sSubmitClass.'" title="'.$aLangTxt['ActionOKHint'].'"'
-                . '><i class="fa fa-check"></i> '.$aLangTxt['ActionOK'].'</button>'
+                . '>'.$aCfg['icons']['actionOK']. $aLangTxt['ActionOK'].'</button>'
                 . '</form>'
                 ;
         

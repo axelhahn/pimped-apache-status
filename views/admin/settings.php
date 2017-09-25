@@ -100,7 +100,7 @@ foreach (array(
     $myvar = $sCfgfile;
     $aTab[$myvar] = array(
         'url' => '#',
-        'label' => $myvar,
+        'label' => $aCfg['icons']['tab_'.$myvar] . $myvar,
         'onclick' => 'return showTab(\'#h3' . md5($myvar) . '\');',
     );
     $sData = file_get_contents(dirname(__DIR__) . '../../config/' . $sCfgfile . '.json');
@@ -110,12 +110,12 @@ foreach (array(
                 . '<input name="appconfig" value="'.$sCfgfile.'" type="hidden">'
                 . '<textarea id="ta" name="rawdata" class="form-control raw" rows="15">' . htmlentities($sData) . '</textarea><br>'
                 . '<button class="btn btn-primary" title="'.$aLangTxt['ActionOKHint'].'"'
-                    . '><i class="fa fa-check"></i> '.$aLangTxt['ActionOK'].'</button>'
+                    . '>'.$aCfg['icons']['actionOK'].$aLangTxt['ActionOK'].'</button>'
             . '</form>'
             : '<pre>' . htmlentities($sData) . '</pre>'
             ;
     $sHtml.='
-                <h3 id="h3' . md5($myvar) . '">' . $sCfgfile . '</h3>
+                <h3 id="h3' . md5($myvar) . '">' . $aCfg['icons']['tab_'.$myvar] . $sCfgfile . '</h3>
                 <div class="subh3">'
             . '<div class="hintbox">'
             . $aLangTxt['AdminHintRaw-' . $sCfgfile]
@@ -134,7 +134,7 @@ $aCfgUser = $oCfg->get("config_user");
 $myvar = 'overrides';
 $aTab[$myvar] = array(
     'url' => '#',
-    'label' => $aLangTxt['AdminMenuSettingsCompare'],
+    'label' => $aCfg['icons']['tab_Compare'] . $aLangTxt['AdminMenuSettingsCompare'],
     'onclick' => 'return showTab(\'#h3' . md5($myvar) . '\');',
 );
 $sTable = '<table class="table datatable"><thead>'
@@ -170,7 +170,7 @@ foreach ($aDefaultCfg as $sKey => $val) {
 $sTable.='<tbody></table>';
 
 $sHtml.='
-            <h3 id="h3' . md5($myvar) . '">' . $aLangTxt["AdminMenuSettingsCompare"] . '</h3>
+            <h3 id="h3' . md5($myvar) . '">' . $aCfg['icons']['tab_Compare'] . $aLangTxt["AdminMenuSettingsCompare"] . '</h3>
             <div class="subh3">'
         . '<div class="hintbox">'
         . $aLangTxt['AdminHintSettingsCompare']

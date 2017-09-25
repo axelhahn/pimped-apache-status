@@ -1023,7 +1023,7 @@ class Datarenderer {
                     .'>
                       <span class="info-box-icon">'
                         .$sIcon
-                        . '<span style="float: right; position: absolute;">'.$sKnob.'</span>'
+                        . '<span style="float: right; position: relative; top: -85px; right: -17px;">'.$sKnob.'</span>'
                       .'</span>
                       <div class="info-box-content">
                         <span class="info-box-text">'
