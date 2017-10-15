@@ -2,11 +2,31 @@
 
   Axel pimped the Apache-status
 
-  http://www.axel-hahn.de/apachestatus.php
-  http://sourceforge.net/projects/pimpapachestat/
+  https://www.axel-hahn.de/apachestatus.php
+  https://sourceforge.net/projects/pimpapachestat/
 
   Docs:
-  http://www.axel-hahn.de/docs/apachestatus/
+  https://www.axel-hahn.de/docs/apachestatus/
+
+----------------------------------------------------------------------
+
+2017-10-15 - v2.00.14
+  * added (finished) German texts
+  * fix finding assets in cdnorlocal admin class
+  * update lib datatable 1.10.15 -> 1.10.16
+  * update lib adminLte 2.3.11 -> 2.4.2
+  * updater - show a message that it is blocked in beta
+
+
+Version 2 is still beta. Most changes are related to the user interface.
+v2 brings you ...
+
+  * added: AdminLTE as admin interface
+  * added: debugging
+  * added: admin interface to define servers and groups
+  * added: graphical information with morris.js ans knob
+  * config format is now JSON (use upgrade.php to convert)
+  * external libraries are not bundled anymore to minimize download size (but can be downloaded)
 
 ----------------------------------------------------------------------
 

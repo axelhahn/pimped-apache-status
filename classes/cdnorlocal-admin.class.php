@@ -477,6 +477,8 @@ class cdnorlocaladmin extends cdnorlocal{
      * download all files of a given library.
      * 
      * @param  string  $sLibrary  name of library
+     * @param  string  $sVersion  version number
+     * @param  bool    $bForceDownload  optional flag: if true a download will be repeated even if the local copy exists
      * @return boolean
      */
     public function downloadAssets($sLibrary, $sVersion, $bForceDownload=false){
@@ -492,13 +494,13 @@ class cdnorlocaladmin extends cdnorlocal{
 
         $iMaxFiles=50;
         $iFilesLeft=0;
-        $iFilesTotal=count($this->getLibraryAssets($sLibrary));
+        $iFilesTotal=count($this->getLibraryAssets($sLibrary, $sVersion));
         $this->_putLibraryInfoFile($sLibrary);
         $this->_putLocalLibsFile();
         
         // --- get the first N files...
         $aDownloads=array();
-        foreach($this->getLibraryAssets($sLibrary) as $sFilename){
+        foreach($this->getLibraryAssets($sLibrary, $sVersion) as $sFilename){
             if (!file_exists($sTmpdir.'/'.$sFilename) || !filesize($sTmpdir.'/'.$sFilename) ){
                 if(count($aDownloads) < $iMaxFiles){
                     $aDownloads[]=array(
@@ -512,7 +514,7 @@ class cdnorlocaladmin extends cdnorlocal{
         $this->_httpGet($aDownloads);
         
         // --- verify if all was downloaded
-        foreach($this->getLibraryAssets($sLibrary) as $sFilename){
+        foreach($this->getLibraryAssets($sLibrary, $sVersion) as $sFilename){
             if (!file_exists($sTmpdir.'/'.$sFilename)){
                 $iFilesLeft++;
                 $this->_wd(__METHOD__ . ' file still missing: '. $sTmpdir.'/'.$sFilename);

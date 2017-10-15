@@ -3,7 +3,9 @@ if (!isset($adminindex)){
     die("Abort.");
 }
 
-
+    $iCount=0;
+    $iCountLocal=0;
+    
     require_once(__DIR__ . '/../../classes/cdnorlocal-admin.class.php');
     
     $sVendorUrl=(strpos($_SERVER['REQUEST_URI'], '/admin/?') ? '.' : '') . './vendor/';
@@ -29,14 +31,15 @@ if (!isset($adminindex)){
             . '<tr>'
                 . '<th>'.$aLangTxt["AdminVendorLib"].'</th>'
                 . '<th>'.$aLangTxt["AdminVendorVersion"].'</th>'
-                . '<th>'.$aLangTxt["AdminVendorLocal"].'</th>'
                 . '<th>'.$aLangTxt["AdminVendorRemote"].'</th>'
+                . '<th>'.$aLangTxt["AdminVendorLocal"].'</th>'
             . '</tr>'
             . '</thead>'
             . '<tbody>'
             ;
     
     foreach($oCdn->getLibs() as $aLib){
+        $iCount++;
         
         // --- download
         if ($sLib2download && $aLib['lib']===$sLib2download && !$aLib['islocal']){
@@ -52,7 +55,9 @@ if (!isset($adminindex)){
             echo "<script>window.setTimeout('location.href=\"?&action=vendor\"', 20);</script>";
             $oCdn->setLibs($aEnv['vendor']);
         }
-        
+        if ($aLib['islocal']){
+            $iCountLocal++;
+        }
         $sHtml.='<tr>'
                 . '<td><strong>'
                     .$aCfg['icons']['adminvendor']
@@ -62,15 +67,15 @@ if (!isset($adminindex)){
                 .'<td>'
                 .($aLib['islocal']
                 
-                    ? '<button onclick="location.href=\''. getNewQs(array('delete'=>$aLib['lib'])).'\';" class="btn btn-danger"'
+                    ? '</td><td><button onclick="location.href=\''. getNewQs(array('delete'=>$aLib['lib'])).'\';" class="btn btn-danger"'
                         . ' title="'.$aLangTxt['ActionDeleteHint'].'"'
                         . '>'.$aCfg['icons']['actionDelete'].$aLangTxt['ActionDelete'].'</button></td>'
-                        .'</td><td></td>'
+                        .'</td>'
                 
-                    : '</td><td>'
+                    : ''
                             .'<button onclick="location.href=\''. getNewQs(array('download'=>$aLib['lib'])).'\';" class="btn btn-success"'
                         . ' title="'.$aLangTxt['ActionDownloadHint'].'"'
-                        . '>'.$aCfg['icons']['actionDownload'].$aLangTxt['ActionDownload'].'</a></td>'
+                        . '>'.$aCfg['icons']['actionDownload'].$aLangTxt['ActionDownload'].'</a></td><td></td>'
                 )
                 // .'<br>'
                 .'</tr>'
@@ -78,5 +83,8 @@ if (!isset($adminindex)){
     }
     $sHtml.='</tbody></table>';
     
-    echo $sHtml;
+    echo (($iCount && $iCount===$iCountLocal)
+            ? sprintf($aLangTxt["AdminVendorLibAllLocal"], $iCount)
+            : sprintf($aLangTxt["AdminVendorLibLocalinstallations"], $iCount, $iCountLocal)
+    ). $sHtml;
     // echo 'Libs:<br><pre>'. print_r($oCdn->getLibs(),1). '</pre>---<br>';    

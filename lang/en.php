@@ -382,6 +382,8 @@ $aLangTxt = array(
         'AdminVendorVersion'=>'Version',
         'AdminVendorLocal'=>'Local',
         'AdminVendorRemote'=>'Remote',
+        'AdminVendorLibLocalinstallations'=>'<strong>%s</strong> libs are in use and <strong>%s</strong> of them are local. Download all libs for best performance.',
+        'AdminVendorLibAllLocal'=>'All <strong>%s</strong> used libs are local.',
     
         'AdminHintUpdates'=>'Update this web application.<br>',
     
@@ -391,7 +393,7 @@ $aLangTxt = array(
         'cfg-auth'=>'Authentication to protect access to the Apache status data',
             'AdminLblVar-user'=>'username',
             'AdminLblVar-password'=>'password',
-        'cfg-autoreload'=>'Time to auto reload page. The array contains values in seconsd that will be visible as a dropdown.',
+        'cfg-autoreload'=>'Time to auto reload page. The array contains values in seconds that will be visible as a dropdown.',
             'AdminLblVar-autoreload'=>'time in sec',
         'cfg-checkupdate'=>'How often to check for an update. The value is in [s]. The value 0 turns off the check. Default is 1 day.',
         'cfg-datatableOptions'=>'Javascript object for datatable. Do not override this.',

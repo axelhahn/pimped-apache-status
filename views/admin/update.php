@@ -5,8 +5,9 @@ if (!isset($adminindex)){
 $sHtml = '';
 
 // TODO BETA: DISABLE UPDATE FOR USERS
-$sHtml .= "<h3>Work in progress</h3>file: " . __FILE__ . "<p>Update feature is disabled so far.</p>";
+$sHtml .= "<h3>Work in progress</h3>file: " . __FILE__ . "<p>Update feature is disabled here so far. It would destroy a beta installation.</p>";
 if (!strpos($_SERVER["SERVER_NAME"], "axel-hahn.de")){
+    echo $sHtml;
     return true;
 }
 

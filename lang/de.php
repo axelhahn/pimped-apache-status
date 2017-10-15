@@ -38,6 +38,17 @@ $aLangTxt = array(
     // ------------------------------------------------------------
     // for all tables in the views
     // ------------------------------------------------------------
+        // ............................................................
+        'lblInitialSetup'=>'Initial-Setup',
+        'lblHelplblInitialSetup'=>'
+            Willkommen beim Pimped Apache Status.<br>
+            Zuerst: Sch&uuml;tze das Werkzeug und setze einen Admin-user.
+        ',
+        'lblUsername'=>'Username',
+        'lblPassword'=>'Passwort',
+        'lblRepeatPassword'=>'Passwort wiederholen',
+        'lblInitialSetupSaved'=>'OK, Daten wurden gespeichert.',
+        'lblInitialSetupSaveFailed'=>'Irgendwas ging schief. Bitte gib einen Benutzernamen ein und 2 x dasselbe Passwort.',
 
         // ............................................................
         'lblTable_status_workers'=>'Worker Status',
@@ -294,9 +305,108 @@ $aLangTxt = array(
         'js::srvFilterPlaceholder'=>'Server finden',
     
     // ------------------------------------------------------------
-    // admin TODO
+    // admin
     // ------------------------------------------------------------
-        'AdminMenuServers'=>'Server',
-        'AdminLblServers'=>'Verwaltung der Server',
-        'AdminLblServergroup'=>'server group',
+        'ActionAdd'=>'Hinzuf&uuml;gen',
+        'ActionAddServer'=>'Server hinzuf&uuml;gen',
+        'ActionAddServergroup'=>'Server-Gruppe hinzuf&uuml;gen',
+        'ActionEdit'=>'Bearbeiten',
+        'ActionContinue'=>'Weiter',
+        'ActionClose'=>'Schliessen',
+        'ActionDelete'=>'L&ouml;schen',
+        'ActionDeleteHint'=>'Eintrag l&ouml;schen ... wenn du sicher bist.',
+        'ActionDownload'=>'Download',
+        'ActionDownloadHint'=>'Bibliothek herunterladen und von local verwenden.',
+        'ActionOK'=>'OK',
+        'ActionOKHint'=>'&Auml;nderungen speichern',
+    
+        'AdminMenusettings'=>'Einstellungen',
+        'AdminMenuservers'=>'Server',
+        'AdminMenulang'=>'Sprachen',
+        'AdminMenuvendor'=>'Vendor-Bibliotheken',
+        'AdminMenuupdate'=>'Update',
+    
+        'AdminMenuSettingsCompare'=>'Vergleichen',    
+        'AdminHintSettingsCompare'=>'Hier sind alle Default Werte sichtbar und welche von ihnen &uuml;bersteuert werden.<br>',
+        'AdminMenuSettings-var'=>'Variablen-Name',
+        'AdminMenuSettings-description'=>'Beschreibung',
+        'AdminMenuSettings-default'=>'Default',
+        'AdminMenuSettings-uservalue'=>'Benutzer-Wert',
+        'AdminHintRaw-internal-config_default'=>'Ansicht der Rohdaten aller Default-Einstellungen.<br>',
+        'AdminHintRaw-config_user'=>'Benutzer-Einstellungen als Rohdaten bearbeiten.<br>',
+    
+        'AdminHintServers'=>'Anlegen von Gruppen.<br>'
+            . 'In jeder Gruppe kannst du mehrere Apache Server anlegen, die &uuml;berwacht werden sollen. Alle status Seiten aller Server derselben Gruppe werden simultan eingeholt.<br>'
+            . 'So kannst du eine loadbalancte Webseite monitoren.<br>'
+            . 'Oder erzeuge eine Gruppe mit Servern, um ein Aug auf den Traffic aller Server (Appserver, Caching-Server) eines Projektes zu haben.<br>',
+        'AdminServersLblAddGroup'=>'Neue Gruppe von Servern anlegen.',
+        'AdminLblGroup-label'=>'Name der Gruppe',
+    
+        'AdminServersLblAddServer'=>'Hinzuf&uuml;gen eines Apache Httpd Server in dieser Gruppe.',
+    
+        'AdminLblServers'=>'Apache-Server konfigurieren',
+        'AdminLblServers-ConfirmDelete'=>'Bist du sicherm, dass du den Server-Eintrag l&ouml;schen m&ouml;chtest\n%s?',
+        'AdminLblServers-label'=>'Servername',
+        'AdminLblServers-label-Hint'=>'Servername des Apache webservers.',
+        'AdminLblServers-status-url'=>'Url der Serverstatus Seite',
+        'AdminLblServers-status-url-Hint'=>'Url der Serverstatus Seite. Wird sie leer gelassen, wird der Default verwendet: <em>http://[servername]/server-status/</em>. Passe es an, wenn https statt http oder ein anderer Port verwendet wird, z.B. <em>http[s]://[servername]:[port]/server-status/</em>',
+        'AdminLblServers-userpwd'=>'Benutzername und Password',
+        'AdminLblServers-userpwd-Hint'=>'optional; Nur dann ausf&uuml;llen, wenn die Serverstatus-Seite passwort-.gesch&uuml;tzt ist.<br>Syntax: <em>[username]:[password]</em>',
+    
+        'AdminMessageServer-addgroup-error' => 'FEHLER: Gruppe %s kann nicht hinzugef&uuml;gt werden.',
+        'AdminMessageServer-addgroup-ok' => 'OK: Gruppe %s wurde hinzugef&uuml;gt.',
+        'AdminMessageServer-deletegroup-error' => 'FEHLER: Gruppe %wurde nicht gel&ouml;scht.',
+        'AdminMessageServer-deletegroup-ok' => 'OK: Gruppe %s wurde gel&ouml;scht.',
+        'AdminMessageServer-updategroup-error' => 'FEHLER: Gruppe %s kann nicht aktualisiert werden.',
+        'AdminMessageServer-updategroup-ok' => 'OK: Gruppe %s wurde hinzugef&uuml;gt.',
+        'AdminMessageServer-addserver-error' => 'FEHLER: Server %s kann nicht hinzugef&uuml;gt werden.',
+        'AdminMessageServer-addserver-ok' => 'OK: Server %s wurde hinzugef&uuml;gt.',
+        'AdminMessageServer-deleteserver-error' => 'FEHLER: Server %s kann nicht gel&ouml;scht werden.',
+        'AdminMessageServer-deleteserver-ok' => 'OK: Server %s wurde gel&ouml;scht.',
+        'AdminMessageServer-updateserver-error' => 'FEHLER: Server %s konnte nicht aktualisiert werden.',
+        'AdminMessageServer-updateserver-ok' => 'OK: Server %s wurde aktualisiert.',
+    
+        'AdminMessageSettings-update-error-no-json' => 'SKIP: die gesendeten Daten sind kein valides JSON. Die alten Einstellungen bleiben bestehen. Du kannst zur&uuml;ckwechseln, um es erneut zu versuchen.',
+        'AdminMessageSettings-update-error' => 'FEHLER: die Benutzereinstellungen wurden nicht gespeichert :-/',
+        'AdminMessageSettings-update-ok' => 'OK: Benutzereinstellungen wurden gespeichert.',
+        'AdminMessageSettings-wrong-key' => 'WARNUNG: der Wert [%s] ist ung&uuml;tig. Diese Einstellöung ist sinnlos: ',
+        
+        'AdminHintVendor'=>'Verwendete Bibliotheken und von wo sie geladen werden. Ob sie von einem CDN oder lokal geladen werden, hat funktional keinen Einfluss. Liegen sie lokal, erh&ouml;ht des die Ladegeschwindigkeit und man kann die Webapplikation ohne externe Internet-Anbindung betreiben.',
+        'AdminVendorLib'=>'Bibliothek',
+        'AdminVendorVersion'=>'Version',
+        'AdminVendorLocal'=>'Lokal',
+        'AdminVendorRemote'=>'Remote',
+        'AdminVendorLibLocalinstallations'=>'<strong>%s</strong> verwendete Bibliotheken gesamt - davon liegen <strong>%s</strong> lokal. Lade alle herunter, um die beste Performance zu haben.',
+        'AdminVendorLibAllLocal'=>'Alle <strong>%s</strong> verwendeten Bibliotheken sind lokal.',
+    
+        'AdminHintUpdates'=>'Update dieser Web-applikation.<br>',
+
+    // ------------------------------------------------------------
+    // cfg values
+    // ------------------------------------------------------------
+        'cfg-auth'=>'Authentifizierung zum Zugriffs-Schutz auf die Apache Serverstatus Daten',
+            'AdminLblVar-user'=>'Username',
+            'AdminLblVar-password'=>'Passwort',
+        'cfg-autoreload'=>'Zeit bis Neuladen der Seite. Das Array enthält die Werte in Sekuinden, die als Dropdown angezeigt werden.',
+            'AdminLblVar-autoreload'=>'Zeit in sec',
+        'cfg-checkupdate'=>'Intervall zur Pr&uuml;fung eines Updates. Der Wert ist in [s]. Wer Wert 0 schaltet die Pr&uuml;fung aus. Default ist 1 x pro Tag.',
+        'cfg-datatableOptions'=>'Javascript Objekt für die Datatable Komponente. Dieses nicht &uuml;berschreiben.',
+        'cfg-defaultTemplate'=>'Dieses nicht &uuml;berschreiben.',
+        'cfg-defaultView'=>'Default Ansicht ist die Server-info Seite.',
+        'cfg-debug'=>'Debug-Informationen einschalten. Default ist false (AUS).',
+        'cfg-execTimeRequest'=>'Array zur Definition der Zeitlimits in [ms] f&uuml;r for langlaufende Requests: ein Wert für Warnungen, einer für kritische.',
+        'cfg-hideRows'=>'Array der auszublendenden Spalten. Man kann etwas Platz sparen, indem nicht gewünschte Spalten ausblendet. Warnung: blenden sie keine wichtigen Spalten aus!',
+        'cfg-icons'=>'Dieses nicht &uuml;berschreiben.',
+        'cfg-lang'=>'Aktive Standard-Sprache.',
+        'cfg-selectLang'=>'Kommaseperierte Liste der im Dropdown w&auml;hlbaren Sprachen',
+        'cfg-selectSkin'=>'Kommaseperierte Liste der im Dropdown w&auml;hlbaren Skins',
+        'cfg-showHint'=>'Hinweisboxen anzeigen (true/ false)',
+        'cfg-skin'=>'Aktiviertes Default-Skin.',
+        'cfg-tdbars'=>'Tabellenspalten mit Werten, zu denen eine Balkengrafik angezeigt werden soll.',
+        'cfg-tdlink'=>'Spezielle Links für Tabellenspalten.',
+        'cfg-views'=>'Liste der sichtbaren Men&uuml;-Punkte',
+        'cfg-viewsadmin'=>'Liste der sichtbaren Admin-Men&uuml;-Punkte',
+        'cfg-wrongitem'=>'!!falscher Key!!',
+        'cfg-'=>'',
+    
 );
