@@ -64,7 +64,7 @@ $sBody = '
     <nav class="navbar navbar-static-top">
     
         <!-- Sidebar toggle button
-        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
           <span class="sr-only">Toggle navigation</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
@@ -161,7 +161,7 @@ $sBody = '
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
         <ul class="sidebar-menu">
-        <li><a href="?"><span style="font-size:150%; white-space: normal;">'
+        <li class="treeview"><a href="?"><span style="font-size:150%; white-space: normal;">'
                 // . $aCfg['icons']['title'] 
                 . $aEnv["project"]["title"]
                 . '

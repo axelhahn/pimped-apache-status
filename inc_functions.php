@@ -239,7 +239,7 @@ function getHtmlHead($aLangTxt) {
             . '<link rel="stylesheet" href="' . $oCdn->getFullUrl($oCdn->getLibRelpath('datatables')."/css/jquery.dataTables.min.css") . '">' . "\n"
 
             // Admin LTE
-            . '<script src="' . $oCdn->getFullUrl($oCdn->getLibRelpath('admin-lte')."/js/app.min.js") . '" type="text/javascript"></script>' . "\n"
+            . '<script src="' . $oCdn->getFullUrl($oCdn->getLibRelpath('admin-lte')."/js/adminlte.min.js") . '" type="text/javascript"></script>' . "\n"
             . '<link rel="stylesheet" href="' . $oCdn->getFullUrl($oCdn->getLibRelpath('admin-lte')."/css/AdminLTE.min.css") . '">' . "\n"
             . '<link rel="stylesheet" href="' . $oCdn->getFullUrl($oCdn->getLibRelpath('admin-lte')."/css/skins/_all-skins.min.css") . '">' . "\n"
 
