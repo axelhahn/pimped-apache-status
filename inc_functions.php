@@ -123,7 +123,7 @@ function checkUpdate($bForce = false) {
     global $oLog;
     $sUrlCheck = str_replace(" ", "%20", $aEnv['links']['update']['check']['url']);
     $iTtl = (int) $aCfg["checkupdate"];
-    $sTarget = sys_get_temp_dir() . "/checkupdate_" . md5($sUrlCheck) . ".tmp";
+    $sTarget = "checkupdate_" . md5($sUrlCheck) . ".tmp";
 
     // if the user does not want an update check then respect it
     if (!$iTtl && !$bForce) {
