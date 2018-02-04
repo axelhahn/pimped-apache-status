@@ -161,15 +161,18 @@ $sBody = '
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
         <ul class="sidebar-menu">
-        <li class="treeview"><a href="?"><span style="font-size:150%; white-space: normal;">'
+        <li class="treeview">
+            <a href="?"><span style="font-size:150%; white-space: normal;">'
                 // . $aCfg['icons']['title'] 
                 . $aEnv["project"]["title"]
                 . '
                 </span>
                 <br>
                 <span>v' . $aEnv["project"]["version"] . '</span><br>
-                <span id="checkversion"></span><br>
             </a>
+        </li>
+        <li class="treeview">
+            <span id="checkversion"></span>
         </li>
         </ul>
         

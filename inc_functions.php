@@ -112,6 +112,28 @@ function checkAuth() {
 }
 
 /**
+ * search temp directory using tmpdir in config. if false then use system
+ * temp dir
+ * @param bool  $bForce  force check and ignore ttl
+ * @return type
+ */
+function getTempdir(){
+    global $aCfg;
+    global $oLog;
+    $oLog->add(__FUNCTION__ . '() start');
+    $sTmpDir=(isset($aCfg['tmpdir']) && $aCfg['tmpdir']) ? $aCfg['tmpdir'] : sys_get_temp_dir();
+
+    if($sTmpDir && !($sTmpDir[0]==='/' || $sTmpDir[1]===':')){
+        $sTmpDir=__DIR__ . '/' . $sTmpDir;
+    }
+    if(!is_writable($sTmpDir)){
+        echo 'WARNING: directory is not writable: '.$sTmpDir.' - check write access or set a new value for "tmpdir"<br>';
+        $oLog->add(__FUNCTION__ . '() - directory is not writable: '.$sTmpDir.' - check write access or set a new value for tmpdir', 'error');
+    }
+    $oLog->add(__FUNCTION__ . '() - set temp dir '.$sTmpDir);
+    return $sTmpDir;
+}
+/**
  * check for an update of the product
  * @param bool  $bForce  force check and ignore ttl
  * @return type
@@ -121,9 +143,7 @@ function checkUpdate($bForce = false) {
     global $aEnv;
     global $aCfg;
     global $oLog;
-    $sUrlCheck = str_replace(" ", "%20", $aEnv['links']['update']['check']['url']);
     $iTtl = (int) $aCfg["checkupdate"];
-    $sTarget = "checkupdate_" . md5($sUrlCheck) . ".tmp";
 
     // if the user does not want an update check then respect it
     if (!$iTtl && !$bForce) {
@@ -135,7 +155,9 @@ function checkUpdate($bForce = false) {
                 . '>' . $aLangTxt['versionManualCheck'] . '</a>';
         // return false;
     }
-
+    
+    $sUrlCheck = str_replace(" ", "%20", $aEnv['links']['update']['check']['url']);
+    $sTarget = getTempdir() . '/checkupdate_' . md5($sUrlCheck) . '.tmp';
     $bExec = true;
     if (file_exists($sTarget)) {
         $bExec = false;
@@ -173,13 +195,10 @@ function checkUpdate($bForce = false) {
                 . '&skin=' . $aEnv['active']['skin']
                 . '&action=update'
         ;
-        $sResult = ' <span class="version-updateavailable" '
-                . 'title="' . $sResult . '">'
-                . '<a'
-                . ' href="' . $sUrl . '"'
-                . '>'
-                . sprintf($aLangTxt['versionUpdateAvailable'], $sVersion)
-                . '</a>'
+        $sResult = ' <span class="version-updateavailable" title="' . $sResult . '">'
+                    . '<a href="' . $sUrl . '">'
+                    . sprintf($aLangTxt['versionUpdateAvailable'], $sVersion)
+                    . '</a>'
                 . '</span>';
     } else if (strpos($sResult, "OK") === 0) {
         $sResult = ' <span class="version-uptodate" title="' . $sResult . '">'
@@ -187,7 +206,7 @@ function checkUpdate($bForce = false) {
                 . '</span>';
     }
 
-    return '<span id="checkversion">' . $sResult . '</span>';
+    return '<div id="checkversion">' . $sResult . '</div>';
 }
 
 /**

@@ -934,13 +934,15 @@ class Datarenderer {
                 // case 'requests_running': break;
                 case 'requests_mostrequested':
                     if ($aTData[0] && is_array($aTData[0])) {
-                        if (array_key_exists($aLangTxt['thCount'], $aTData[0])) {
-                            $sReq = $aTData[0]['Request'];
-                        }
-                        if (!$sReq) {
+                        $iCount = $aTData[0][$aLangTxt['thCount']];
+                        if($iCount>1){
+                            if (array_key_exists($aLangTxt['thCount'], $aTData[0])) {
+                                $sReq = $aTData[0]['Request'];
+                            }
+                        } else {
+                            $iCount='';
                             $sReq = '?';
                         }
-                        $iCount = $aTData[0][$aLangTxt['thCount']];
                     }
                     break;
                 case 'requests_clients':

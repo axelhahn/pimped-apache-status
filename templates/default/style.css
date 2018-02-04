@@ -44,6 +44,7 @@ nav .nav a span.caret{color:#89a;}
 #divmainbody ul.nav li.active a {color:#46a; border-top: 2px solid #fc3;}
 #divmainbody ul.nav li.active a i{color:#46a;}
 
+#checkversion{padding: 0px 5px 12px 15px; position: relative; display: block; white-space: normal;}
 #checkversion .version-uptodate{color:#697;}
 #checkversion .version-updateavailable *{color:#fc2;}
 #checkversion .version-updateerror{color:#822;}
@@ -124,7 +125,7 @@ nav .nav a span.caret{color:#89a;}
 .tile .dial{color:#fa2; background-color: #eee;
      color:#00e0ff;
      background-color: #00a0c0; 
-     color:rgba(255,255,255,0.5);
+     color:rgba(255,255,255,0.3);
      background-color: rgba(0,0,0,0.1); 
 }
 .tile canvas{display: block; float: left; margin-right: 0.5em;}

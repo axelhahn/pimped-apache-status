@@ -14,7 +14,7 @@ if (!strpos($_SERVER["SERVER_NAME"], "axel-hahn.de")){
 $sApproot=dirname(__DIR__);
 
 
-$sZipfile = $sApproot . '/__pimpapachestat-latest.zip';
+$sZipfile = getTempdir() . '/__pimpapachestat-latest.zip';
 $sTargetPath = $sApproot;
 $sLatestUrl=$aEnv["links"]["update"]['download']['url'];
 

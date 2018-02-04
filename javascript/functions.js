@@ -125,7 +125,7 @@ function initServerFilter(){
     $('#serverlist li').each(function () {
          iServer++;
     });
-    var sFiltertext=localStorage.getItem('apachestatusFilterServer');
+    var sFiltertext=localStorage.getItem('apachestatusFilterServer')+'';
     if(sFiltertext===undefined){
         sFiltertext='';
     }

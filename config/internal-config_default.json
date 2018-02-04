@@ -15,6 +15,7 @@
     "defaultTemplate": "out_html.php",
     "defaultView": false,
     "debug": false,
+    "tmpdir": "tmp",
     "execTimeRequest": {
         "warning": "1000",
         "critical": "5000"
@@ -65,9 +66,7 @@
     },
     "lang": "en",
     "selectLang": "en,de",
-    "selectSkin___": "default,summer,ice",
-    "selectSkinAll": "skin-blue,skin-black,skin-red,skin-yellow,skin-purple,skin-green,skin-blue-light,skin-black-light,skin-red-light,skin-yellow-light,skin-purple-light,skin-green-light",
-    "selectSkin": "skin-blue,skin-red,skin-yellow,skin-purple,skin-green",
+    "selectSkin": "skin-blue,skin-black,skin-red,skin-yellow,skin-purple,skin-green,skin-blue-light,skin-black-light,skin-red-light,skin-yellow-light,skin-purple-light,skin-green-light",
     "showHint": true,
     "skin": "skin-purple",
     "tdbars": [
