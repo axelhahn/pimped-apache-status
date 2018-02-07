@@ -84,8 +84,8 @@
     "viewsadmin": [
         "servers",
         "settings",
-        "lang",
         "vendor",
-        "update"
+        "update",
+        "lang"        
     ]
 }

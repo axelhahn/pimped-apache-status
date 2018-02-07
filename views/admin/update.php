@@ -4,19 +4,38 @@ if (!isset($adminindex)){
 }
 $sHtml = '';
 
-// TODO BETA: DISABLE UPDATE FOR USERS
+/*
 $sHtml .= "<h3>Work in progress</h3>file: " . __FILE__ . "<p>Update feature is disabled here so far. It would destroy a beta installation.</p>";
 if (!strpos($_SERVER["SERVER_NAME"], "axel-hahn.de")){
     echo $sHtml;
     return true;
 }
+ * 
+ */
 
-$sApproot=dirname(__DIR__);
+require_once __DIR__ . '/../../classes/ahwi-installer.class.php';
+$sApproot=dirname(dirname(__DIR__));
+// $sApproot=dirname(dirname(__DIR__)).'/test-update';
 
 
 $sZipfile = getTempdir() . '/__pimpapachestat-latest.zip';
 $sTargetPath = $sApproot;
-$sLatestUrl=$aEnv["links"]["update"]['download']['url'];
+
+$sLatestUrl=(stripos($aEnv["project"]["version"], "beta")) 
+        ? $aEnv["links"]["update"]['downloadbeta']['url']
+        : $aEnv["links"]["update"]['download']['url']
+        ;
+
+$oInstaller=new ahwi(array(
+    'product'=>'dummy',
+    'source'=>$sLatestUrl,
+    'installdir'=>$sApproot,
+    'tmpzip'=>$sZipfile,
+    'checks'=>array(
+        'phpversion'=>'5.3',
+        'phpextensions'=>array('curl')
+    ),
+));
 
 if (!array_key_exists('doinstall', $_GET)) {
     // ------------------------------------------------------------
@@ -26,15 +45,18 @@ if (!array_key_exists('doinstall', $_GET)) {
     $sHtml .= '<h3 id="h3' . md5('update') . '">'. $aLangTxt["lblUpdate"] . '</h3>'
             . '<div class="subh3"><br>'
             . (hasNewVersion($sUpdateInfo)
-                ?' '.$aLangTxt['lblUpdateNewerVerionAvailable'].'<br>'
-                :'<div class="hintbox">'.$aLangTxt['lblUpdateNoNewerVerionAvailable'].'</div>'
+                ? $aLangTxt['lblUpdateNewerVerionAvailable'].'<br>'
+                : $aLangTxt['lblUpdateNoNewerVerionAvailable'].'<br>'
                 )
             . '<br>'
             . sprintf($aLangTxt["lblUpdateHints"], $sLatestUrl)
+            . sprintf($aLangTxt['lblUpdateInstalldir'], $oInstaller->getInstalldir())
             . '</div>'
             . '<a href="' . getNewQs(array('doinstall' => 'download')) . '"'
             . ' class="btn btn-default"'
-            . '>' . $aLangTxt["lblUpdateContinue"] . '</a>';
+            . '>' . $aLangTxt["lblUpdateContinue"] . '</a>'
+            ;
+    
 } else {
     switch ($_GET['doinstall']) {
         
@@ -45,31 +67,23 @@ if (!array_key_exists('doinstall', $_GET)) {
             $sHtml .= '<h3 id="h3' . md5('update') . '">'. $aLangTxt["lblUpdate"] . '</h3>'
                     . '<div class="subh3">';
 
-
             if (file_exists($sZipfile)) {
                 unlink($sZipfile);
             }
             
-            $sLatestVersionUrl = httpFollowUrl($sLatestUrl);
-			
-			$sHtml.= $sLatestUrl . '<br> --&gt; GET ' . $sLatestVersionUrl;
-			$sData = httpGet($sLatestVersionUrl);
-			$sHtml.=' ('.strlen($sData) . ')<br>';
-		
-            if (strlen($sData) > 100000) {
-                file_put_contents($sZipfile, $sData);
-                if (file_exists($sZipfile)) {
-                    $sHtml.='<br><strong>'.$aLangTxt['lblUpdateDonwloadDone'].'</strong>'
-                            . '</div><a href="' . getNewQs(array('doinstall' => 'unzip')) . '"'
-                            . ' class="btn btn-default"'
-                            . '>' . $aLangTxt["lblUpdateContinue"] . '</a>';
-                } else {
-                    $sHtml.=$aLangTxt['lblUpdateDonwloadFailed'] . '</div>';
-                }
+            ob_start();
+            $bDownload=$oInstaller->download(false);
+            $sHtml.= str_replace("\n", "<br>", ob_get_contents());
+            ob_end_clean();
+            if($bDownload){
+                $sHtml.='<br><strong>'.$aLangTxt['lblUpdateDonwloadDone'].'</strong><br><br>'
+                        . sprintf($aLangTxt['lblUpdateInstalldir'], $oInstaller->getInstalldir())
+                        . '</div><a href="' . getNewQs(array('doinstall' => 'unzip')) . '"'
+                        . ' class="btn btn-default"'
+                        . '>' . $aLangTxt["lblUpdateContinue"] . '</a>';
             } else {
                 $sHtml.=$aLangTxt['lblUpdateDonwloadFailed'] . '</div>';
             }
-
             break;
             
         // ------------------------------------------------------------
@@ -80,18 +94,16 @@ if (!array_key_exists('doinstall', $_GET)) {
                     . '<div class="subh3">';
             $sHtml.=sprintf($aLangTxt['lblUpdateUnzipFile'], $sZipfile, $sTargetPath) . '<br><br>';
             
-            $zip = new ZipArchive;
+            ob_start();
+            $bInmstall=$oInstaller->install();
+            $sHtml.= str_replace("\n", "<br>", ob_get_contents()).'<hr>';
+            ob_end_clean();
             
-            $res = $zip->open($sZipfile);
-            if ($res === TRUE) {
-                // extract it to the path we determined above
-                $zip->extractTo($sTargetPath);
-                $zip->close();
+            if ($bInmstall){
                 $sHtml.=$aLangTxt['lblUpdateUnzipOK'] . '</div>'
-                    . '<a href="?"'
+                    . '<a href="../?"'
                         . ' class="btn btn-default"'
                         . '>' . $aLangTxt["lblUpdateContinue"] . '</a>';
-                unlink($sZipfile);
             } else {
                 $sHtml.=$aLangTxt['lblUpdateUnzipFailed'] . '</div>';
             }

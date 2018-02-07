@@ -5,9 +5,14 @@
  * view: INSTALL
  */
 
-$sUser=$_POST['username'];
+$sUser=($_POST && isset($_POST['username'])) ? $_POST['username'] : false;
 $sContent='';
-$sForm='<form class="form-horizontal" action="?" method="POST">'
+
+$sForm=(is_array($aUserCfg) && count($aUserCfg)) 
+    ? $aLangTxt['lblInitialSetupAbort']
+    : $aLangTxt['lblHelplblInitialSetup']
+      .'<br><br>'
+      . '<form class="form-horizontal" action="?" method="POST">'
         . '<div class="form-group">'
             . '<label class="col-sm-2">'.$aLangTxt['lblUsername'].'</label>'
             . '<div class="col-sm-3">'
@@ -61,7 +66,5 @@ if(is_array($_POST) && count($_POST)){
 $content=
         $oDatarenderer->themeBox(
                 $aCfg['icons']['help-doc'] .' '. $aLangTxt['lblInitialSetup'],
-                $aLangTxt['lblHelplblInitialSetup'].
-                '<br><br>'
-                .$sContent
+                $sContent
         );

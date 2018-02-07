@@ -1,8 +1,8 @@
 {
     "project": {
         "title": "Pimped Apache Status",
-        "version": "2.00.16 BETA",
-        "releasedate": "2018-02-04",
+        "version": "2.00.17 BETA",
+        "releasedate": "2018-02-08",
         "license": "GPL 3.0"
     },
     "active": [],
@@ -14,29 +14,34 @@
                 "target": "_blank"
             },
             "projecthome": {
-                "url": "http:\/\/sourceforge.net\/projects\/pimpapachestat\/",
+                "url": "https:\/\/sourceforge.net\/projects\/pimpapachestat\/",
                 "label": "Sourceforge (en)",
                 "target": "_blank"
             },
             "projecthome2": {
-                "url": "http:\/\/www.axel-hahn.de\/apachestatus.php",
+                "url": "https:\/\/www.axel-hahn.de\/apachestatus.php",
                 "label": "axel-hahn.de (de)",
                 "target": "_blank"
             },
             "doc": {
-                "url": "http:\/\/www.axel-hahn.de\/docs\/apachestatus\/usage.htm",
+                "url": "https:\/\/www.axel-hahn.de\/docs\/apachestatus\/usage.htm",
                 "label": "Documentation :: usage (en)",
                 "target": "_blank"
             }
         },
         "update": {
             "check": {
-                "url": "http:\/\/www.axel-hahn.de\/versions\/pimpedapachestatus_[VERSION].txt",
+                "url": "https:\/\/www.axel-hahn.de\/versions\/pimpedapachestatus_[VERSION].txt",
                 "label": "",
                 "target": ""
             },
             "download": {
-                "url": "http:\/\/sourceforge.net\/projects\/pimpapachestat\/files\/latest\/download",
+                "url": "https:\/\/sourceforge.net\/projects\/pimpapachestat\/files\/latest\/download",
+                "label": "",
+                "target": ""
+            },
+            "downloadbeta": {
+                "url": "https:\/\/github.com\/axelhahn\/pimped-apache-status\/archive\/beta-v2.zip",
                 "label": "",
                 "target": ""
             }

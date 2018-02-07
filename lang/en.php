@@ -6,7 +6,6 @@ $aLangTxt = array(
     'id'=>'english',
     
     'menuAdmin'=>'Setup ',
-    'menuLeaveAdmin'=>'Monitoring ',
     'menuGroup'=>'Group: ',
     'menuLang'=>'Language: ',
     'menuSkin'=>'Skin: ',
@@ -50,6 +49,7 @@ $aLangTxt = array(
     // ------------------------------------------------------------
         // ............................................................
         'lblInitialSetup'=>'Initial Setup',
+        'lblInitialSetupAbort'=>'Sorry, the initial setup was executed already.',
         'lblHelplblInitialSetup'=>'
             Welcome to the Pimped Apache status.<br>
             First of all: protect the tool and setup an admin user.
@@ -296,9 +296,10 @@ $aLangTxt = array(
             ',
         'lblUpdateDonwloadDone'=>'OK, the file was downloaded.<br>In the next step it will be extracted.',
         'lblUpdateDonwloadFailed'=>'Error: unable to download the zip file.',
+        'lblUpdateInstalldir'=>'Local installation directory: %s',
         'lblUpdateContinue'=>'Continue &raquo;',
         'lblUpdateUnzipFile'=>'Extract file: %s<br>To: %s',
-        'lblUpdateUnzipOK'=>'OK: the new version was extracted. Have fun!<br>If you like the software you can support it and make me happy if you go to the docs page (see the footer below) and share it or donate a few bugs.<br>I also would need some more translations...',
+        'lblUpdateUnzipOK'=>'OK: the new version was extracted. Have fun!<br>If you like the software you can support it and make me happy if you go to the docs page (see the footer below) and share it or donate a few bugs.<br>Helper for translations into other languages are welcome too...',
         'lblUpdateUnzipFailed'=>'Error: unable to open the zip file.',
     
     // ------------------------------------------------------------
@@ -400,6 +401,7 @@ $aLangTxt = array(
         'cfg-defaultTemplate'=>'Do not override this.',
         'cfg-defaultView'=>'Default view is Server info page.',
         'cfg-debug'=>'Enable client debugging infos. Default is false.',
+        'cfg-tmpdir'=>'Temp directory. This directory needs write permissions. Default is tmp (= [Appdir]/tmp]).',
         'cfg-execTimeRequest'=>'An array to define values in [ms] for long requests: one for warning and one for critical long requests.',
         'cfg-hideRows'=>'Array of rows to hide. You can save some space not to display all colums. Warning: do not hide important rows!',
         'cfg-icons'=>'Do not override this.',

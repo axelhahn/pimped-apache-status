@@ -176,12 +176,17 @@ function checkUpdate($bForce = false) {
     }
 
     if ($bExec) {
-        $oLog->add(__FUNCTION__ . "fetching $sUrlCheck ...");
+        $oLog->add(__FUNCTION__ . " fetching $sUrlCheck ...");
         $sResult = httpGet($sUrlCheck);
         if (!$sResult) {
             $sResult = ' <span class="version-updateerror">' . $aLangTxt['versionError'] . '</span>';
+            $oLog->add(__FUNCTION__ . " unable to check version.");
         } else {
-            file_put_contents($sTarget, $sResult);
+            $oLog->add(__FUNCTION__ . " <pre>$sResult</pre>");
+            
+            if (!file_put_contents($sTarget, $sResult)){
+                $oLog->add(__FUNCTION__ . " unable to write file [$sTarget]", "error");
+            }
         }
     } else {
         $oLog->add(__FUNCTION__ . " reading cache $sTarget ...");

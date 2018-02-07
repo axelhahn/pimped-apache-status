@@ -3,12 +3,25 @@
   Axel pimped the Apache-status
 
   https://www.axel-hahn.de/apachestatus.php
-  https://sourceforge.net/projects/pimpapachestat/
+  https://github.com/axelhahn/pimped-apache-status/
 
   Docs:
   https://www.axel-hahn.de/docs/apachestatus/
 
 ----------------------------------------------------------------------
+
+2018-02-08 - v2.00.17
+  * added updater class using ahwebinstall
+  * activated updater for beta releases
+  * removed unused old template dirs, js files and others
+  * fix missing lang entries
+  * block initial setup on second request
+
+2018-02-08 - v2.00.16
+  * added tmp dir
+
+2017-10-15 - v2.00.15
+  * upgrade code for adminLte 2.4.2
 
 2017-10-15 - v2.00.14
   * added (finished) German texts

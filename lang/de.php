@@ -9,6 +9,14 @@ $aLangTxt = array(
     'menuLang'=>'Sprache: ',
     'menuSkin'=>'Skin: ',
     'menuReload'=>'Aktualisierungs-Intervall: ',
+
+    // ------------------------------------------------------------
+    // basic errors
+    // ------------------------------------------------------------
+    'error-wrong-group'=>'Die Gruppe [%s] existiert nicht.',
+    'error-no-group'=>'Es wurde keine Server-Gruppe gefunden. Bitte legen Sie eine unter Admin - Server an.',
+    'error-server-not-in-group'=>'Server [%s] exisitert nicht in der Gruppe [%s].',
+    'error-no-server-in-group'=>'Es wurde noch kein Server in der Gruppe [%s] angelegt. Bitte legen Sie einen unter Admin - Server an.',
     
     // ------------------------------------------------------------
     // version check
@@ -19,7 +27,7 @@ $aLangTxt = array(
     'versionManualCheck'=>'auf neue Version testen',
 
     'authAccessDenied'=>'<h1>Zugriff verweigert</h1>Benutzername und Passwort sind erforderlich.',
-    
+
     // ------------------------------------------------------------
     // for menu of views:
     // label for menu and h2
@@ -40,6 +48,7 @@ $aLangTxt = array(
     // ------------------------------------------------------------
         // ............................................................
         'lblInitialSetup'=>'Initial-Setup',
+        'lblInitialSetupAbort'=>'Tut mir leid - das Initial-Setup wurde bereits ausgef&uuml;hrt.',
         'lblHelplblInitialSetup'=>'
             Willkommen beim Pimped Apache Status.<br>
             Zuerst: Sch&uuml;tze das Werkzeug und setze einen Admin-user.
@@ -280,7 +289,7 @@ $aLangTxt = array(
     // ------------------------------------------------------------
         'lblUpdate'=>'Aktualisierung der Applikation',
         'lblUpdateNewerVerionAvailable'=>'OK, es ist eine neuere Version verf&uuml;gbar.',
-        'lblUpdateNoNewerVerionAvailable'=>'Hinweis: Es gibt keine neuere Version. Das Ausf&uuml;hren des Updates ist nicht notwendig.',
+        'lblUpdateNoNewerVerionAvailable'=>'Hinweis: Es gibt keine neuere Version. Das Ausf&uuml;hren des Updates ist eigentlich nicht notwendig.',
         'lblUpdateHints'=>'
             Die Aktualisierung erfolgt in 2 Schritten:
             <ol>
@@ -288,8 +297,9 @@ $aLangTxt = array(
                 <li>Entpacken der ZIP-Datei</li>
             </ol>
             ',
-        'lblUpdateDonwloadDone'=>'OK, die Datei wurde erfolgreich heruntergeladen.<br>Als n&auml;chstes wird sie entpackt.',
+        'lblUpdateDonwloadDone'=>'OK, die Datei wurde erfolgreich heruntergeladen.<br>Als N&auml;chstes wird sie entpackt.',
         'lblUpdateDonwloadFailed'=>'Fehler: die Datei konnte nicht heruntergeladen werden.',
+        'lblUpdateInstalldir'=>'Lokales Installationsverzeichnis: %s',
         'lblUpdateContinue'=>'Weiter &raquo;',
         'lblUpdateUnzipFile'=>'Entpacke Datei: %s<br>Nach: %s',
         'lblUpdateUnzipOK'=>'OK: die aktuelle Version wurde erfolgreich entpackt.<br>Wenn Ihnen die Software gef&auml;llt, dann k&ouml;nnen Sie mich unterst&uuml;tzen, indem Sie (unten im Footer) in die Dokumentation wechseln, diese teilen oder ein klein wenig spenden.<br>&Uuml;bersetzer in weitere Sprachen sind ebenfalls willkommen...',
@@ -394,6 +404,7 @@ $aLangTxt = array(
         'cfg-defaultTemplate'=>'Dieses nicht &uuml;berschreiben.',
         'cfg-defaultView'=>'Default Ansicht ist die Server-info Seite.',
         'cfg-debug'=>'Debug-Informationen einschalten. Default ist false (AUS).',
+        'cfg-tmpdir'=>'Temp Verzeichnis. Dieses Verzeichis braucht Schreibrechte. Default ist tmp (= [Appdir]/tmp]).',
         'cfg-execTimeRequest'=>'Array zur Definition der Zeitlimits in [ms] f&uuml;r for langlaufende Requests: ein Wert für Warnungen, einer für kritische.',
         'cfg-hideRows'=>'Array der auszublendenden Spalten. Man kann etwas Platz sparen, indem nicht gewünschte Spalten ausblendet. Warnung: blenden sie keine wichtigen Spalten aus!',
         'cfg-icons'=>'Dieses nicht &uuml;berschreiben.',
