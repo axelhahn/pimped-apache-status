@@ -7,7 +7,7 @@
 
 // tabbed content
 $aTC = array();
-if (count($aSrvStatus) > 1) {
+if (count($aSrvStatus) > 0) {
     foreach ($aSrvStatus as $sHost => $aData) {
         $aTC[] = array(
             'tab' => $sHost,
