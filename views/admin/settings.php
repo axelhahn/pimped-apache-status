@@ -4,21 +4,9 @@ if (!isset($adminindex)) {
     die("Abort." . __FILE__);
 }
 
-$sJsOnReady.='
-	//On Click Event
-	$(".subh2 ul.nav li").click(function() {
-		$(this.parentNode).find("li").removeClass("active"); //Remove any "active" class
-		$(this).addClass("active"); //Add "active" class to selected tab
-		return false;
-	});
-        
-        $(".subh2 div ul.nav li a").filter(":first").trigger("click");
-';
-$aTab = array();
-$sHtml = '';
-
 $oCfg=new confighandler("config_user");
 // $aUserCfg=$oCfg->get();
+$aTC = array();
 
 // ----------------------------------------------------------------------
 // actions
@@ -67,27 +55,6 @@ foreach(array_keys($aUserCfg) as $sKey){
     }
 }
 
-// ----------------------------------------------------------------------
-// tab settings
-// ----------------------------------------------------------------------
-
-/*
-  $myvar='settings';
-  $aTab[$myvar] = array(
-  'url' => '#',
-  'label' => $aLangTxt['AdminMenuSettings'] ,
-  'onclick' => 'return showTab(\'#h3' . md5($myvar) . '\');',
-  );
-
-  require_once '../classes/configdata.class.php';
-  $oData=new configData();
-  $sHtml.='
-  <h3 id="h3' . md5($myvar) . '">' . $aLangTxt["AdminMenuSettings"] . '</h3>
-  <div class="subh3">'
-  . $oData->renderForm4UserConfig()
-  . '</div>';
-
- */
 
 // ----------------------------------------------------------------------
 // 2 tabs for raw data
@@ -98,11 +65,6 @@ foreach (array(
     "internal-config_default" => array("edit" => false),
 ) as $sCfgfile => $aSettings) {
     $myvar = $sCfgfile;
-    $aTab[$myvar] = array(
-        'url' => '#',
-        'label' => $aCfg['icons']['tab_'.$myvar] . $myvar,
-        'onclick' => 'return showTab(\'#h3' . md5($myvar) . '\');',
-    );
     $sData = file_get_contents(dirname(__DIR__) . '../../config/' . $sCfgfile . '.json');
     $sOut=$aSettings['edit']
             ? '<form class="form" method="post" action="'.getNewQs(array()).'">'
@@ -114,15 +76,19 @@ foreach (array(
             . '</form>'
             : '<pre>' . htmlentities($sData) . '</pre>'
             ;
-    $sHtml.='
-                <h3 id="h3' . md5($myvar) . '">' . $aCfg['icons']['tab_'.$myvar] . $sCfgfile . '</h3>
-                <div class="subh3">'
+    
+    $aTC[] = array(
+        'tab' => $aCfg['icons']['tab_'.$myvar] . $myvar,
+        'content' => '<h3>' . $aCfg['icons']['tab_'.$myvar] . $sCfgfile . '</h3>
+            <div class="subh3">'
             . '<div class="hintbox">'
-            . $aLangTxt['AdminHintRaw-' . $sCfgfile]
+                . $aLangTxt['AdminHintRaw-' . $sCfgfile]
             . '</div>'
             . $sOut
-            . '</div>
-        ';
+          . '</div>
+        '
+    );
+    
 }
 
 // ----------------------------------------------------------------------
@@ -131,12 +97,7 @@ foreach (array(
 $aCfgUser = $oCfg->get("config_user");
 
 
-$myvar = 'overrides';
-$aTab[$myvar] = array(
-    'url' => '#',
-    'label' => $aCfg['icons']['tab_Compare'] . $aLangTxt['AdminMenuSettingsCompare'],
-    'onclick' => 'return showTab(\'#h3' . md5($myvar) . '\');',
-);
+// $myvar = 'overrides';
 $sTable = '<table class="table datatable"><thead>'
         . '<tr>'
         . '<th>' . $aLangTxt['AdminMenuSettings-var'] . '</th>'
@@ -169,35 +130,21 @@ foreach ($aDefaultCfg as $sKey => $val) {
 }
 $sTable.='<tbody></table>';
 
-$sHtml.='
-            <h3 id="h3' . md5($myvar) . '">' . $aCfg['icons']['tab_Compare'] . $aLangTxt["AdminMenuSettingsCompare"] . '</h3>
+
+$aTC[] = array(
+        'tab' => $aCfg['icons']['tab_Compare'] . $aLangTxt['AdminMenuSettingsCompare'],
+        'content' => '<h3>' . $aCfg['icons']['tab_Compare'] . $aLangTxt["AdminMenuSettingsCompare"] . '</h3>
             <div class="subh3">'
-        . '<div class="hintbox">'
-        . $aLangTxt['AdminHintSettingsCompare']
+            . '<div class="hintbox">'
+                . $aLangTxt['AdminHintSettingsCompare']
+            . '</div>'
+            . $sTable
         . '</div>'
-        . $sTable
-        . '</div>';
+    );
 
 // ----------------------------------------------------------------------
 // output
 // ----------------------------------------------------------------------
-echo '<div class="subh2"><h3><i class="fa fa-bars"></i> Overview </h3>'
- . $oDatarenderer->renderTabs($aTab)
- . '<div style="clear: both"></div><br>'
- . $sHtml
- . '</div>'
- . '';
 
-?>
-<!--
-<script src="../vendor/codemirror/lib/codemirror.js"></script>
-<link rel="stylesheet" href="../vendor/codemirror/lib/codemirror.css">
-<script src="../vendor/codemirror/mode/javascript/javascript.js"></script>
-<script>
-    editor = CodeMirror.fromTextArea(document.getElementById('ta'), {
-        lineNumbers: true,
-        lineWrapping: true,
-        json: true
-    });
-</script>
--->
+echo $oDatarenderer->renderTabbedContent($aTC);
+

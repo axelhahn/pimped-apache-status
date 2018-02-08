@@ -1,7 +1,7 @@
 {
     "project": {
         "title": "Pimped Apache Status",
-        "version": "2.00.17 BETA",
+        "version": "2.00.18 BETA",
         "releasedate": "2018-02-08",
         "license": "GPL 3.0"
     },
@@ -52,7 +52,7 @@
         "jQuery-Knob/1.2.13",
         "datatables/1.10.16",
         "font-awesome/4.7.0",
-        "jquery/3.2.1",
+        "jquery/3.3.1",
         "morris.js/0.5.1",
         "raphael/2.2.7",
         "twitter-bootstrap/3.3.7"

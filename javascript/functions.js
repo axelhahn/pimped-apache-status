@@ -166,18 +166,24 @@ function initKnob(){
         if (sTilename){
             var oCounter = new counterhistory(sSrv, sTilename);
             aData=oCounter.getLast(50);
-            // console.log(aData);
+            aDataLast=oCounter.getLast(1);
+            currentVal=aDataLast['max'];
+            console.log('----- ' + sTilename + ' ('+sId+') - max ' + aData['max'] + ' current: ' + currentVal );
+            console.log(aData);
+            console.log(aDataLast);
             if(aData){
 
                 $(this).knob({
                     readOnly: true,
                     fgColor: sFgColor,
                     bgColor: sBgColor,
-                    'max': aData['max'],
+                    max: aData['max'],
                     'width': '90px',
                     'height': '90px',
-                    thickness: 0.4
+                    thickness: 0.04
                 });
+                $(this).val(currentVal).trigger('change');
+                $('#progress-'+sId).css('width', (currentVal/aData['max']*100)+'%');
 
             }
         }

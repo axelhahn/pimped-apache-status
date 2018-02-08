@@ -10,6 +10,13 @@
 
 ----------------------------------------------------------------------
 
+2018-02-08 - v2.00.18
+  * update jquery -> 3.3.1
+  * update tiles: smaller circles and additional horizontal bar
+  * removed lang
+  * update original server status tabs
+  * update settings tabs
+
 2018-02-08 - v2.00.17
   * added updater class using ahwebinstall
   * activated updater for beta releases

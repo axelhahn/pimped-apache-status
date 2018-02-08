@@ -879,6 +879,31 @@ class Datarenderer {
     /**
      * generate a menu with li elements - surrounded with ul class"tabs"
      * to get a tabbed list; use $aEnv["links"]["name"] as first parameter
+     * @param array $aTabbedData  array with items with keys tab and content
+     * @return string
+     */
+    public function renderTabbedContent($aTabbedData) {
+        static $iTabid;
+        if($iTabid){
+            $iTabid=0;
+        }
+        $sTabs='';
+        $sContent='';
+        foreach($aTabbedData as $aTabdata){
+            $iTabid++;
+            $sTabid='tab_'.$iTabid;
+            
+            $sTabs.='<li class="'.($sTabs ? '' : 'active').'"><a href="#'.$sTabid.'" data-toggle="tab" aria-expanded="false">'.$aTabdata['tab'].'</a></li>';
+            $sContent.='<div class="tab-pane'.($sContent ? '' : ' active').'" id="'.$sTabid.'">'.$aTabdata['content'].'</div>';
+        }
+        return '<div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">'.$sTabs.'</ul>
+            <div class="tab-content">'.$sContent.'</div>
+         </div>';
+    }
+    /**
+     * generate a menu with li elements - surrounded with ul class"tabs"
+     * to get a tabbed list; use $aEnv["links"]["name"] as first parameter
      * @param array $aLinks
      * @return string
      */
@@ -1030,11 +1055,11 @@ class Datarenderer {
                       <div class="info-box-content">
                         <span class="info-box-text">'
                         . $sTitle
-                    .'</span>
+                      .'</span>
                         <span class="info-box-number">'.$iCount.$sUnit.'</span>
-                        <!-- The progress section is optional
-                        <div class="progress"><div class="progress-bar" style="width: '.$iCount.'%"></div></div>
-                        -->
+                        <!-- The progress section is optional -->
+                        <div class="progress"><div class="progress-bar" id="progress-'.$sSrvIndex.'-'.$sTilename.'" style="width: 0;"></div></div>
+                        <!-- -->
                         <span class="progress-description">
                           '.$sReq.'
                         </span>

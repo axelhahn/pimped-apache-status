@@ -5,6 +5,8 @@ $aLangTxt = array(
     
     'id'=>'english',
     
+    'menuHeaderMonitoring'=>'Monitoring',
+    'menuHeaderConfig'=>'Configuration',
     'menuAdmin'=>'Setup ',
     'menuGroup'=>'Group: ',
     'menuLang'=>'Language: ',
@@ -213,12 +215,14 @@ $aLangTxt = array(
                 tools I use here in my product:
             </p>
             <ul>
+                <li>Admin LTE - Control panel template: <a href="https://adminlte.io/">https://adminlte.io/</a></li>
                 <li>jQuery: <a href="http://jquery.com/">http://jquery.com/</a></li>
-                <li>Datatables - sortable tables: <a href="http://datatables.net/">http://datatables.net/</a></li>
+                <li>Datatables - sortable tables: <a href="https://datatables.net/">https://datatables.net/</a></li>
                 <li>array2xml.class - XML export: <a href="http://www.lalit.org/lab/convert-php-array-to-xml-with-attributes">http://www.lalit.org/lab/convert-php-array-to-xml-with-attributes</a></li>
                 <li>Bootstrap - Html-Framework: <a href="http://getbootstrap.com/">http://getbootstrap.com/</a></li>
-                <li>Font-awesome - Icons: <a href="http://fontawesome.io/">http://fontawesome.io/</a></li>
+                <li>Font-awesome - Icons: <a href="https://fontawesome.io/">https://fontawesome.io/</a></li>
                 <li>jQuery Knob - dials: <a href="https://github.com/aterrien/jQuery-Knob">https://github.com/aterrien/jQuery-Knob</a></li>
+                <li>Morris JS - charts: <a href="http://morrisjs.github.io/morris.js/index.html">http://morrisjs.github.io/morris.js/index.html</a></li>
             </ul>
             ',
     

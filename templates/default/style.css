@@ -31,6 +31,8 @@ h1.title span{font-size:70%; }
 h1 a{ color:#fff; text-decoration: none;}
 h1 a:hover{color:#def; text-decoration: none;}
 
+.box:first-child{margin-bottom: 2em !important;}
+.box{margin-bottom: 5em !important;}
 /*.box-header.with-border{background: #485060;}*/
 h3.box-title{color:#9ab !important;font-size: 250% !important;}
 section h1{color:#578; font-size: 130%;}
@@ -125,7 +127,7 @@ nav .nav a span.caret{color:#89a;}
 .tile .dial{color:#fa2; background-color: #eee;
      color:#00e0ff;
      background-color: #00a0c0; 
-     color:rgba(255,255,255,0.3);
+     color:rgba(255,255,255,0.6);
      background-color: rgba(0,0,0,0.1); 
 }
 .tile canvas{display: block; float: left; margin-right: 0.5em;}
@@ -266,15 +268,13 @@ table.dataTable a{background: none;}
     width: 15%;
 }    
 .sorting_asc {
-    background: #cce url('../../images/sort_asc.png') no-repeat center right;
-    background-image: url('../../images/sort_asc.png'), linear-gradient(to bottom, #6be, #7ce) !important;
+    background-image: url('../../images/sort_asc.png'), linear-gradient(to bottom, #cef, #7ce) !important;
     border-left: 1px solid #fff;
     border-right: 1px solid #aaa;
 }
 
 .sorting_desc {
-    background: #cce url('../../images/sort_desc.png') no-repeat center right;
-    background-image: url('../../images/sort_desc.png'), linear-gradient(to bottom, #7ce, #6be)  !important;
+    background-image: url('../../images/sort_desc.png'), linear-gradient(to bottom, #7ce, #cef)  !important;
     border-left: 1px solid #fff;
     border-right: 1px solid #aaa;
 }
@@ -395,6 +395,7 @@ plotter
 }
 .plotter .btnclose{background: #f88; color:#fff; float: right; padding: 0.5em 1em; display: none; cursor: pointer;}
 .plotter .btnclose:hover{background: #f66;}
+.plotter .btnclose:active{background: #f66;}
 .plotter .graph {}
 .plotter .graph .infos{position: absolute; background: rgba(255,255,255,0.7); padding: 0.5em; margin: 0.5em 0.5em 0.5em;}
 .plotter .graph .title{background: #00a0c0; background: linear-gradient(90deg,#000,#00a0c0, rgba(0,0,0,0.0)); color:#fff; font-weight: bold; padding: 0.5em; margin: 0 0 0.5em;}

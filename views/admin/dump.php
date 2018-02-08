@@ -26,21 +26,26 @@ $aTab = array();
 // ----------------------------------------------------------------------
 foreach (array("aUserCfg", "aEnv", "aSrvStatus") as $myvar) {
 
+    /*
     $content.='
         <h3 id="h3' . md5($myvar) . '">' . $aLangTxt["lblDumps" . $myvar] . '</h3>
         <div class="subh3">
             <div class="hintbox">' . $aLangTxt["lblHintDumps" . $myvar] . '</div>
             <pre>';
-
+    */
     ob_start();
     // eval("var_export($$myvar);");
     eval("print_r($$myvar);");
-    $content.=ob_get_contents();
+    $sTabcontent='<pre>'.ob_get_contents().'</pre>';
     ob_end_clean();
 
+    /*
     $content.='</pre>
         </div>';
-
+     */
+    
+    $content.=$oDatarenderer->themeBox($aLangTxt["lblDumps" . $myvar], $sTabcontent, $aLangTxt["lblHintDumps" . $myvar]);
+    
     $aTab[$myvar] = array(
         'url' => '#',
         'label' => "$" . $myvar,
@@ -107,8 +112,7 @@ $aTab[$myvar] = array(
 // ----------------------------------------------------------------------
 $sMyTabs = $oDatarenderer->renderTabs($aTab);
 
-
-$content= '<div>' . $sMyTabs . '</div>'
+$content='<div>' . $sMyTabs . '</div>'
         . '<div style="clear: both"></div><br>' 
         . $content
         . '</div><div style="clear: both"></div>';

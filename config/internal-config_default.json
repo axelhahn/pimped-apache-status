@@ -85,7 +85,6 @@
         "servers",
         "settings",
         "vendor",
-        "update",
-        "lang"        
+        "update"
     ]
 }
