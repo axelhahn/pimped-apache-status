@@ -48,70 +48,72 @@ $aEnv["links"]["views"]['admin'] = array(
 );
 */
 
-foreach ($aCfg['views'] as $s) {
-    $sLabel = '';
-    if (array_key_exists($s, $aCfg['icons'])) {
-        $sLabel.=$aCfg['icons'][$s] . ' ';
-    }
-    $sLabel .= '<span>'.($aLangTxt['view_' . $s . '_label'] ? $aLangTxt['view_' . $s . '_label'] : $s).'</span>';
-    $aEnv["links"]["views"][$s] = array(
-        "label" => $sLabel,
-        "url" => $sSelfURL . '/'. getNewQs(array("view" => $s, 'action'=>'')),
-        "active" => ($s == $aEnv["active"]["view"]),
-    );
-}
-foreach ($aCfg['viewsadmin'] as $s) {
-    $sLabel = '';
-    if (array_key_exists('admin'.$s, $aCfg['icons'])) {
-        $sLabel.=$aCfg['icons']['admin'.$s] . ' ';
-    }
-    $sLabel .= '<span>'.(array_key_exists('AdminMenu' . $s . '', $aLangTxt) ? $aLangTxt['AdminMenu' . $s . ''] : $s).'</span>';
-    $aEnv["links"]["viewsadmin"][$s] = array(
-        'url' =>  getNewQs(array('action'=>'update')),
-        
-        "label" => $sLabel,
-        "url" => $sSelfURL . '/admin/'.getNewQs(array('action'=>$s, 'view'=>'')),
-        "active" => ($s == $aEnv["active"]["view"]),
-    );
-}
-// ------------------------------------------------------------
-// available languages
-// ------------------------------------------------------------
-if ($aCfg['selectLang']) {
-    foreach (explode(",", $aCfg['selectLang']) as $s) {
-        $aEnv["links"]["lang"][$s] = array(
-            "label" => $s,
-            "url" => getNewQs(array("lang" => $s)),
-            "active" => ($s == $aEnv["active"]["lang"]),
+if (isset($aUserCfg)){
+    foreach ($aCfg['views'] as $s) {
+        $sLabel = '';
+        if (array_key_exists($s, $aCfg['icons'])) {
+            $sLabel.=$aCfg['icons'][$s] . ' ';
+        }
+        $sLabel .= '<span>'.($aLangTxt['view_' . $s . '_label'] ? $aLangTxt['view_' . $s . '_label'] : $s).'</span>';
+        $aEnv["links"]["views"][$s] = array(
+            "label" => $sLabel,
+            "url" => $sSelfURL . '/'. getNewQs(array("view" => $s, 'action'=>'')),
+            "active" => ($s == $aEnv["active"]["view"]),
         );
     }
-}
+    foreach ($aCfg['viewsadmin'] as $s) {
+        $sLabel = '';
+        if (array_key_exists('admin'.$s, $aCfg['icons'])) {
+            $sLabel.=$aCfg['icons']['admin'.$s] . ' ';
+        }
+        $sLabel .= '<span>'.(array_key_exists('AdminMenu' . $s . '', $aLangTxt) ? $aLangTxt['AdminMenu' . $s . ''] : $s).'</span>';
+        $aEnv["links"]["viewsadmin"][$s] = array(
+            'url' =>  getNewQs(array('action'=>'update')),
 
-// ------------------------------------------------------------
-// available skins
-// ------------------------------------------------------------
-if ($aCfg['selectSkin']) {
-    foreach (explode(",", $aCfg['selectSkin']) as $s) {
-        $aEnv["links"]["skins"][$s] = array(
-            "label" => $s,
-            "url" => getNewQs(array("skin" => $s)),
-            "active" => ($s == $aEnv["active"]["skin"]),
+            "label" => $sLabel,
+            "url" => $sSelfURL . '/admin/'.getNewQs(array('action'=>$s, 'view'=>'')),
+            "active" => ($s == $aEnv["active"]["view"]),
         );
     }
-}
 
-// ------------------------------------------------------------
-// autoreload page
-// ------------------------------------------------------------
-if ($aCfg['autoreload']) {
-    foreach ($aCfg['autoreload'] as $iTime) {
-        $s = $iTime . " s";
-        if ($s == " s")
-            $s = "---";
-        $aEnv["links"]["reload"][$s] = array(
-            "label" => $s,
-            "url" => getNewQs(array("reload" => $iTime)),
-            "active" => ($iTime == $aEnv["active"]["reload"]),
-        );
+    // ------------------------------------------------------------
+    // available skins
+    // ------------------------------------------------------------
+    if ($aCfg['selectSkin']) {
+        foreach (explode(",", $aCfg['selectSkin']) as $s) {
+            $aEnv["links"]["skins"][$s] = array(
+                "label" => $s,
+                "url" => getNewQs(array("skin" => $s)),
+                "active" => ($s == $aEnv["active"]["skin"]),
+            );
+        }
+    }
+
+    // ------------------------------------------------------------
+    // autoreload page
+    // ------------------------------------------------------------
+    if ($aCfg['autoreload']) {
+        foreach ($aCfg['autoreload'] as $iTime) {
+            $s = $iTime . " s";
+            if ($s == " s")
+                $s = "---";
+            $aEnv["links"]["reload"][$s] = array(
+                "label" => $s,
+                "url" => getNewQs(array("reload" => $iTime)),
+                "active" => ($iTime == $aEnv["active"]["reload"]),
+            );
+        }
     }
 }
+    // ------------------------------------------------------------
+    // available languages
+    // ------------------------------------------------------------
+    if ($aCfg['selectLang']) {
+        foreach (explode(",", $aCfg['selectLang']) as $s) {
+            $aEnv["links"]["lang"][$s] = array(
+                "label" => $s,
+                "url" => getNewQs(array("lang" => $s)),
+                "active" => ($s == $aEnv["active"]["lang"]),
+            );
+        }
+    }

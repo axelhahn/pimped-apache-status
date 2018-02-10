@@ -51,8 +51,6 @@ if (!is_array($aUserCfg)|| !count($aUserCfg)) {
 }
 $aCfg = array_merge($aDefaultCfg, $aUserCfg);
 
-$aServergroups=$oCfg->get("config_servers");
-
 
 // ------------------------------------------------------------
 // check required features
@@ -99,6 +97,22 @@ $aEnv["active"]["skin"] = array_key_exists("skin", $_GET) ? $_GET["skin"] : $aCf
 $aEnv["active"]["reload"] = array_key_exists("reload", $_GET) ? $_GET["reload"] : false;
 
 // -- servergroup
+// --- load server groups and servers
+$aServergroups=$oCfg->get("config_servers");
+
+// if no server was configured then setup defaults
+if (!count($aServergroups) && is_array($aUserCfg) ){
+    require_once __DIR__ . '/classes/configserver.class.php';
+    $oServers=new configServer();
+    
+    $aServergroups=$oCfg->get("config_servers");
+    if ($aServergroups && count($aServergroups)){
+        $oMsg->add($aLangTxt['AdminMessageServer-add-defaults-ok'], 'success');
+    } else {
+        $oMsg->add($aLangTxt['AdminMessageServer-add-defaults-error'], 'error');
+    }
+}
+
 $aEnv["active"]["group"] = array_key_exists("group", $_GET) ? $_GET["group"] : false;
 if (!$aEnv["active"]["group"]) {
 
@@ -107,26 +121,36 @@ if (!$aEnv["active"]["group"]) {
         break;
     }
 }
+
+
 $aEnv["active"]["servers"] = array_key_exists("servers", $_GET) ? $_GET["servers"] : false;
 
 if ($aServergroups && !array_key_exists($aEnv["active"]["group"], $aServergroups)) {
     $oMsg->add(sprintf($aLangTxt['error-wrong-group'], $aEnv["active"]["group"]), 'error');
 }
-if (!$aEnv["active"]["group"]) {
-    $oMsg->add(sprintf($aLangTxt['error-no-group'], $aEnv["active"]["group"]), 'error');
-} else {
 
-    foreach ($aServergroups[$aEnv["active"]["group"]]["servers"] as $sHost => $aData2) {
-        $aServers2Collect[] = $sHost;
-    }
+// show menu items if a user config exists 
+if(is_array($aUserCfg)){
+    if (!$aEnv["active"]["group"]) {
+        $oMsg->add(sprintf($aLangTxt['error-no-group'], $aEnv["active"]["group"]), 'error');
+    } else {
 
-    $aServers2Collect = array_key_exists("servers", $_GET) ? explode(",", $_GET["servers"]) : $aServers2Collect;
+        foreach ($aServergroups[$aEnv["active"]["group"]]["servers"] as $sHost => $aData2) {
+            $aServers2Collect[] = $sHost;
+        }
 
-    // check: all servers are in my group?
-    if ($aServers2Collect) {
-        foreach ($aServers2Collect as $sHost) {
-            if (!array_key_exists($sHost, $aServergroups[$aEnv["active"]["group"]]['servers'])) {
-                $oMsg->add(sprintf($aLangTxt['error-server-not-in-group'], $sHost, $aEnv["active"]["group"]), 'error');
+        $aServers2Collect = array_key_exists("servers", $_GET) ? explode(",", $_GET["servers"]) : $aServers2Collect;
+
+        // check: all servers are in my group?
+        if ($aServers2Collect) {
+            foreach ($aServers2Collect as $sHost) {
+                if (!array_key_exists($sHost, $aServergroups[$aEnv["active"]["group"]]['servers'])) {
+                    $oMsg->add(sprintf($aLangTxt['error-server-not-in-group'], $sHost, $aEnv["active"]["group"]), 'error');
+                }
+            }
+        } else {
+            if (!isset($adminindex) || !$adminindex){
+                $oMsg->add(sprintf($aLangTxt['error-no-server']), 'error');
             }
         }
     }

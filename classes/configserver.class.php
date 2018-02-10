@@ -45,11 +45,22 @@ class configServer {
     // ----------------------------------------------------------------------
 
     private function _initMinimalConfig() {
-        $this->_aServer=array(
-            'default'=>array(
-                'servers'=>array()
-            )
-        );
+        $this->_aServer=array();
+        $sDefaultGroup='default';
+        $sDefaultServer='localhost';
+        
+        $aResult=$this->addGroup(array('label'=>$sDefaultGroup));
+        if (isset($aResult['error'])){
+            die($aResult['error']);
+        }
+
+        $aResult=$this->addServer(array(
+            'label'=>$sDefaultServer,
+            'group'=>$sDefaultGroup
+            ));
+        if (isset($aResult['error'])){
+            die($aResult['error']);
+        }
         $this->_save();
     }
     
@@ -59,7 +70,7 @@ class configServer {
      */
     private function _load() {
         $this->_aServer = $this->_oCfg->get();
-        if (!$this->_aServer){
+        if (!$this->_aServer || !count($this->_aServer)){
             $this->_initMinimalConfig();
             $this->_save();
         }

@@ -44,19 +44,6 @@ ob_start();
 if (!@include(__DIR__ . '/../views/' . $sIncView)) {
     $oMsg->add('View could not be included: ' . $sIncView, 'error');
 }
-/*
-switch ($sAction){
-    case 'lang':
-    case 'servers':
-    case 'update':
-    case 'settings':
-        include 'inc_'.$sAction.'.php';
-        break;
-    default:
-        include 'inc_servers.php';
-}
- * 
- */
 $content .= $oDatarenderer->themeBox(
         $aCfg['icons']['admin'. $sAction] .' '. $aLangTxt['AdminMenu'.$sAction]
         , ob_get_contents()

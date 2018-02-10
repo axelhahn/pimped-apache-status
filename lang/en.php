@@ -20,6 +20,7 @@ $aLangTxt = array(
     'error-no-group'=>'No group of servers was found. Please create one in the setup.',
     'error-server-not-in-group'=>'Server [%s] does not exist in group [%s].',
     'error-no-server-in-group'=>'No server was defined in the selected group [%s]. Add one in the setup.',
+    'error-no-server'=>'No server was given to analyze. After adding servers in the config select a server or server group on top.',
 
     // ------------------------------------------------------------
     // version check
@@ -364,6 +365,8 @@ $aLangTxt = array(
         'AdminLblServers-userpwd'=>'user and password',
         'AdminLblServers-userpwd-Hint'=>'optional value; Fill in this field if the server status page is password protected.<br>Syntax is <em>[username]:[password]</em>',
     
+        'AdminMessageServer-add-defaults-ok' => 'OK: Default group and server have been created.',
+        'AdminMessageServer-add-defaults-error' => 'ERROR: Unable to create default group and server.',
         'AdminMessageServer-addgroup-error' => 'ERROR: group %s cannot be added.',
         'AdminMessageServer-addgroup-ok' => 'OK: group %s was added.',
         'AdminMessageServer-deletegroup-error' => 'ERROR: group %s was not deleted.',

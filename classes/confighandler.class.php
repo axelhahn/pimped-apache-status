@@ -189,7 +189,7 @@ class confighandler {
         $this->_aCfg=array();
         $this->_sCfgId=$sId;
         if(!file_exists($sCfgFile)){
-            echo "WARNING: file " . $sCfgFile . " does not exist.";
+            // echo "WARNING: file " . $sCfgFile . " does not exist.";
         } else {
             $this->_aCfg=json_decode(file_get_contents($sCfgFile),1);
             if (!$this->_aCfg || !is_array($this->_aCfg)){

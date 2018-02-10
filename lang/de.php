@@ -19,6 +19,7 @@ $aLangTxt = array(
     'error-no-group'=>'Es wurde keine Server-Gruppe gefunden. Bitte legen Sie eine unter Admin - Server an.',
     'error-server-not-in-group'=>'Server [%s] exisitert nicht in der Gruppe [%s].',
     'error-no-server-in-group'=>'Es wurde noch kein Server in der Gruppe [%s] angelegt. Bitte legen Sie einen unter Admin - Server an.',
+    'error-no-server'=>'Es wurde kein Server gefunden.',
     
     // ------------------------------------------------------------
     // version check
@@ -367,6 +368,8 @@ $aLangTxt = array(
         'AdminLblServers-userpwd'=>'Benutzername und Password',
         'AdminLblServers-userpwd-Hint'=>'optional; Nur dann ausf&uuml;llen, wenn die Serverstatus-Seite passwort-.gesch&uuml;tzt ist.<br>Syntax: <em>[username]:[password]</em>',
     
+        'AdminMessageServer-add-defaults-ok' => 'OK: Default-Gruppe und -Server werden erstellt.',
+        'AdminMessageServer-add-defaults-error' => 'FEHLER: Default-Gruppe und -Server konnten nicht erstellt werden.',
         'AdminMessageServer-addgroup-error' => 'FEHLER: Gruppe %s kann nicht hinzugef&uuml;gt werden.',
         'AdminMessageServer-addgroup-ok' => 'OK: Gruppe %s wurde hinzugef&uuml;gt.',
         'AdminMessageServer-deletegroup-error' => 'FEHLER: Gruppe %wurde nicht gel&ouml;scht.',

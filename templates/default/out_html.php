@@ -179,16 +179,16 @@ $sBody = '
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
       
-        
-        <li class="header">'.$aLangTxt['menuHeaderMonitoring'].'</li>
-        '
-        .$oDatarenderer->renderLI($aEnv["links"]["views"])
-        .'
-            
-
-        <li class="header">'.$aLangTxt['menuHeaderConfig'].'</li>
-        '
-        .$oDatarenderer->renderLI($aEnv["links"]["viewsadmin"])
+        '.(isset($aEnv["links"]["views"]) && count($aEnv["links"]["views"])
+            ? '<li class="header">'.$aLangTxt['menuHeaderMonitoring'].'</li>'
+                .$oDatarenderer->renderLI($aEnv["links"]["views"])
+            : ''
+        )
+        .(isset($aEnv["links"]["viewsadmin"]) && count($aEnv["links"]["viewsadmin"])
+            ? '<li class="header">'.$aLangTxt['menuHeaderConfig'].'</li>'
+                .$oDatarenderer->renderLI($aEnv["links"]["viewsadmin"])
+            : ''
+        )
         .'
       </ul>
     </section>
@@ -277,7 +277,12 @@ $sBody = '
 // - a DIV with a link to jump to top of page
 // ----------------------------------------------------------------------
 
-$sTabNavi = isset($sTabNavi) ? $sTabNavi : $oDatarenderer->renderTabs($aEnv["links"]["views"]);
+$sTabNavi = isset($sTabNavi) ? $sTabNavi : 
+        (isset($aEnv["links"]["views"]) 
+            ? $oDatarenderer->renderTabs($aEnv["links"]["views"])
+            : ''
+        )
+        ;
 
 /*
 if (array_key_exists("views", $aEnv["links"])) {

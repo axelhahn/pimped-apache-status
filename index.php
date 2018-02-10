@@ -50,9 +50,8 @@ $oLog->add('done $oServerStatus->getStatus() ');
 $aSrvStatus = $aStatus["data"];
 $aSrvMeta = $aStatus["meta"];
 
-if (!count($aServers2Collect)) {
+if (!count($aServers2Collect) && isset($aCfgUser) ) {
     $oMsg->add(sprintf($aLangTxt['error-no-server-in-group'], $aEnv["active"]["group"]), 'error');
-    // $oMsg->add('No server was defined for monitoring. Open <a href="./admin/">Settings</a> or check your config in config/config_servers.json.', 'error');
 }
 
 
