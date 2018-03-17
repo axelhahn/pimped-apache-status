@@ -52,9 +52,16 @@ $aLangTxt = array(
         // ............................................................
         'lblInitialSetup'=>'Initial-Setup',
         'lblInitialSetupAbort'=>'Tut mir leid - das Initial-Setup wurde bereits ausgef&uuml;hrt.',
-        'lblHelplblInitialSetup'=>'
+        'lblInitialSetupTab1'=>'Passwortschutz einrichten',
+        'lblHelplblInitialSetupTab1'=>'
             Willkommen beim Pimped Apache Status.<br>
             Zuerst: Sch&uuml;tze das Werkzeug und setze einen Admin-user.
+        ',
+        'lblInitialSetupTab2'=>'Kein Schutz',
+        'lblHelplblInitialSetupTab2'=>'
+            Sie k&ouml;nnen dieses Tool auch selbst via Httpd Konfiguration auf eine IP zu beschr&auml;nken oder mit einer anderen Authentifzierung zu sch&uuml;tzen.<br>
+            Hinweis: dieses Werkzeug niemals gegen das &ouml;ffentliche Internet offen lassen!<br>
+            Sie haben hier die M&ouml;glichkeit, den internen Benutzer + Passwort zu &uuml;bergehen.<br>
         ',
         'lblUsername'=>'Username',
         'lblPassword'=>'Passwort',

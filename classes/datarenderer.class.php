@@ -953,7 +953,7 @@ class Datarenderer {
             $this->log(__FUNCTION__ . "($sTilename) - end datafilter");
         }
         $iCount = count($aTData);
-        if ($iCount && count($iCount)) {
+        if ($iCount) {
             switch ($sTilename) {
                 // case 'requests_all': break;
                 // case 'requests_running': break;

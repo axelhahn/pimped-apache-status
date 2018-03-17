@@ -63,12 +63,16 @@ function initSoftscroll() {
 
 /**
  * filter display of server list in the menu
+ * 
+ * @param {string} s  filtertext
  * @returns {undefined}
  */
 function filterServer(s){
 
     var iCount=0;
-    
+    if(s='null'){
+        s='';
+    }
     localStorage.setItem('apachestatusFilterServer', s);
     $('#serverlist ul li a').each(function () {
         if (!s || $(this).html().indexOf(s)>=0){
@@ -168,9 +172,11 @@ function initKnob(){
             aData=oCounter.getLast(50);
             aDataLast=oCounter.getLast(1);
             currentVal=aDataLast['max'];
+            /*
             console.log('----- ' + sTilename + ' ('+sId+') - max ' + aData['max'] + ' current: ' + currentVal );
             console.log(aData);
             console.log(aDataLast);
+            */
             if(aData){
 
                 $(this).knob({

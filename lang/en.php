@@ -53,9 +53,16 @@ $aLangTxt = array(
         // ............................................................
         'lblInitialSetup'=>'Initial Setup',
         'lblInitialSetupAbort'=>'Sorry, the initial setup was executed already.',
-        'lblHelplblInitialSetup'=>'
+        'lblInitialSetupTab1'=>'Protect with a user and password',
+        'lblHelplblInitialSetupTab1'=>'
             Welcome to the Pimped Apache status.<br>
             First of all: protect the tool and setup an admin user.
+        ',
+        'lblInitialSetupTab2'=>'No Protection',
+        'lblHelplblInitialSetupTab2'=>'
+            Sure you have the possibility to restrict the access to this tool by ip address or another authentication in your httpd config.<br>
+            Please Remind: never let it be open to the public internet!<br>
+            Here you can skip the internal authentication.<br>
         ',
         'lblUsername'=>'Username',
         'lblPassword'=>'Password',

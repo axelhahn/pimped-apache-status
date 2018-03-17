@@ -93,9 +93,8 @@ function checkAuth() {
     global $aLangTxt;
     // echo '<pre>'.print_r($aCfg, 1).'</pre>'; die();
     if (
-            !array_key_exists('user', $aCfg['auth']) || !array_key_exists('password', $aCfg['auth']) || (
-            $aCfg['auth']['user'] == 'admin' && !$aCfg['auth']['password']
-            )
+            !$aCfg['auth'] || !array_key_exists('user', $aCfg['auth']) || !array_key_exists('password', $aCfg['auth']) 
+            || ($aCfg['auth']['user'] == 'admin' && !$aCfg['auth']['password'] )
     ) {
         return true;
     }

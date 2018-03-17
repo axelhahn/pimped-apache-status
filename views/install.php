@@ -7,12 +7,13 @@
 
 $sUser=($_POST && isset($_POST['username'])) ? $_POST['username'] : false;
 $sContent='';
+$sDummyUser='nouserprotection';
 
-$sForm=(is_array($aUserCfg) && count($aUserCfg)) 
-    ? $aLangTxt['lblInitialSetupAbort']
-    : $aLangTxt['lblHelplblInitialSetup']
-      .'<br><br>'
-      . '<form class="form-horizontal" action="?" method="POST">'
+$aTC[] = array(
+    'tab'=>$aLangTxt['lblInitialSetupTab1'],
+    'content'=>$aLangTxt['lblHelplblInitialSetupTab1']
+        . '<br><br>'
+        . '<form class="form-horizontal" action="?" method="POST">'
         . '<div class="form-group">'
             . '<label class="col-sm-2">'.$aLangTxt['lblUsername'].'</label>'
             . '<div class="col-sm-3">'
@@ -34,20 +35,49 @@ $sForm=(is_array($aUserCfg) && count($aUserCfg))
     . '<button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> '.$aLangTxt['ActionOK'].'</button>'
     . '<div style="clear: both"></div>'
     . '</form>'
+    ,
+);
+$aTC[] = array(
+    'tab'=>$aLangTxt['lblInitialSetupTab2'],
+    'content'=>$aLangTxt['lblHelplblInitialSetupTab2']
+        . '<br><br>'
+        . '<form class="form-horizontal" action="?" method="POST">'
+                . '<input name="username" type="hidden" value="'.$sDummyUser.'">'
+                . '<input name="pw1" type="hidden" value="" >'
+                . '<input name="pw2" type="hidden" value="" >'
+        . '<button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> '.$aLangTxt['lblInitialSetupTab2'].'</button>'
+    . '</form>'
+);
+
+$sFormUserPw=$oDatarenderer->renderTabbedContent($aTC);
+        
+$sForm=(is_array($aUserCfg) && count($aUserCfg)) 
+    ? $aLangTxt['lblInitialSetupAbort'] // Sorry, the initial setup was executed already. 
+    : $sFormUserPw
 ; 
+
 if(is_array($_POST) && count($_POST)){
     if ($_POST['username']
-        && $_POST['pw1']
-        && $_POST['pw2']
-        && $_POST['pw1']===$_POST['pw2']
+        && (
+            ($_POST['pw1']
+            && $_POST['pw2']
+            && $_POST['pw1']===$_POST['pw2']
+            )
+            || ($_POST['username']===$sDummyUser && !$_POST['pw1'] && !$_POST['pw2'])
+        )
     ){
         $dummy=$oCfg->get("config_user");
-        $oCfg->set(array(
+        $aUsersetup=array(
             'auth'=>array(
-                'user'=>$_POST['username'],
-                'password'=>md5($_POST['pw1']),
+                'user'=>$_POST['username']
             )
-        ));
+        );
+        if ($_POST['pw1']){
+            $aUsersetup['auth']=md5($_POST['pw1']);
+        } else {
+            $aUsersetup['auth']=false;
+        }
+        $oCfg->set($aUsersetup);
         $oMsg->add($aLangTxt['lblInitialSetupSaved'], 'success');
         $sContent.=$aLangTxt['lblInitialSetupSaved']. '<br><br><a href="?" class="btn btn-primary">'.$aLangTxt['ActionContinue'].'</a>';
     } else {
