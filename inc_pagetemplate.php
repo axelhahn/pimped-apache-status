@@ -1,11 +1,12 @@
 <?php
 
-
-$oLog->add('load out_html.php in the skin directory');
+$sOutMode=( (array_key_exists('format', $_GET) && $_GET['format']) ? 'data':'default');
+    
+$oLog->add('load '.$sOutMode.'/out_html.php ...');
 // if (!include(__DIR__ . '/templates/' . $aEnv["active"]["skin"] . '/' . $aCfg['defaultTemplate'])) {
-if (!include(__DIR__ . '/templates/default/' . $aCfg['defaultTemplate'])) {
+if (!include(__DIR__ . '/templates/'.$sOutMode.'/' . $aCfg['defaultTemplate'])) {
     // die('ERROR: Template could not be included: ' . './templates/' . $aCfg['skin'] . '/' . $aCfg['defaultTemplate'] . '.<br>Check the values "skin" and "defaultTemplate" in your configuration.');
-    die('ERROR: Template could not be included: ' . './templates/default/' . $aCfg['defaultTemplate'] . '.<br>Check the values "skin" and "defaultTemplate" in your configuration.');
+    die('ERROR: Template could not be included: ' . './templates/'.$sOutMode.'/' . $aCfg['defaultTemplate'] . '.<br>Check the values "skin" and "defaultTemplate" in your configuration.');
 }
 
 
