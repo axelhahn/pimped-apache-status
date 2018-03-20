@@ -235,7 +235,7 @@ $sBody = '
                 }
                 $oLog->add(__FILE__ . ' tiles done');
             }
-            $sTiles=$sTiles ? '<div class="box box-solid"><div class="box-body"><div id="divtiles">'.$sTiles.'</div></div></div>' :'';
+            $sTiles=$sTiles ? '<div class="box-body">'.$sTiles.'</div>' :'';
             $sBody.=$sTiles.'
         
       <!-- /.box -->
