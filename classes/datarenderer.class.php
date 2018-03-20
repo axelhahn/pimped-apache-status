@@ -1,5 +1,4 @@
 <?php
-
 /**
  * PIMPED APACHE-STATUS
  * datarenderer helps to render tiles and output sections with title,
@@ -15,7 +14,8 @@ class Datarenderer {
      * @var array
      */
     private $aValidTiles = array(
-        'server_count',
+        // removed in 2.00.21 beta
+        // 'server_count',
         'server_responsetime',
         'requests_all',
         'requests_running',
@@ -161,7 +161,7 @@ class Datarenderer {
         if (!class_exists("DomDocument")) {
             unset($this->aExports["xml"]);
         }
-
+        // $this->_oA=new renderadminlte();
         return true;
     }
 
@@ -921,7 +921,7 @@ class Datarenderer {
     public function renderTile($sTilename = false) {
         $this->log(__FUNCTION__ . "($sTilename) - start");
         global $aSrvStatus, $aSrvMeta, $aLangTxt, $aCfg;
-
+        
         if (!$sTilename) {
             return false;
         }
@@ -1041,8 +1041,9 @@ class Datarenderer {
                     . '<span class="title">' . $sTitle . '</span>:<br><span class="content">' . $sContent . '</span>'
                     . '</div>'
                      */
-                    .'<!-- Apply any bg-* class to to the info-box to color it -->
-                    <div class="info-box bg-aqua tile ' . $sTilename . '" style="float: left; width: auto; margin: 0 1em 1em 0;" '
+                    .'<div class="col-md-2">
+                        <!-- Apply any bg-* class to to the info-box to color it -->
+                    <div class="info-box bg-aqua tile ' . $sTilename . '"'
                         . 'title="' . $sHint . '" '
                         . 'onmouseover="showGraph(\'' . $sSrvIndex . '\', \'' . $sTilename . '\', \'' . $sTitle . '\');" '
                         . 'onmouseout="hideGraph();" '
@@ -1066,7 +1067,8 @@ class Datarenderer {
                       </div>
                       <!-- /.info-box-content -->
                     </div>
-                    <!-- /.info-box -->'                    
+                    <!-- /.info-box -->
+                    </div>'                    
                     . $sJsCounter
                     ;
         }
