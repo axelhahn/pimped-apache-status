@@ -159,7 +159,7 @@ function initKnob(){
     var aData=false;
     var sFgColor=$('.tile .dial').css("color");
     var sBgColor=$('.tile .dial').css("background-color");
-    $("#divtiles .dial").each(function () {
+    $(".tile .dial").each(function () {
         i++;
         
         // tial name is the id "dial-[server]-[tilename]" 
@@ -183,12 +183,12 @@ function initKnob(){
                     readOnly: true,
                     fgColor: sFgColor,
                     bgColor: sBgColor,
-                    max: aData['max'],
+                    max: aData['max']*1000,
                     'width': '90px',
                     'height': '90px',
                     thickness: 0.04
                 });
-                $(this).val(currentVal).trigger('change');
+                $(this).val(currentVal*1000).trigger('change');
                 $('#progress-'+sId).css('width', (currentVal/aData['max']*100)+'%');
 
             }
