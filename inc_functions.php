@@ -85,7 +85,7 @@ function httpGet($url, $bHeaderOnly = false) {
 
 /**
  * check authentication if a user and password were configured
- * @global array  $aCfg  config from ./config/config_user.php
+ * @global array  $aCfg  config from ./config/config_user.json
  * @return boolean
  */
 function checkAuth() {

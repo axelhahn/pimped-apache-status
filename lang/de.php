@@ -52,6 +52,21 @@ $aLangTxt = array(
         // ............................................................
         'lblInitialSetup'=>'Initial-Setup',
         'lblInitialSetupAbort'=>'Tut mir leid - das Initial-Setup wurde bereits ausgef&uuml;hrt.',
+        'lblInitialSetupTab0'=>'Upgrade',
+        'lblHelplblInitialSetupTab0'=>'
+            Es wurde eine Konfigurationsdatei mit Version 1.x erkannt.<br>
+            <br>
+            Empfehlung: Starten Sie das das Upgrade - dieses
+            <ul>
+                <li>konvertiert die bestehenden Einstellungen einschl. Username und Passwort</li>
+                <li>Transferiert die bestehenden Apache-Server
+            </ul>
+            <a href="upgrade.php" class="btn btn-primary">Upgrade starten</a><br>
+            <br>
+            ODER<br>
+            W&auml;hlen Sie einen der weiteren Tabs, um mit einer neuen, leeren Konfiguration zu starten.
+            
+        ',
         'lblInitialSetupTab1'=>'Passwortschutz einrichten',
         'lblHelplblInitialSetupTab1'=>'
             Willkommen beim Pimped Apache Status.<br>
@@ -408,7 +423,7 @@ $aLangTxt = array(
     // ------------------------------------------------------------
     // cfg values
     // ------------------------------------------------------------
-        'cfg-auth'=>'Authentifizierung zum Zugriffs-Schutz auf die Apache Serverstatus Daten',
+        'cfg-auth'=>'Interne Authentifizierung zum Zugriffs-Schutz auf die Apache Serverstatus Daten. Setze Username und Md5 Hash des Passwortes oder aber <em>auth: false</em>, um interne Authentifizierung zu deaktivieren (nutzen Sie Restriktionen in der Httpd Konfiguration)',
             'AdminLblVar-user'=>'Username',
             'AdminLblVar-password'=>'Passwort',
         'cfg-autoreload'=>'Zeit bis Neuladen der Seite. Das Array enthält die Werte in Sekuinden, die als Dropdown angezeigt werden.',

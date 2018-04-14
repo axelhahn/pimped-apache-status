@@ -9,6 +9,13 @@ $sUser=($_POST && isset($_POST['username'])) ? $_POST['username'] : false;
 $sContent='';
 $sDummyUser='nouserprotection';
 
+if(file_exists(__DIR__ . '/../config/config_user.php')){
+    $aTC[] = array(
+        'tab'=>$aLangTxt['lblInitialSetupTab0'],
+        'content'=>$aLangTxt['lblHelplblInitialSetupTab0']
+    );
+}
+
 $aTC[] = array(
     'tab'=>$aLangTxt['lblInitialSetupTab1'],
     'content'=>$aLangTxt['lblHelplblInitialSetupTab1']
@@ -49,11 +56,9 @@ $aTC[] = array(
     . '</form>'
 );
 
-$sFormUserPw=$oDatarenderer->renderTabbedContent($aTC);
-        
 $sForm=(is_array($aUserCfg) && count($aUserCfg)) 
     ? $aLangTxt['lblInitialSetupAbort'] // Sorry, the initial setup was executed already. 
-    : $sFormUserPw
+    : $sOldConfig . $oDatarenderer->renderTabbedContent($aTC);
 ; 
 
 if(is_array($_POST) && count($_POST)){

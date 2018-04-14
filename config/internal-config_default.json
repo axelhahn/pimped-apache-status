@@ -70,8 +70,7 @@
     "showHint": true,
     "skin": "skin-purple",
     "tdbars": [
-        "thCount",
-        "__DISABLED__Req"
+        "thCount"
     ],
     "tdlink": [],
     "views": [

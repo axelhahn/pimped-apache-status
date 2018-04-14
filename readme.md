@@ -62,15 +62,14 @@ webroot.
 
 ### (2)
 Allow your server to access the server-status page on the systems 
-you want to monitor, i.e. in apache 2.2 syntax:
+you want to monitor, i.e. in apache 2.4 syntax:
 
-    <Location /server-status>
-        SetHandler server-status
-        order deny, allow
-        allow from 127.0.0.1
-        allow from 192.168.123.4 # <--- enter ip of your monitoring system
-        deny from all
+    <Location /server-status> 
+      SetHandler server-status 
+      Require ip 127.0.0.1
+      Require ip 192.168.123.4 # enter ip of your monitoring system
     </Location>
+
 
 ### (3) 
 Open http://localhost/apachestatus/ in your webbrowser.
@@ -78,18 +77,18 @@ Open http://localhost/apachestatus/ in your webbrowser.
 ### (4)
 Go to the admin subdirectory: http://localhost/apachestatus/admin/
 There you can add groups and servers.
-(You can change the settings in the json files below ./config/ too).
+(You can change the settings in the json files in ./config/ too).
 
 
 ## UPGRADE from version 1.x
 
-Make a backup of version 1 (as zip, tgz, ...).
-Extract version 2 over the existing version 1.
-Then execute the upgrade script:
+A new local version will be detected in the webbrowser. Follow the
+upgrade link or open directly
 http://localhost/apachestatus/upgrade.php
 
-This converts the config files (array in php files) to json.
+On CLI or for automation execute 
 
+    php [installdir]/upgrade.php
 
 ## CUSTOMIZATION
 

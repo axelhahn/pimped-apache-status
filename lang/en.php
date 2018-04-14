@@ -53,6 +53,21 @@ $aLangTxt = array(
         // ............................................................
         'lblInitialSetup'=>'Initial Setup',
         'lblInitialSetupAbort'=>'Sorry, the initial setup was executed already.',
+        'lblInitialSetupTab0'=>'Upgrade',
+        'lblHelplblInitialSetupTab0'=>'
+            A config file of the former version 1.x was detected.<br>
+            <br>
+            Recommendation: execute the upgrade to 
+            <ul>
+                <li>convert existing settings incl. user and password</li>
+                <li>transfer all defined apache servers 
+            </ul>
+            <a href="upgrade.php" class="btn btn-primary">Upgrade my config</a><br>
+            <br>
+            OR<br>
+            select one of the next tabs to start with a new, empty config.
+            
+        ',
         'lblInitialSetupTab1'=>'Protect with a user and password',
         'lblHelplblInitialSetupTab1'=>'
             Welcome to the Pimped Apache status.<br>
@@ -405,7 +420,7 @@ $aLangTxt = array(
     // ------------------------------------------------------------
     // cfg values
     // ------------------------------------------------------------
-        'cfg-auth'=>'Authentication to protect access to the Apache status data',
+        'cfg-auth'=>'Internal authentication to protect access to the Apache status data.<br>Set a username and the md5 hash of its password or <em>auth: false</em> to disable internal protection (to use a restriction in httpd config).',
             'AdminLblVar-user'=>'username',
             'AdminLblVar-password'=>'password',
         'cfg-autoreload'=>'Time to auto reload page. The array contains values in seconds that will be visible as a dropdown.',

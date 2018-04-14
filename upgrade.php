@@ -59,6 +59,9 @@ function renameOld($filename){
             . "Maybe the the converter was executed already.<br>";
         }else {
             echo "OK, <span class=\"file\">config/config_user.php</span> was read.";
+            if(!isset($aCfg['auth']) || !count($aCfg['auth'])){
+                    $aCfg['auth']=false;
+            }
 
             // ---------- write
             echo "<h2>Writing new config</h2>";

@@ -4,6 +4,7 @@ $adminindex=1;
 require_once '../inc_config.php';
 require_once '../inc_menu.php';
 
+    // remove menu items on top right
     unset($aEnv["links"]["servers"]);
     unset($aEnv["links"]["reload"]);
     

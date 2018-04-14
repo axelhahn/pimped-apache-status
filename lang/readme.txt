@@ -18,12 +18,12 @@ Both must have the same name but different extensions.
 
 Remember to use htmlentities for special chars!
 	
-To enable the language in the dropdown add it in the config (config/config_user.php) as
+To enable the language in the dropdown add it in the config (config/config_user.json) as
 
-    'selectLang' => 'en,de,[your language]',
+    'selectLang': 'en,de,[your language]',
 
 or
-    'lang' => '[your language]',
+    'lang': '[your language]',
 
 to use it as default language.
 
