@@ -396,10 +396,14 @@ class configServer {
                     . $sGroup .' <span class="badge">'.count($this->getServers($sGroup)).'</span>'
                     . '</h3>'
                     ;
+        } else {
+            $sHtml.='<button class="btn btn-success" onclick="$(\'.divFrm\').hide();$(\'#' . $sFormId . '\').slideToggle();">'
+                . $aCfg['icons']['actionAdd'] . $aLangTxt['ActionAddServergroup']
+            . '</button>'
+           ;
         }
-        $sHtml.='<div id="'.$sFormId.'" class="divFrm"'
-            . ($sGroup ? ' style="display: none;"' : '')
-            . '>'
+        $sHtml.='<div id="'.$sFormId.'" class="divFrm'.($sGroup ? '' : ' divNew').'"'. '>'
+                .($sGroup ? '' : '<p>' . $aLangTxt['AdminServersLblAddGroup'] . '</p>')
             // . '<br>'
             . '<form action="'.getNewQs(array()).'" class="form-inline" method="POST" style="float: left;">'
             . '<input type="hidden" name="appaction" value="'.$sAppAction.'"/>'
@@ -485,10 +489,15 @@ class configServer {
                     . ' ('.$aSrv['status-url'].')'
                     . ''
                     ;
+        } else {
+            $sHtml.='<button class="btn btn-success" onclick="$(\'.divFrm\').hide();$(\'#' . $sFormId . '\').slideToggle();">'
+                    . $aCfg['icons']['actionAdd'] . $aLangTxt['ActionAddServer']
+                . '</button>'
+                . '<br>'
+            ;
         }
-        $sHtml.='<div id="'.$sFormId.'" class="divFrm"'
-            . ($sId ? ' style="display: none;"' : '')
-            . '>'
+        $sHtml.='<div id="'.$sFormId.'" class="divFrm'.($sId ? '' : ' divNew').'">'
+                .($sId ? '' : '<p>' . $aLangTxt['AdminServersLblAddServer'] . '</p>')
             // . '<br>'
             . '<form action="'.getNewQs(array()).'" class="form-horizontal" method="POST" >'
             . '<input type="hidden" name="appaction" value="'.$sAppAction.'"/>'

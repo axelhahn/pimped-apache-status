@@ -200,7 +200,7 @@ div.subh4 {margin-left: 10px; margin-bottom: 10px; padding-left: 10px; border-le
 }
 
 .divNew{display: none; background: #cec;}
-.divFrm{padding: 1em;}
+.divFrm{padding: 1em; display: none;}
 .divServer{padding: 0em 1em 0; background: #f8f8f8; border-bottom: 1px solid #ddd; margin-bottom: 2px;}
 .divServer:hover{background: #f0f4f8; }
 .lastsave{ background:#fea;}

@@ -129,18 +129,11 @@ $sHtml.='<h3>' . $aLangTxt['AdminLblServers'] . '</h3>'
 // loop over groups
 if (count($oCS->getGroups())) {
     // add a group
-    $sDivNewGroup = 'divAddGroup';
+    
     $sHtml.=''
-            . '<button class="btn btn-success" onclick="$(\'#' . $sDivNewGroup . '\').slideToggle();">'
-                . $aCfg['icons']['actionAdd'] . $aLangTxt['ActionAddServergroup']
-            . '</button>'
-            . '<br>'
-            . '<div class="divServergroup">'
-                . '<div id="' . $sDivNewGroup . '" class="divNew">'
-                    . '<p>' . $aLangTxt['AdminServersLblAddGroup'] . '</p>'
-                    . $oCS->renderFormGroup() . '<br>'
-                . '</div><br>'
-    ;
+        . '<div class="divServergroup">'
+            . $oCS->renderFormGroup() . '<br>'
+        ;
     foreach ($oCS->getGroups() as $sGroup) {
         
         // add a server
@@ -148,14 +141,9 @@ if (count($oCS->getGroups())) {
         $sHtml.=''
                 . $oCS->renderFormGroup($sGroup) . '<br>'
                 . '<div style="margin-left: 3%" class="">'
-                . '<button class="btn btn-success" onclick="$(\'#' . $sDivNew . '\').slideToggle();">'
-                    . $aCfg['icons']['actionAdd'] . $aLangTxt['ActionAddServer']
-                . '</button>'
-                . '<br>'
-                . '<div id="' . $sDivNew . '" class="divNew">'
-                . '<p>' . $aLangTxt['AdminServersLblAddServer'] . '</p>'
+                // . '<div id="' . $sDivNew . '" class="divNew">'
                 . $oCS->renderFormServer($sGroup) . '<br>'
-                . '</div><br>'
+                // . '</div><br>'
         ;
 
         // show servers of the current group
