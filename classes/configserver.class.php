@@ -389,7 +389,7 @@ class configServer {
         if($sGroup){
             $sHtml.='<div class="divGroup" id="'.$this->getDivId($sGroup).'">'
                     . '<h3>'
-                    . '<button class="btn btn-default" onclick="$(\'#'.$sFormId.'\').slideToggle();">'
+                    . '<button class="btn btn-default" onclick="$(\'.divFrm\').hide();$(\'#'.$sFormId.'\').slideToggle();">'
                     . '<i class="fa fa-pencil"></i> ' . $aLangTxt['ActionEdit']
                     . '</button> '
                     . '<i class="fa fa-cubes"></i> '
@@ -478,7 +478,7 @@ class configServer {
                     . '</button>'
                     . '</form>'
                     
-                    . '<button class="btn btn-default" onclick="$(\'#'.$sFormId.'\').slideToggle();">'
+                    . '<button class="btn btn-default" onclick="$(\'.divFrm\').hide();$(\'#'.$sFormId.'\').slideToggle();">'
                     . $aCfg['icons']['actionEdit'] . $aLangTxt['ActionEdit']
                     . '</button>'
                     . ' <strong><i class="fa fa-hdd-o"></i> '.$aSrv['label'].'</strong>'
