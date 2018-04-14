@@ -62,7 +62,7 @@ foreach(array_keys($aUserCfg) as $sKey){
 
 foreach (array(
     "config_user" => array("edit" => true),
-    "internal-config_default" => array("edit" => false),
+    // "internal-config_default" => array("edit" => false),
 ) as $sCfgfile => $aSettings) {
     $myvar = $sCfgfile;
     $sData = file_get_contents(dirname(__DIR__) . '../../config/' . $sCfgfile . '.json');
@@ -102,8 +102,8 @@ $sTable = '<table class="table datatable"><thead>'
         . '<tr>'
         . '<th>' . $aLangTxt['AdminMenuSettings-var'] . '</th>'
         . '<th>' . $aLangTxt['AdminMenuSettings-description'] . '</th>'
-        . '<th>' . $aLangTxt['AdminMenuSettings-default'] . '</th>'
         . '<th>' . $aLangTxt['AdminMenuSettings-uservalue'] . '</th>'
+        . '<th>' . $aLangTxt['AdminMenuSettings-default'] . '</th>'
         . '</tr>'
         . '</thead>'
         . '<tbody>';
@@ -121,10 +121,10 @@ foreach ($aDefaultCfg as $sKey => $val) {
             . '<td>' . $sKey . '</td>' . "\n"
             . '<td>' . (isset($aLangTxt['cfg-' . $sKey]) ? $aLangTxt['cfg-' . $sKey] : $aLangTxt['cfg-wrongitem'] ) . '</td>' . "\n"
             // . '<td><pre>' . htmlentities(print_r($val, 1)) . '</pre></td>' . "\n"
+            . '<td>' . (array_key_exists($sKey, $aCfgUser) ? '<pre class="active">' . htmlentities(json_encode($aCfgUser[$sKey], JSON_PRETTY_PRINT)) . '</pre>' : '-' ) . '</td>' . "\n"
             . '<td><pre' . (!array_key_exists($sKey, $aCfgUser) ? ' class="default"': '' ) 
-                . '>'.htmlentities(print_r($val, 1)) 
+                . '>"'.$sKey.'": '.htmlentities(json_encode($val, JSON_PRETTY_PRINT)) 
                 . '</pre>' . '</td>' . "\n"
-            . '<td>' . (array_key_exists($sKey, $aCfgUser) ? '<pre class="active">' . htmlentities(print_r($value, 1)) . '</pre>' : '-' ) . '</td>' . "\n"
             . '</tr>' . "\n"
     ;
 }

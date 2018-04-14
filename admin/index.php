@@ -2,18 +2,11 @@
 $adminindex=1;
 
 require_once '../inc_config.php';
-require_once '../inc_menu.php';
-
-    // remove menu items on top right
-    unset($aEnv["links"]["servers"]);
-    unset($aEnv["links"]["reload"]);
     
     
 $oLog->add('aEnv["active"] <pre>'.print_r($aEnv["active"], 1),'</pre>');
 $oLog->add('aEnv["links"] <pre>'.print_r($aEnv["links"], 1),'</pre>');
     
-require_once '../classes/datarenderer.class.php';
-$oDatarenderer = new Datarenderer();
 
 $aEnv["active"]["view"]="admin.php";
 
@@ -23,12 +16,18 @@ $sAction=(array_key_exists('action', $_POST))?$_POST['action']:$sAction;
 $sAppAction=(array_key_exists('appaction', $_GET))?$_GET['appaction']:false;
 $sAppAction=(array_key_exists('appaction', $_POST))?$_POST['appaction']:$sAppAction;
 
+$aEnv["active"]["view"]=( $sAction && array_search($sAction,$aCfg['viewsadmin'])!==false
+        ? $sAction
+        :'servers'
+        );
+require_once '../inc_menu.php';
 
-if(array_key_exists($sAction,$aCfg['viewsadmin'])){
-    $aCfg['viewsadmin'][$sAction]['active']=true;
-} else {
-    $aCfg['viewsadmin']['overview']['active']=true;
-}
+    // remove menu items on top right
+    unset($aEnv["links"]["servers"]);
+    unset($aEnv["links"]["reload"]);
+
+require_once '../classes/datarenderer.class.php';
+$oDatarenderer = new Datarenderer();
 
 $content = '<div id="divtiles">'
             . '<h2>'

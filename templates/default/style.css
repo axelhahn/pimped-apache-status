@@ -38,7 +38,7 @@ h3.box-title{color:#9ab !important;font-size: 250% !important;}
 section h1{color:#578; font-size: 130%;}
 
 nav .nav a i{color:#fc8;}
-nav .nav a span{color:rgba(255,255,255,0.6);}
+nav .nav a span{opacity:0.7; text-shadow: none;}
 nav .nav a span.caret{color:#89a;}
 #divmainbody ul.nav li a {color:#aaa;}
 #divmainbody ul.nav li a i{font-size: 130%;}

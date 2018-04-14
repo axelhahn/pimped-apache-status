@@ -43,7 +43,8 @@ $sHtml.='
             </tbody></table>
         </div>';
 
-$sJsOnReady.='$("#table' . $myvar . '").dataTable(' . $aCfg['datatableOptions'] . ');';
+print_r($aCfg['datatableOptions']); die();
+$sJsOnReady.='$("#table' . $myvar . '").dataTable(' . json_encode($aCfg['datatableOptions']) . ');';
 
 $aTab[$myvar] = array(
     'url' => '#',

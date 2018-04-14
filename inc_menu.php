@@ -80,7 +80,7 @@ if (isset($aUserCfg)){
     // available skins
     // ------------------------------------------------------------
     if ($aCfg['selectSkin']) {
-        foreach (explode(",", $aCfg['selectSkin']) as $s) {
+        foreach ($aCfg['selectSkin'] as $s) {
             $aEnv["links"]["skins"][$s] = array(
                 "label" => $s,
                 "url" => getNewQs(array("skin" => $s)),
@@ -109,7 +109,7 @@ if (isset($aUserCfg)){
     // available languages
     // ------------------------------------------------------------
     if ($aCfg['selectLang']) {
-        foreach (explode(",", $aCfg['selectLang']) as $s) {
+        foreach ($aCfg['selectLang'] as $s) {
             $aEnv["links"]["lang"][$s] = array(
                 "label" => $s,
                 "url" => getNewQs(array("lang" => $s)),

@@ -11,7 +11,16 @@
         300
     ],
     "checkupdate": 86400,
-    "datatableOptions": "{ \n        \"bPaginate\": false, \n        \"bLengthChange\": false, \n        \"bFilter\": true, \n        \"bSort\": true, \n        \"bAutoWidth\": false, \n        \"bStateSave\": true,\n        \"sPaginationType\": \"full_numbers\",\n        \"dom\": 'C<\"clear\">lfrtip',\n        \"oLanguage\": __LANG__ \n        }",
+    "datatableOptions": {
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": true,
+        "bSort": true,
+        "bAutoWidth": false,
+        "bStateSave": true,
+        "sPaginationType": "full_numbers",
+        "oLanguage": "__LANG__"
+    },
     "defaultTemplate": "out_html.php",
     "defaultView": false,
     "debug": false,
@@ -65,8 +74,24 @@
         
     },
     "lang": "en",
-    "selectLang": "en,de",
-    "selectSkin": "skin-blue,skin-black,skin-red,skin-yellow,skin-purple,skin-green,skin-blue-light,skin-black-light,skin-red-light,skin-yellow-light,skin-purple-light,skin-green-light",
+    "selectLang": [
+        "en",
+        "de"
+    ],
+    "selectSkin": [
+        "skin-blue",
+        "skin-black",
+        "skin-red",
+        "skin-yellow",
+        "skin-purple",
+        "skin-green",
+        "skin-blue-light",
+        "skin-black-light",
+        "skin-red-light",
+        "skin-yellow-light",
+        "skin-purple-light",
+        "skin-green-light"
+    ],
     "showHint": true,
     "skin": "skin-purple",
     "tdbars": [

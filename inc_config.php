@@ -83,7 +83,10 @@ if (!$sData) {
 // @since v1.16
 checkAuth();
 
-$aCfg['datatableOptions'] = str_replace("__LANG__", $sData, $aCfg['datatableOptions']);
+$aCfg['datatableOptions']["oLanguage"]= json_decode($sData, JSON_PRETTY_PRINT);
+
+$aCfg['datatableOptions']= json_encode($aCfg['datatableOptions']);
+// print_r($aCfg['datatableOptions']);
 
 // --- view
 $aEnv["active"]["view"] = array_key_exists("view", $_GET) ? $_GET["view"] : $aCfg['defaultView'];
