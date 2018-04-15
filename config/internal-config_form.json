@@ -1,0 +1,15 @@
+{
+    "auth": {
+            "user": {
+                "_type": "text"
+            },
+            "password": {
+                "_type": "password"
+            }
+    },
+    
+    "autoreload": {
+            "_type": "text"
+    }
+
+}

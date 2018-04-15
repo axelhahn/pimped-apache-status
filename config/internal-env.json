@@ -1,0 +1,56 @@
+{
+    "project": {
+        "title": "Pimped Apache Status",
+        "version": "2.00.00",
+        "releasedate": "2018-04-15",
+        "license": "GPL 3.0"
+    },
+    "active": [],
+    "links": {
+        "project": {
+            "projecthome": {
+                "url": "https:\/\/github.com\/axelhahn\/pimped-apache-status\/tree\/master",
+                "label": "Github (en)",
+                "target": "_blank"
+            },
+            "projecthome2": {
+                "url": "https:\/\/www.axel-hahn.de\/apachestatus.php",
+                "label": "axel-hahn.de (de)",
+                "target": "_blank"
+            },
+            "doc": {
+                "url": "https:\/\/www.axel-hahn.de\/docs\/apachestatus\/usage.htm",
+                "label": "Documentation :: usage (en)",
+                "target": "_blank"
+            }
+        },
+        "update": {
+            "check": {
+                "url": "https:\/\/www.axel-hahn.de\/versions\/pimpedapachestatus_[VERSION].txt",
+                "label": "",
+                "target": ""
+            },
+            "download": {
+                "url": "https:\/\/sourceforge.net\/projects\/pimpapachestat\/files\/latest\/download",
+                "label": "",
+                "target": ""
+            },
+            "downloadbeta": {
+                "url": "https:\/\/github.com\/axelhahn\/pimped-apache-status\/archive\/beta-v2.zip",
+                "label": "",
+                "target": ""
+            }
+        }
+    },
+    "vendor": [
+        "admin-lte/2.4.2",
+        "jQuery-Knob/1.2.13",
+        "datatables/1.10.16",
+        "font-awesome/4.7.0",
+        "jquery/3.3.1",
+        "morris.js/0.5.1",
+        "raphael/2.2.7",
+        "twitter-bootstrap/3.3.7"
+    ]
+    
+}

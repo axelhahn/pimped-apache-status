@@ -1,0 +1,116 @@
+{
+    "auth": {
+            "user": "admin",
+            "password": false
+    },
+    "autoreload": [
+        false,
+        10,
+        30,
+        60,
+        300
+    ],
+    "checkupdate": 86400,
+    "datatableOptions": {
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": true,
+        "bSort": true,
+        "bAutoWidth": false,
+        "bStateSave": true,
+        "sPaginationType": "full_numbers",
+        "oLanguage": "__LANG__"
+    },
+    "defaultTemplate": "out_html.php",
+    "defaultView": false,
+    "debug": false,
+    "tmpdir": "tmp",
+    "execTimeRequest": {
+        "warning": "1000",
+        "critical": "5000"
+    },
+    "hideRows": [],
+    "icons": {
+        "adminservers": "<i class=\"fa fa-cubes\"><\/i> ",
+        "adminsettings": "<i class=\"fa fa-cogs\"><\/i> ",
+        "adminupdate": "<i class=\"fa fa-flash\"><\/i> ",
+        "adminvendor": "<i class=\"fa fa-puzzle-piece\"><\/i> ",
+        "adminlang": "<i class=\"fa fa-comment\"><\/i> ",
+        
+        "actionAdd": "<i class=\"fa fa-plus\"><\/i> ",
+        "actionDelete": "<i class=\"fa fa-close\"><\/i> ",
+        "actionDownload": "<i class=\"fa fa-cloud-download\"><\/i> ",
+        "actionEdit": "<i class=\"fa fa-pencil\"><\/i> ",
+        "actionOK": "<i class=\"fa fa-check\"><\/i> ",
+        "actionReset": "<i class=\"fa fa-close\"><\/i> ",
+        
+        "tab_config_user": "<i class=\"fa fa-user\"><\/i> ",
+        "tab_internal-config_default": "<i class=\"fa fa-cog\"><\/i> ",
+        "tab_Compare": "<i class=\"fa fa-flag\"><\/i> ",
+        
+        "title": "<i class=\"fa fa-square\"><\/i> ",
+        "gotop": "<i class=\"fa fa-arrow-up\"><\/i> ",
+        "group": "<i class=\"fa fa-folder-o\"><\/i> ",
+        "time": "<i class=\"fa fa-clock-o\"><\/i> ",
+        "refresh": "<i class=\"fa fa-refresh\"><\/i> ",
+        "skin": "<i class=\"fa fa-tint\"><\/i> ",
+        "lang": "<i class=\"fa fa-comment\"><\/i> ",
+        "export": "<i class=\"fa fa-download\"><\/i> ",
+        "serverinfos.php": "<i class=\"fa fa-tasks\"><\/i>",
+        "performance-check.php": "<i class=\"fa fa-line-chart\"><\/i>",
+        "allrequests.php": "<i class=\"fa fa-navicon\"><\/i>",
+        "original.php": "<i class=\"fa fa-file-text-o\"><\/i>",
+        "help.php": "<i class=\"fa fa-question-circle\"><\/i>",
+        "help-doc": "<i class=\"fa fa-book\"><\/i>",
+        "help-color": "<i class=\"fa fa-tint\"><\/i>",
+        "help-thanks": "<i class=\"fa fa-comment-o\"><\/i>",
+        "update.php": "<i class=\"fa fa-rocket\"><\/i>",
+        
+        "server_count": "<i class=\"fa fa-hdd-o\"><\/i>",
+        "server_responsetime": "<i class=\"fa fa-clock-o\"><\/i>",
+        "requests_all": "<i class=\"fa fa-ticket\"><\/i>",
+        "requests_running": "<i class=\"fa fa-ticket\"><\/i>",
+        "requests_clients": "<i class=\"fa fa-laptop\"><\/i>",
+        "requests_mostrequested": "<i class=\"fa fa-file-o\"><\/i>",
+        "requests_longest": "<i class=\"fa fa-hourglass-end\"><\/i>"
+        
+    },
+    "lang": "en",
+    "selectLang": [
+        "en",
+        "de"
+    ],
+    "selectSkin": [
+        "skin-blue",
+        "skin-black",
+        "skin-red",
+        "skin-yellow",
+        "skin-purple",
+        "skin-green",
+        "skin-blue-light",
+        "skin-black-light",
+        "skin-red-light",
+        "skin-yellow-light",
+        "skin-purple-light",
+        "skin-green-light"
+    ],
+    "showHint": true,
+    "skin": "skin-purple",
+    "tdbars": [
+        "thCount"
+    ],
+    "tdlink": [],
+    "views": [
+        "serverinfos.php",
+        "performance-check.php",
+        "allrequests.php",
+        "original.php",
+        "help.php"
+    ],
+    "viewsadmin": [
+        "servers",
+        "settings",
+        "vendor",
+        "update"
+    ]
+}
