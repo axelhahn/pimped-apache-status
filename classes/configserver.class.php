@@ -376,7 +376,7 @@ class configServer {
      * @return string
      */
     public function renderFormGroup($sGroup=false){
-        global $aLangTxt;
+        global $aLangTxt, $aCfg;
         $bNew=!($sGroup>'');
         
         $sHtml='';
@@ -398,7 +398,7 @@ class configServer {
                     ;
         } else {
             $sHtml.='<button class="btn btn-success" onclick="$(\'.divFrm\').hide();$(\'#' . $sFormId . '\').slideToggle();">'
-                . $aCfg['icons']['actionAdd'] . $aLangTxt['ActionAddServergroup']
+                . $aCfg['icons']['actionAdd'].  $aLangTxt['ActionAddServergroup']
             . '</button>'
            ;
         }
