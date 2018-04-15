@@ -83,7 +83,7 @@ if (!$sData) {
 // @since v1.16
 checkAuth();
 
-$aCfg['datatableOptions']["oLanguage"]= json_decode($sData, JSON_PRETTY_PRINT);
+$aCfg['datatableOptions']["oLanguage"]= json_decode($sData, 1);
 
 $aCfg['datatableOptions']= json_encode($aCfg['datatableOptions']);
 // print_r($aCfg['datatableOptions']);

@@ -1,21 +1,16 @@
 {
     "project": {
         "title": "Pimped Apache Status",
-        "version": "2.00.23 BETA",
+        "version": "2.00.00",
         "releasedate": "2018-04-15",
         "license": "GPL 3.0"
     },
     "active": [],
     "links": {
         "project": {
-            "projecthomebeta": {
-                "url": "https:\/\/github.com\/axelhahn\/pimped-apache-status\/tree\/beta-v2",
-                "label": "Git - beta-v2 (en)",
-                "target": "_blank"
-            },
             "projecthome": {
-                "url": "https:\/\/sourceforge.net\/projects\/pimpapachestat\/",
-                "label": "Sourceforge (en)",
+                "url": "https:\/\/github.com\/axelhahn\/pimped-apache-status\/tree\/master",
+                "label": "Github (en)",
                 "target": "_blank"
             },
             "projecthome2": {

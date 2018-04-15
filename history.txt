@@ -10,45 +10,23 @@
 
 ----------------------------------------------------------------------
 
-2018-02-08 - v2.00.18
-  * update jquery -> 3.3.1
-  * update tiles: smaller circles and additional horizontal bar
-  * removed lang
-  * update original server status tabs
-  * update settings tabs
-
-2018-02-08 - v2.00.17
-  * added updater class using ahwebinstall
-  * activated updater for beta releases
-  * removed unused old template dirs, js files and others
-  * fix missing lang entries
-  * block initial setup on second request
-
-2018-02-08 - v2.00.16
-  * added tmp dir
-
-2017-10-15 - v2.00.15
-  * upgrade code for adminLte 2.4.2
-
-2017-10-15 - v2.00.14
-  * added (finished) German texts
-  * fix finding assets in cdnorlocal admin class
-  * update lib datatable 1.10.15 -> 1.10.16
-  * update lib adminLte 2.3.11 -> 2.4.2
-  * updater - show a message that it is blocked in beta
-
-
-Version 2 is still beta. Most changes are related to the user interface.
-v2 brings you ...
+2018-04-15 - v2.00.00
 
   * added: AdminLTE as admin interface
   * added: debugging
   * added: admin interface to define servers and groups
   * added: graphical information with morris.js ans knob
-  * config format is now JSON (use upgrade.php to convert)
+  * config format is now JSON
   * external libraries are not bundled anymore to minimize download size (but can be downloaded)
 
 ----------------------------------------------------------------------
+
+2018-02-04 - v1.28
+  * use explicit tmpdir value
+
+2016-09-12 - v1.27
+  * change: use user agent "pimped apache status" to fetch data from webservers
+    with installed mod_security
 
 2016-08-21 - v1.26
   * fix: re-enable statistics graphs (on mouseover on tiles)

@@ -1,22 +1,13 @@
 
 
-# Axel pimped the Apache-status v2.x BETA
+# Axel pimped the Apache-status
 
-## BETA
+Ressources:
 
-This is a real beta version. A lot of things are not ready yet.
-It is based on version 1. All results work fine. There are things to do like
-
-  * finish the (new) admin backend
-  * translation to German (development is in english)
-  * update documentation
-
-
-Ressources for version 1.x:
-
-  * Docs: [axel-hahn.de](http://www.axel-hahn.de/docs/apachestatus/index.htm) (English)
-  * Sources+Download: [sourceforge](http://sourceforge.net/projects/pimpapachestat/)
-  * Home: [axel-hahn.de](http://www.axel-hahn.de/apachestatus) (German)
+  * Docs: [axel-hahn.de](https://www.axel-hahn.de/docs/apachestatus/index.htm)
+  * Sources: [Github](https://github.com/axelhahn/pimped-apache-status/tree/master)
+  * Download: [sourceforge](https://sourceforge.net/projects/pimpapachestat/files/latest/download)
+  * Home: [axel-hahn.de](https://www.axel-hahn.de/apachestatus) (German)
 
 
 ---
@@ -55,7 +46,7 @@ Ressources for version 1.x:
 ## INSTALL
 
 ### (1)
-Download the software https://github.com/axelhahn/pimped-apache-status/archive/beta-v2.zip
+Download the software https://sourceforge.net/projects/pimpapachestat/files/latest/download
 Extract the files somewhere below webroot on your webserver. You 
 can put to any subdirectory. It is not a must to have it in the 
 webroot.
@@ -93,7 +84,7 @@ On CLI or for automation execute
 ## CUSTOMIZATION
 
 You can setup and group servers to monitor, define skins, templates and more.
-See the [Docs::Customization](http://www.axel-hahn.de/docs/apachestatus/custom.htm).
+See the [Docs::Customization](https://www.axel-hahn.de/docs/apachestatus/custom.htm).
 
 You can disable the access to admin in your apache config with a deny rule.
 All settings and configured servers you find in json files below the

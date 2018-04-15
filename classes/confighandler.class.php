@@ -71,11 +71,7 @@ class confighandler {
         }
         ksort($this->_aCfg);
         // JSON_PRETTY_PRINT reqires PHP 5.4
-        if (defined('JSON_PRETTY_PRINT')) {
-            $sOut = json_encode($this->_aCfg, JSON_PRETTY_PRINT);
-        } else {
-            $sOut = json_encode($this->_aCfg);
-        }
+        $sOut = json_encode($this->_aCfg, (defined('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : false ));
         file_put_contents($this->_getCfgFile($this->_sCfgId), $sOut);
         return true;
     }

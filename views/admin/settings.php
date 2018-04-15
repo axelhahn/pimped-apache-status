@@ -88,7 +88,8 @@ $aCfgUser = $oCfg->get("config_user");
 
 
 // $myvar = 'overrides';
-$sTable = '<table class="table datatable"><thead>'
+$sTableId='tblCompareSettings';
+$sTable = '<table class="table datatable" id="'.$sTableId.'" style="width: 100%;"><thead>'
         . '<tr>'
         . '<th>' . $aLangTxt['AdminMenuSettings-var'] . '</th>'
         . '<th>' . $aLangTxt['AdminMenuSettings-description'] . '</th>'
@@ -124,10 +125,13 @@ foreach ($aDefaultCfg as $sKey => $val) {
     $sTable.='<tr class="' . $sClass . '">' . "\n"
             . '<td>' . $sKey . '</td>' . "\n"
             . '<td>' . (isset($aLangTxt['cfg-' . $sKey]) ? $aLangTxt['cfg-' . $sKey] : $aLangTxt['cfg-wrongitem'] ) . '</td>' . "\n"
-            // . '<td><pre>' . htmlentities(print_r($val, 1)) . '</pre></td>' . "\n"
-            . '<td>' . ($bHasUserCfg ? '<pre class="active">' . htmlentities(json_encode($aCfgUser[$sKey], JSON_PRETTY_PRINT)) . '</pre>' : '-' ) . '</td>' . "\n"
+            
+            // --- show user config value
+            . '<td>' . ($bHasUserCfg ? '<pre class="active">' . htmlentities(json_encode($aCfgUser[$sKey], (defined('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : false ))) . '</pre>' : '-' ) . '</td>' . "\n"
+
+            // --- show default config and button
             . '<td><pre' . (!$bHasUserCfg ? ' class="default"': '' ) 
-                . '>"'.$sKey.'": '.htmlentities(json_encode($val, JSON_PRETTY_PRINT)) 
+                . '>"'.$sKey.'": '.htmlentities(json_encode($val, (defined('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : false ))) 
                 .($sNewCfg
                     ?  '<form class="form" method="post" action="'.getNewQs(array()).'">'
                         . '<input name="appaction" value="updateconfig" type="hidden">'
@@ -142,8 +146,12 @@ foreach ($aDefaultCfg as $sKey => $val) {
             . '</tr>' . "\n"
     ;
 }
-$sTable.='<tbody></table>';
+$sTable.='<tbody></table><div style="clear: both;"></div>';
+$aOptions = array_merge($aCfg['datatableOptions'], array(
+    "bPaginate"=>false,"bLengthChange"=>false,"bFilter"=>true,"bSort"=>false,"bAutoWidth"=>false,"bStateSave"=>false
+));
 
+// $sJsOnReady = '$("#' . $sTableId . '").dataTable('.json_encode($aOptions, 1).');';
 
 $aTC[] = array(
         'tab' => $aCfg['icons']['tab_Compare'] . $aLangTxt['AdminMenuSettingsCompare'],
