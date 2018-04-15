@@ -388,13 +388,13 @@ class configServer {
         
         if($sGroup){
             $sHtml.='<div class="divGroup" id="'.$this->getDivId($sGroup).'">'
-                    . '<h3>'
+                    . '<h4>'
                     . '<button class="btn btn-default" onclick="$(\'.divFrm\').hide();$(\'#'.$sFormId.'\').slideToggle();">'
                     . '<i class="fa fa-pencil"></i> ' . $aLangTxt['ActionEdit']
                     . '</button> '
                     . '<i class="fa fa-cubes"></i> '
                     . $sGroup .' <span class="badge">'.count($this->getServers($sGroup)).'</span>'
-                    . '</h3>'
+                    . '</h4>'
                     ;
         } else {
             $sHtml.='<button class="btn btn-success" onclick="$(\'.divFrm\').hide();$(\'#' . $sFormId . '\').slideToggle();">'

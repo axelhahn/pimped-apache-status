@@ -115,7 +115,7 @@ if ($sAppAction) {
 
 <?php
 
-$sHtml.='<h3>' . $aLangTxt['AdminLblServers'] . '</h3>'
+$sHtml.='<h4>' . $aLangTxt['AdminLblServers'] . '</h4>'
         . '<div class="subh3">'
         . '<div class="hintbox">'
         . $aLangTxt['AdminHintServers']

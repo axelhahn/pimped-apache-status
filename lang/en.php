@@ -13,6 +13,8 @@ $aLangTxt = array(
     'menuSkin'=>'Skin: ',
     'menuReload'=>'Reload interval: ',
     
+    'gotop'=>'top',
+    
     // ------------------------------------------------------------
     // basic errors
     // ------------------------------------------------------------
@@ -353,6 +355,8 @@ $aLangTxt = array(
         'ActionDownloadHint'=>'Download this library.',
         'ActionOK'=>'OK',
         'ActionOKHint'=>'Save changes',
+        'ActionResetToDefaults'=>'Reset',
+        'ActionResetToDefaultsHint'=>'Reset to default value',
     
         'AdminMenusettings'=>'Settings',
         'AdminMenuservers'=>'Servers',

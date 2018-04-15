@@ -12,6 +12,8 @@ $aLangTxt = array(
     'menuSkin'=>'Skin: ',
     'menuReload'=>'Aktualisierungs-Intervall: ',
 
+    'gotop'=>'Seitenanfang',
+
     // ------------------------------------------------------------
     // basic errors
     // ------------------------------------------------------------
@@ -356,6 +358,8 @@ $aLangTxt = array(
         'ActionDownloadHint'=>'Bibliothek herunterladen und von local verwenden.',
         'ActionOK'=>'OK',
         'ActionOKHint'=>'&Auml;nderungen speichern',
+        'ActionResetToDefaults'=>'Zur&uuml;cksetzen',
+        'ActionResetToDefaultsHint'=>'Zur&uuml;cksetzen auf Standardwert',
     
         'AdminMenusettings'=>'Einstellungen',
         'AdminMenuservers'=>'Server',

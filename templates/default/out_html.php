@@ -191,6 +191,10 @@ $sBody = '
         )
         .'
       </ul>
+      <div id="divgotop">
+        <a href="#" class="scroll-link">'.$aCfg['icons']['gotop'].$aLangTxt['gotop'].'</a>
+      </div>
+      
     </section>
     <!-- /.sidebar -->
   </aside>

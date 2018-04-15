@@ -9,30 +9,28 @@
  */
 function initDrawH3list() {
     var sHtml = '';
-    var sMenuid = 'h3menu';
+    var sMenuid = '.sidebar-menu>li.active>span.submenu';
     var sH3id = false;
-
+    
     // menu animation
     // $('#sbright').hide() && window.setTimeout("$('#sbright').slideDown(400)", 50);
 
     var i = 0;
-    $("#divmaincontent h3").each(function () {
+    $("h3").each(function () {
         sH3id = this.id ? this.id : "h3" + this.innerHTML.replace(/\W/g, '');
         if (!this.id)
             this.id = sH3id;
         if (this.id !== "h3menu") {
             i++;
-            sHtml += '<a href="#' + sH3id + '" class="scroll-link">' + this.innerHTML.replace(/(<([^>]+)>)/ig, "") + '</a>';
+            sHtml += '<li><a href="#' + sH3id + '" class="scroll-link"><i class="fa fa-angle-right"></i>' + this.innerHTML.replace(/(<([^>]+)>)/ig, "") + '</a></li>';
         }
 
     });
     if (i < 2) {
         sHtml = '';
-        $('#' + sMenuid).hide();
+        $(sMenuid).hide();
     } else {
-        sHtml = '<a href="#" class="scroll-link">^</a>' + sHtml;
-        $('#' + sMenuid).html(sHtml);
-        $('#' + sMenuid).fadeIn(100);
+        $(sMenuid).html('<ul class="treeview-menu" style="display: block;">'+sHtml+'</ul>');
     }
 
 }

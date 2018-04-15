@@ -42,7 +42,7 @@ if (!array_key_exists('doinstall', $_GET)) {
     // step 1: welcome
     // ------------------------------------------------------------
     $sUpdateInfo=checkUpdate(true);
-    $sHtml .= '<h3 id="h3' . md5('update') . '">'. $aLangTxt["lblUpdate"] . '</h3>'
+    $sHtml .= '<h4 id="h3' . md5('update') . '">'. $aLangTxt["lblUpdate"] . '</h4>'
             . '<div class="subh3"><br>'
             . (hasNewVersion($sUpdateInfo)
                 ? $aLangTxt['lblUpdateNewerVerionAvailable'].'<br>'
@@ -64,7 +64,7 @@ if (!array_key_exists('doinstall', $_GET)) {
         // step 2: download 
         // ------------------------------------------------------------
         case 'download':
-            $sHtml .= '<h3 id="h3' . md5('update') . '">'. $aLangTxt["lblUpdate"] . '</h3>'
+            $sHtml .= '<h4 id="h3' . md5('update') . '">'. $aLangTxt["lblUpdate"] . '</h4>'
                     . '<div class="subh3">';
 
             if (file_exists($sZipfile)) {
@@ -90,7 +90,7 @@ if (!array_key_exists('doinstall', $_GET)) {
         // step 3: unzip downloaded file
         // ------------------------------------------------------------
         case 'unzip':
-            $sHtml .= '<h3 id="h3' . md5('update') . '">'. $aLangTxt["lblUpdate"] . '</h3>'
+            $sHtml .= '<h4 id="h3' . md5('update') . '">'. $aLangTxt["lblUpdate"] . '</h4>'
                     . '<div class="subh3">';
             $sHtml.=sprintf($aLangTxt['lblUpdateUnzipFile'], $sZipfile, $sTargetPath) . '<br><br>';
             
@@ -110,7 +110,7 @@ if (!array_key_exists('doinstall', $_GET)) {
             break;
         /*
         case 'postunzip':
-            $content = '<h3 id="h3' . md5($sServer) . '">' . $aLangTxt["lblUpdate"] . '</h3>'
+            $content = '<h3 id="h4' . md5($sServer) . '">' . $aLangTxt["lblUpdate"] . '</h4>'
                     . '<div class="h3">';
             $content.='</div>';
             break;

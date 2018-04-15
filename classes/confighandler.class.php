@@ -66,7 +66,7 @@ class confighandler {
      * @return boolean
      */
     public function _save() {
-        if(!$this->_aCfg){
+        if($this->_aCfg===false){
             return false;
         }
         ksort($this->_aCfg);
@@ -192,7 +192,7 @@ class confighandler {
             // echo "WARNING: file " . $sCfgFile . " does not exist.";
         } else {
             $this->_aCfg=json_decode(file_get_contents($sCfgFile),1);
-            if (!$this->_aCfg || !is_array($this->_aCfg)){
+            if ($this->_aCfg===false || !is_array($this->_aCfg)){
                 die("ERROR: file " . $sCfgFile . " is not a valid JSON file.");
             }
         }

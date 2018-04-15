@@ -12,6 +12,7 @@ body{background:#ccc; color: #444; margin: 0;}
    ---------------------------------------------------------------------- */
 
 #h3menu{
+    /*
     position: fixed; display: none;
     right: 2em; top: 5em;
     padding: 0.5em; 
@@ -19,6 +20,7 @@ body{background:#ccc; color: #444; margin: 0;}
     opacity: 0.3;
     z-index:100;
     box-shadow: 0 0 1em #aaa;
+    */
 }
 #h3menu:hover{opacity: 0.8;}
 #h3menu a{display: block; color:#337; padding: 0.3em 1em;}
@@ -349,15 +351,14 @@ table.display tr.odd.row_selected td {
 
 #divgotop{
     background: #333;
-    background: rgba(0,0,0,0.6);
-    color:#eee;
+    background: rgba(0,0,0,0.1);
     position: fixed;
     bottom: 10px; left: 0px;
     padding: 10px 20px 10px 10px;
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
+    border-top-right-radius: 2em;
+    border-bottom-right-radius: 2em;
 }
-#divgotop a {color:#eee; padding: 2em 5px;
+#divgotop a {color1:#eee; padding: 2em 5px;
              transition: all 0.4s ease-out;
 }
 #divgotop a span { display: none; }

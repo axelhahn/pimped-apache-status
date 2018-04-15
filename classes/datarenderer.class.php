@@ -633,16 +633,16 @@ class Datarenderer {
 
         foreach ($aLinks as $aLink) {
             $sClass="treeview";
-            if (array_key_exists("active", $aLink) && $aLink["active"]) {
-                $sClass.=' active';
-                // $sReturn.=' class="active"';
-            }
+            $bActive=array_key_exists("active", $aLink) && $aLink["active"];
+            $sClass.= $bActive ? ' active menu-open' : '';
+            
             $sReturn.='<li class="'.$sClass.'"';
             $sReturn.='>' . $this->renderA($aLink);
 
             if (array_key_exists("subitems", $aLink)) {
                 $sReturn.='<ul>' . $this->renderLI($aLink["subitems"]) . '</ul>';
             }
+            $sReturn.=$bActive ? '<span class="submenu"></span>' : '';
             $sReturn.='</li>';
         }
         return $sReturn;

@@ -69,7 +69,7 @@ if (!class_exists("DomDocument")) {
 // ------------------------------------------------------------
 // --- languages
 $aEnv["active"]["lang"] = array_key_exists("lang", $_GET) ? $_GET["lang"] : $aCfg['lang'];
-if (!$aEnv["active"]["lang"]){
+if (!$aEnv["active"]["lang"] || !file_exists(__DIR__ . "/lang/" . $aEnv["active"]["lang"] . ".php")){
     $aEnv["active"]["lang"] = 'en';
 }
 require_once(__DIR__ . "/lang/" . $aEnv["active"]["lang"] . ".php");

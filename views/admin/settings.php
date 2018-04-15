@@ -21,21 +21,11 @@ if($sAppAction){
             if(!is_array($aRawCfg)){
                 $oMsg->add($aLangTxt['AdminMessageSettings-update-error-no-json'] . '<button class="btn" onclick="javascript:history.back();">back</button>', 'error');
             } else {
-                // $aNewCfg=array();
-                /*
-                foreach(array_keys($aRawCfg) as $sKey){
-                    if (!array_key_exists($sKey, $aDefaultCfg)){
-                        $oMsg->add("WARNING: key [$sKey] is not a valid configuration. This information is useless: <pre>'<strong>$sKey</strong>':".  json_encode($aRawCfg[$sKey])."</pre>", 'warning');
-                    }
-                }
-                 * 
-                 */
                 if (!$oCfg->set($aRawCfg)){
                     $oMsg->add($aLangTxt['AdminMessageSettings-update-error'], 'error');
                 } else {
                     $oMsg->add($aLangTxt['AdminMessageSettings-update-ok'], 'success');
                 }
-                
             }
             break;
         
@@ -79,7 +69,7 @@ foreach (array(
     
     $aTC[] = array(
         'tab' => $aCfg['icons']['tab_'.$myvar] . $myvar,
-        'content' => '<h3>' . $aCfg['icons']['tab_'.$myvar] . $sCfgfile . '</h3>
+        'content' => '<h4>' . $aCfg['icons']['tab_'.$myvar] . $sCfgfile . '</h4>
             <div class="subh3">'
             . '<div class="hintbox">'
                 . $aLangTxt['AdminHintRaw-' . $sCfgfile]
@@ -110,21 +100,45 @@ $sTable = '<table class="table datatable"><thead>'
 foreach ($aDefaultCfg as $sKey => $val) {
     $value = '';
     $sClass = "default";
-    if (array_key_exists($sKey, $aCfgUser)) {
+    $bHasUserCfg=array_key_exists($sKey, $aCfgUser);
+    // genenerate new config
+    $aNewCfg=$aCfgUser;
+    
+    if ($bHasUserCfg) {
         $sClass = "user";
         $value = $aCfgUser[$sKey];
+        unset($aNewCfg[$sKey]);
+        $sFormButton='<button class="btn btn-default" title="'.$aLangTxt['ActionResetToDefaultsHint'].' '.$sKey.'"'
+            . '>'.$aCfg['icons']['actionReset'].$aLangTxt['ActionResetToDefaults'].'</button>';
+    } else {
+        $aNewCfg[$sKey]=$val;
+        $sFormButton='<button class="btn btn-default" title="'.$aLangTxt['ActionAdd'].' '.$sKey.'"'
+            . '>'.$aCfg['icons']['actionAdd'].$aLangTxt['ActionAdd'].'</button>';
     }
     if (!isset($aLangTxt['cfg-' . $sKey])) {
         $sClass = "error";
     }
+    
+    $sNewCfg=json_encode($aNewCfg);
+    
     $sTable.='<tr class="' . $sClass . '">' . "\n"
             . '<td>' . $sKey . '</td>' . "\n"
             . '<td>' . (isset($aLangTxt['cfg-' . $sKey]) ? $aLangTxt['cfg-' . $sKey] : $aLangTxt['cfg-wrongitem'] ) . '</td>' . "\n"
             // . '<td><pre>' . htmlentities(print_r($val, 1)) . '</pre></td>' . "\n"
-            . '<td>' . (array_key_exists($sKey, $aCfgUser) ? '<pre class="active">' . htmlentities(json_encode($aCfgUser[$sKey], JSON_PRETTY_PRINT)) . '</pre>' : '-' ) . '</td>' . "\n"
-            . '<td><pre' . (!array_key_exists($sKey, $aCfgUser) ? ' class="default"': '' ) 
+            . '<td>' . ($bHasUserCfg ? '<pre class="active">' . htmlentities(json_encode($aCfgUser[$sKey], JSON_PRETTY_PRINT)) . '</pre>' : '-' ) . '</td>' . "\n"
+            . '<td><pre' . (!$bHasUserCfg ? ' class="default"': '' ) 
                 . '>"'.$sKey.'": '.htmlentities(json_encode($val, JSON_PRETTY_PRINT)) 
-                . '</pre>' . '</td>' . "\n"
+                .($sNewCfg
+                    ?  '<form class="form" method="post" action="'.getNewQs(array()).'">'
+                        . '<input name="appaction" value="updateconfig" type="hidden">'
+                        . '<input name="appconfig" value="'.$sCfgfile.'" type="hidden">'
+                        . '<textarea id="ta" name="rawdata" class="form-control raw" rows="15" style="display: none;">' . htmlentities($sNewCfg) . '</textarea><br>'
+                        . $sFormButton
+                    . '</form>'
+                    : ''
+                 )
+                . '</pre>'
+            . '</td>' . "\n"
             . '</tr>' . "\n"
     ;
 }
@@ -133,7 +147,7 @@ $sTable.='<tbody></table>';
 
 $aTC[] = array(
         'tab' => $aCfg['icons']['tab_Compare'] . $aLangTxt['AdminMenuSettingsCompare'],
-        'content' => '<h3>' . $aCfg['icons']['tab_Compare'] . $aLangTxt["AdminMenuSettingsCompare"] . '</h3>
+        'content' => '<h4>' . $aCfg['icons']['tab_Compare'] . $aLangTxt["AdminMenuSettingsCompare"] . '</h4>
             <div class="subh3">'
             . '<div class="hintbox">'
                 . $aLangTxt['AdminHintSettingsCompare']
