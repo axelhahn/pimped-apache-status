@@ -68,7 +68,7 @@ function initSoftscroll() {
 function filterServer(s){
 
     var iCount=0;
-    if(s='null'){
+    if(s==='null'){
         s='';
     }
     localStorage.setItem('apachestatusFilterServer', s);
@@ -104,7 +104,7 @@ function filterServer(s){
         iCountVisibleItems=0;
         oUL=$(this);
         $(oUL).find("li>a").each(function () {
-            if ($(this).css("display")=="block"){
+            if ($(this).css("display")==="block"){
                 iCountVisibleItems++;
             }
         });
