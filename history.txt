@@ -10,6 +10,13 @@
 
 ----------------------------------------------------------------------
 
+2018-05-25: v2.00.02
+  * add description of values in the settings
+  * added value selfurl (if you want to use an alias instead of placing it below webroot)
+
+2018-04-16: v2.00.01
+  * fix search in the serverlist
+
 2018-04-15 - v2.00.00
 
   * added: AdminLTE as admin interface
