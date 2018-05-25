@@ -124,7 +124,10 @@ foreach ($aDefaultCfg as $sKey => $val) {
     
     $sTable.='<tr class="' . $sClass . '">' . "\n"
             . '<td>' . $sKey . '</td>' . "\n"
-            . '<td>' . (isset($aLangTxt['cfg-' . $sKey]) ? $aLangTxt['cfg-' . $sKey] : $aLangTxt['cfg-wrongitem'] ) . '</td>' . "\n"
+            . '<td>' 
+                . (isset($aLangTxt['cfg-' . $sKey]) ? $aLangTxt['cfg-' . $sKey] : $aLangTxt['cfg-wrongitem'] ) 
+                . (isset($aLangTxt['cfg-values-' . $sKey]) ? '<div class="values"><strong>'.$aLangTxt['AdminMenuSettings-value'].'</strong>:<br>'.$aLangTxt['cfg-values-' . $sKey] . '</div>' : '' ) 
+            . '</td>' . "\n"
             
             // --- show user config value
             . '<td>' . ($bHasUserCfg ? '<pre class="active">' . htmlentities(json_encode($aCfgUser[$sKey], (defined('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : false ))) . '</pre>' : '-' ) . '</td>' . "\n"
