@@ -94,6 +94,7 @@
         "skin-purple-light",
         "skin-green-light"
     ],
+    "selfurl": false,
     "showHint": true,
     "skin": "skin-purple",
     "tdbars": [

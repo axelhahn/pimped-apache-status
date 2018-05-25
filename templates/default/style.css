@@ -231,6 +231,7 @@ table.dataTable{width: auto; min-width: 600px; margin: 0;}
 table.dataTable td{padding: 2px !important; font-size: 90%; font-family: arial;}
 table.dataTable.no-footer{border-bottom: 0;}
 table.dataTable a{background: none;}
+div.values{margin: 1em 0 0 1em; opacity: 0.5;}
 
 
 /* */
@@ -358,11 +359,7 @@ table.display tr.odd.row_selected td {
     border-top-right-radius: 2em;
     border-bottom-right-radius: 2em;
 }
-#divgotop a {color1:#eee; padding: 2em 5px;
-             transition: all 0.4s ease-out;
-}
-#divgotop a span { display: none; }
-#divgotop a:hover span { display: inline;}
+#divgotop a {padding: 2em 5px;}
 
 
 /* footer */
