@@ -18,7 +18,6 @@ $sJsOnReady = '';
 $aServers2Collect = array();
 $sGetStarted = '<br>see documentation <a href="https://www.axel-hahn.de/docs/apachestatus/get_started.htm">get started<a>.';
 
-$sSelfURL=str_replace('\\','/',str_replace(realpath($_SERVER['DOCUMENT_ROOT']), '', __DIR__));
 
 $oCfg=new confighandler("internal-env");
 $aEnv=$oCfg->get();
@@ -44,12 +43,14 @@ $aDefaultCfg=$oCfg->get("internal-config_default");
 if (!is_array($aDefaultCfg) || !count($aDefaultCfg)) {
     die("ERROR: Config was not loaded. Reinstall with a fresh download.");
 }
-// repeated in admin/inc_settings.php
+
 $aUserCfg=$oCfg->get("config_user");
 if (!is_array($aUserCfg)|| !count($aUserCfg)) {
     $_GET["view"]='install.php';
 }
 $aCfg = array_merge($aDefaultCfg, $aUserCfg);
+$oLog->add('<pre>'.print_r($aCfg, 1).'</pre>');
+$sSelfURL=$aCfg['selfurl'] ? $aCfg['selfurl'] : str_replace('\\','/',str_replace(realpath($_SERVER['DOCUMENT_ROOT']), '', __DIR__));
 
 
 // ------------------------------------------------------------
