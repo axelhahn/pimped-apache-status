@@ -221,6 +221,7 @@ pre1.default{background: #666; color: #ddd; }
 pre1.active{background: #060; color: #f8fff8; }
 pre.default{background: #e0f0e0; color: #060; }
 pre.active{background: #e0f0e0; color: #060; }
+pre.output{background: #202838; color: #9ab; border: 2px solid #000; font-size: 90%; display: inline-block;}
 
 .raw{font-family: Menlo,Monaco,Consolas,"Courier New",monospace; /* background: #445 !important; color:#eef !important; */};
 

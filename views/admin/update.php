@@ -58,6 +58,7 @@ if (!array_key_exists('doinstall', $_GET)) {
             ;
     
 } else {
+    $sOutput='';
     switch ($_GET['doinstall']) {
         
         // ------------------------------------------------------------
@@ -73,7 +74,7 @@ if (!array_key_exists('doinstall', $_GET)) {
             
             ob_start();
             $bDownload=$oInstaller->download(false);
-            $sHtml.= str_replace("\n", "<br>", ob_get_contents());
+            $sOutput.=str_replace("\n", "<br>", ob_get_contents());
             ob_end_clean();
             if($bDownload){
                 $sHtml.='<br><strong>'.$aLangTxt['lblUpdateDonwloadDone'].'</strong><br><br>'
@@ -90,16 +91,18 @@ if (!array_key_exists('doinstall', $_GET)) {
         // step 3: unzip downloaded file
         // ------------------------------------------------------------
         case 'unzip':
+            
             $sHtml .= '<h4 id="h3' . md5('update') . '">'. $aLangTxt["lblUpdate"] . '</h4>'
-                    . '<div class="subh3">';
-            $sHtml.=sprintf($aLangTxt['lblUpdateUnzipFile'], $sZipfile, $sTargetPath) . '<br><br>';
+                    . '<div class="subh3">'
+                    . sprintf($aLangTxt['lblUpdateUnzipFile'], $sZipfile, $sTargetPath) 
+                    . '<br><br>';
             
             ob_start();
-            $bInmstall=$oInstaller->install();
-            $sHtml.= str_replace("\n", "<br>", ob_get_contents()).'<hr>';
+            $bInstall=$oInstaller->install();
+            $sOutput.=str_replace("\n", "<br>", ob_get_contents());
             ob_end_clean();
             
-            if ($bInmstall){
+            if ($bInstall){
                 $sHtml.=$aLangTxt['lblUpdateUnzipOK'] . '</div>'
                     . '<a href="../?"'
                         . ' class="btn btn-default"'
@@ -118,6 +121,7 @@ if (!array_key_exists('doinstall', $_GET)) {
         default:
             break;
     }
+    $sHtml.=$sOutput ? '<br><br>'.$aLangTxt['lblUpdateOutput'].':<br><pre class="output">'.$sOutput.'</pre>' : '';
 }
 
 echo $sHtml;

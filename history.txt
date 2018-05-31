@@ -10,6 +10,10 @@
 
 ----------------------------------------------------------------------
 
+2018-05-31: v2.00.03
+  * fix sortorder / datatable options
+  * update web updater
+
 2018-05-25: v2.00.02
   * add description of values in the settings
   * added value selfurl (if you want to use an alias instead of placing it below webroot)

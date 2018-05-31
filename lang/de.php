@@ -326,6 +326,7 @@ $aLangTxt = array(
                 <li>Entpacken der ZIP-Datei</li>
             </ol>
             ',
+        'lblUpdateOutput'=>'Ausgabe',
         'lblUpdateDonwloadDone'=>'OK, die Datei wurde erfolgreich heruntergeladen.<br>Als N&auml;chstes wird sie entpackt.',
         'lblUpdateDonwloadFailed'=>'Fehler: die Datei konnte nicht heruntergeladen werden.',
         'lblUpdateInstalldir'=>'Lokales Installationsverzeichnis: %s',
