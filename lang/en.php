@@ -323,6 +323,7 @@ $aLangTxt = array(
                 <li>uncompress zip file</li>
             </ol>
             ',
+        'lblUpdateOutput'=>'Output',
         'lblUpdateDonwloadDone'=>'OK, the file was downloaded.<br>In the next step it will be extracted.',
         'lblUpdateDonwloadFailed'=>'Error: unable to download the zip file.',
         'lblUpdateInstalldir'=>'Local installation directory: %s',
@@ -456,7 +457,7 @@ $aLangTxt = array(
             'cfg-values-selectLang'=>'(Array) of strings for selectable languages in the language dropdown',
         'cfg-selectSkin'=>'Selectable skins',
             'cfg-values-selectSkin'=>'(array) of strings with skins for the skin dropdown',
-        'cfg-selfurl'=>'set a custom base url (required if you use an alias apache)',
+        'cfg-selfurl'=>'set a custom base url (required if you use an alias in apache httpd config)',
             'cfg-values-selfurl'=>'(string) name of your alias starting with a slash and no trailung slash i.e. <em>/apachestatus</em>; default is false (=auto detection of the relative url below webroot)',
         'cfg-showHint'=>'show box with hints for a section',
             'cfg-values-showHint'=>'(boolean); default is true',

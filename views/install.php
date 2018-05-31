@@ -8,7 +8,7 @@
 $sUser=($_POST && isset($_POST['username'])) ? $_POST['username'] : false;
 $sContent='';
 $sDummyUser='nouserprotection';
-
+$aTC = array();
 if(file_exists(__DIR__ . '/../config/config_user.php')){
     $aTC[] = array(
         'tab'=>$aLangTxt['lblInitialSetupTab0'],

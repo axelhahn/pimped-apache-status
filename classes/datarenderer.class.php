@@ -773,7 +773,11 @@ class Datarenderer {
         $sOptions = $aCfg['datatableOptions'] ? $aCfg['datatableOptions'] : '{}';
 
         if ($sDatatableOptions) {
-            $sOptions = preg_replace("/\ }$/", ", " . $sDatatableOptions . " }", $aCfg['datatableOptions']);
+            $this->log(__FUNCTION__ . " add custom DatatableOptions " .print_r(json_decode('{'.$sDatatableOptions.'}', 1),1));
+            $sOptions = json_encode(array_merge(
+                    json_decode($sOptions, 1),
+                    json_decode('{'.$sDatatableOptions.'}', 1)
+            ));
         }
         if ($sHtml) {
             $sHtml = ''
@@ -858,7 +862,7 @@ class Datarenderer {
                 $iReq = $this->_getNumberOfArraykey("Req", $aTData[0]);
                 if (!$iReq)
                     $iReq = 0;
-                $sTableOptions = 'aaSorting: [[' . $iReq . ',"desc"]],"bStateSave": false';
+                $sTableOptions = '"aaSorting": [[' . $iReq . ',"desc"]],"bStateSave": false';
                 break;
             default:
                 break;
