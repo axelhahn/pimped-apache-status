@@ -15,6 +15,9 @@ $oPage->setAppDir($sSelfURL);
 
 switch ($oPage->getOutputtype()) {
     case 'html':
+        // v2.00.04
+        $oPage->setContent($oDatarenderer->storeLocally($aSrvStatus).$oPage->getContent());
+            
         // v1.13: version check
         $sUpdateInfos = checkUpdate();
         $oLog->add('update check done');

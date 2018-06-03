@@ -526,6 +526,41 @@ class Datarenderer {
         }
         return '<a href="#' . md5($sTarget) . '">' . $sLabel . '</a>';
     }
+    
+    /**
+     * generate javascript code to put performance data into localstorage
+     * @param array $aSrvStatus
+     * @return boolean|string
+     */
+    public function storeLocally($aSrvStatus){
+        $sReturn='';
+        $aKeys2Store=array(
+            'dummyJust2WriteSomething',
+            'requests/sec',
+            'size/sec',
+            'requests_active',
+            'slots_busy',
+        );
+        
+        // in admin area it has no data
+        if(!$aSrvStatus || !is_array($aSrvStatus)){
+            return false;
+        }
+        foreach(array_keys($aSrvStatus) as $sMyWebserver){
+            if (isset($aSrvStatus[$sMyWebserver]['counter'])){
+                foreach($aSrvStatus[$sMyWebserver]['counter'] as $sKey=>$value){
+                    if (!array_search($sKey, $aKeys2Store)===false && !is_array($value)){
+                        $sReturn.='oCounter=new counterhistory("' . $sMyWebserver . '", "' . $sKey . '"); oCounter.add(' . $value . ');' . "\n";
+                    }
+                }
+            }
+        }
+        if($sReturn){
+            $sReturn='<script>var '.$sReturn.'</script>';
+        }
+        // die('<pre>'.htmlentities($sReturn));
+        return $sReturn;
+    }
 
     /**
      * generate a datalist based input field
@@ -1047,7 +1082,7 @@ class Datarenderer {
                      */
                     .'<div class="col-md-2">
                         <!-- Apply any bg-* class to to the info-box to color it -->
-                    <div class="info-box bg-aqua tile ' . $sTilename . '"'
+                    <div class="info-box '.$aCfg['skin-color2'].' tile ' . $sTilename . '"'
                         . 'title="' . $sHint . '" '
                         . 'onmouseover="showGraph(\'' . $sSrvIndex . '\', \'' . $sTilename . '\', \'' . $sTitle . '\');" '
                         . 'onmouseout="hideGraph();" '
@@ -1100,39 +1135,47 @@ class Datarenderer {
                 ) ? $aEnv['links']['views']['performance-check.php'] : false
         ;
 
+        /*
+        Array
+        (
+            [Parent Server Config. Generation] => 1
+            [Parent Server MPM Generation] => 0
+            [Total accesses] => 3884
+            [Total Traffic] => 8283750.4
+            [requests/sec] => 0.274
+            [size/sec] => 583
+            [slots_total] => 150
+            [slots_busy] => 7
+            [slots_free] => 143
+            [requests_active] => 2
+            [requests_waiting] => 5
+        )
+         */
         foreach ($aSrvStatus as $sHost => $aData) {
+            
+            $iProcesses = $aData['counter']['slots_total'];
+            $iSlotsUnused = $aData['counter']['slots_unused'];
+            $iActive = $aData['counter']['requests_active'];
+            $iWait = $aData['counter']['requests_waiting'];
 
-            $iTotal = 0;
-            $iActive = 0;
-            $iWait = 0;
-
-            if (array_key_exists("requests", $aData)) {
-                foreach ($aData['requests'] as $aRequest) {
-
-                    // check status of request
-                    if ($aRequest['M'] != "." && $aRequest['M'] != "_")
-                        $iActive++;
-                    if ($aRequest['M'] == "_")
-                        $iWait++;
-                    $iTotal++;
-                }
-            }
             $aTmp = array(
                 $aLangTxt['thWorkerServer'] => $sHost,
-                $aLangTxt['thWorkerTotal'] => $iTotal,
+                $aLangTxt['thWorkerTotal'] => $iProcesses,
                 $aLangTxt['thWorkerActive'] => $iActive,
                 $aLangTxt['thWorkerWait'] => $iWait,
+                $aLangTxt['thWorkerUnused'] => $iSlotsUnused,
             );
 
             if ($bGenerateBar) {
                 $iBarFactor = 1;
 
-                if ($iTotal > $iMaxWith) {
-                    $iBarFactor = $iMaxWith / $iTotal;
+                if ($iProcesses > $iMaxWith) {
+                    $iBarFactor = $iMaxWith / $iProcesses;
                 }
-                $sBar = "<div class=\"barTotal\" style=\"width: " . ($iTotal * $iBarFactor) . "px; \" title=\"" . ($iTotal - $iActive - $iWait) . " " . $aLangTxt['bartitleFreeWorkers'] . "\">
-                            <div class=\"barBusyWorker\" style=\"width: " . ($iActive * $iBarFactor) . "px; \" title=\"$iActive " . $aLangTxt['bartitleBusyWorkers'] . "\"> </div>
-                            <div class=\"barIdleWorker\" style=\"width: " . ($iWait * $iBarFactor) . "px; \" title=\"$iWait " . $aLangTxt['bartitleIdleWorkers'] . "\"> </div>
+                $sHeight='height: 1.6em;';
+                $sBar = "<div class=\"barTotal\" style=\"width: " . ($iProcesses * $iBarFactor) . "px; $sHeight\" title=\"" . sprintf($aLangTxt['bartitleUnusedWorkers'], ($iProcesses - $iActive - $iWait)) . "\">
+                            <div class=\"barBusyWorker\" style=\"width: " . ($iActive * $iBarFactor) . "px; $sHeight\" title=\"" . sprintf($aLangTxt['bartitleBusyWorkers'], $iActive) . "\"> </div>
+                            <div class=\"barIdleWorker\" style=\"width: " . ($iWait * $iBarFactor) . "px; $sHeight\" title=\"" . sprintf($aLangTxt['bartitleIdleWorkers'], $iWait) . "\"> </div>
                         </div>";
                 $aTmp[$aLangTxt['thWorkerBar']] = $sBar;
             }

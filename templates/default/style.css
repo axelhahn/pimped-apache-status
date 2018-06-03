@@ -33,6 +33,8 @@ h1.title span{font-size:70%; }
 h1 a{ color:#fff; text-decoration: none;}
 h1 a:hover{color:#def; text-decoration: none;}
 
+div.hero{border: 2px solid #eee; background: #f8f8f8; padding: 1em; font-size: 120%; }
+.srvlabel{display: block; float: left; width: 12em; opacity: 0.8;}
 .box:first-child{margin-bottom: 2em !important;}
 .box{margin-bottom: 5em !important;}
 /*.box-header.with-border{background: #485060;}*/
@@ -392,16 +394,27 @@ plotter
          border: 1em solid #fff; top: 16em; left: 24em; box-shadow: 0 0 1em #aaa; z-index: 1000;
          display: none;
 }
-.plotter .btnclose{background: #f88; color:#fff; float: right; padding: 0.5em 1em; display: none; cursor: pointer;}
-.plotter .btnclose:hover{background: #f66;}
-.plotter .btnclose:active{background: #f66;}
-.plotter .graph {}
-.plotter .graph .infos{position: absolute; background: rgba(255,255,255,0.7); padding: 0.5em; margin: 0.5em 0.5em 0.5em;}
-.plotter .graph .title{background: #00a0c0; background: linear-gradient(90deg,#000,#00a0c0, rgba(0,0,0,0.0)); color:#fff; font-weight: bold; padding: 0.5em; margin: 0 0 0.5em;}
-.plotter .graph .barcontainer{float: left; }
-.plotter .graph .barcontainer:hover {background: rgba(0,0,0,0.05);}
-.plotter .graph .bar{background: #ace; background: linear-gradient(90deg,#00a0c0,#00c0ef);}
-.plotter .graph .bar:hover {background: linear-gradient(90deg,#00a0c0,#00e0ff,#00a0c0);}
-.plotter .graph .barcur{background: #3a3;background: linear-gradient(90deg,#fa2,#fc2,#fa2);}
-.plotter .graph .current{position: absolute; left: 0; border-top: 1px solid #fc2; width: 100%;}
-.plotter .graph .avg{position: absolute; left: 0; border-top: 1px dashed #a33; width: 100%;}
+.btnclose{background: #f88; color:#fff; float: right; padding: 0.5em 1em; display: none; cursor: pointer;}
+.btnclose:hover{background: #f66;}
+.btnclose:active{background: #f66;}
+.graph {}
+.graph .infos{position: absolute; background: rgba(255,255,255,0.7); padding: 0.5em; margin: 0.5em 0.5em 0.5em;}
+.graph .title{background: #00a0c0; background: linear-gradient(90deg,#000,#00a0c0, rgba(0,0,0,0.0)); color:#fff; font-weight: bold; padding: 0.5em; margin: 0 0 0.5em;}
+.graph .barcontainer{float: left; }
+.graph .barcontainer:hover {background: rgba(0,0,0,0.05);}
+.graph .bar{background: #ace; background: linear-gradient(90deg,#00a0c0,#00c0ef);}
+.graph .bar:hover {background: linear-gradient(90deg,#00a0c0,#00e0ff,#00a0c0);}
+.graph .barcur{background: #3a3;background: linear-gradient(90deg,#fa2,#fc2,#fa2);}
+.graph .current{position: absolute; left: 0; border-top: 1px solid #fc2; width: 100%;}
+.graph .avg{position: absolute; left: 0; border-top: 1px dashed #a33; width: 100%;}
+
+.plottterinline1{position: relative; display: inline; left:none; top: none; float: left;
+    border: 1px  solid #ddd; margin: 1em 1em 1em 0; padding: 0.5em;
+}
+.plottterinline1 .graph .title{background: #eee; color:#678;}
+
+.plottterinlinewrapper{display: block; float: left; border: 1px solid #ddd; box-shadowX: 0 0 1em #888; margin: 0 1em 1em 0; padding: 1em;}
+.plottterinlinewrapper .header{background: #ddd; font-weight: bold; padding: 0.5em;}
+.plottterinline{width: 500px; height: 300px;}
+.plottterinline .infos{opacity: 0.3; position: absolute; background: rgba(220,220,220,0.7); border: 1px solid #ccc; padding: 0.5em; margin: 0.5em 0.5em 0.5em; top: 2em; left: 5em;}
+.plottterinline:hover .infos{opacity: 1; }

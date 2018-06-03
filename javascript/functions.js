@@ -11,7 +11,7 @@ function initDrawH3list() {
     var sHtml = '';
     var sMenuid = '.sidebar-menu>li.active>span.submenu';
     var sH3id = false;
-    
+
     // menu animation
     // $('#sbright').hide() && window.setTimeout("$('#sbright').slideDown(400)", 50);
 
@@ -30,7 +30,7 @@ function initDrawH3list() {
         sHtml = '';
         $(sMenuid).hide();
     } else {
-        $(sMenuid).html('<ul class="treeview-menu" style="display: block;">'+sHtml+'</ul>');
+        $(sMenuid).html('<ul class="treeview-menu" style="display: block;">' + sHtml + '</ul>');
     }
 
 }
@@ -65,80 +65,80 @@ function initSoftscroll() {
  * @param {string} s  filtertext
  * @returns {undefined}
  */
-function filterServer(s){
+function filterServer(s) {
 
-    var iCount=0;
-    if(s==='null'){
-        s='';
+    var iCount = 0;
+    if (s === 'null') {
+        s = '';
     }
     localStorage.setItem('apachestatusFilterServer', s);
     $('#serverlist ul li a').each(function () {
-        if (!s || $(this).html().indexOf(s)>=0){
+        if (!s || $(this).html().indexOf(s) >= 0) {
             iCount++;
-            $(this).css("display", "block" );
+            $(this).css("display", "block");
         } else {
-            $(this).css("display", "none" );
+            $(this).css("display", "none");
         }
     });
-    
+
     // show count of hits
-    $('#srvcounter').html( s ? iCount : '' );
-    
+    $('#srvcounter').html(s ? iCount : '');
+
     // enable active server
     $('#serverlist ul li.active a').each(function () {
-        $(this).css("display", "block" );
+        $(this).css("display", "block");
     });
 
     // switch view between list and cascaded menu
-    var bShowAsListmenu=iCount<25;
+    var bShowAsListmenu = iCount < 25;
     $('#serverlist>li ').each(function () {
         bShowAsListmenu ? $(this).removeClass("dropdown-submenu") : $(this).addClass("dropdown-submenu");
-        $(this).attr("onmouseover", bShowAsListmenu ?  "" : "$(this).addClass(\'open\');" );
-        $(this).attr("onmouseout",  bShowAsListmenu ?  ""  : "$(this).removeClass(\'open\');" );
+        $(this).attr("onmouseover", bShowAsListmenu ? "" : "$(this).addClass(\'open\');");
+        $(this).attr("onmouseout", bShowAsListmenu ? "" : "$(this).removeClass(\'open\');");
     });
-    
+
     // show count of items and filtered view
     $('#serverlist li ul').each(function () {
         bShowAsListmenu ? $(this).removeClass("dropdown-menu") : $(this).addClass("dropdown-menu");
-        iCountItems=$(this).find("li>a").length;
-        iCountVisibleItems=0;
-        oUL=$(this);
+        iCountItems = $(this).find("li>a").length;
+        iCountVisibleItems = 0;
+        oUL = $(this);
         $(oUL).find("li>a").each(function () {
-            if ($(this).css("display")==="block"){
+            if ($(this).css("display") === "block") {
                 iCountVisibleItems++;
             }
         });
-        sInfotext=iCountVisibleItems!=iCountItems
-            ? iCountVisibleItems + '/ ' + iCountItems 
-            : iCountItems
-            ;
-        $(oUL).prev().children(".info").html(' ('+sInfotext+')');
+        sInfotext = iCountVisibleItems != iCountItems
+                ? iCountVisibleItems + '/ ' + iCountItems
+                : iCountItems
+                ;
+        $(oUL).prev().children(".info").html(' (' + sInfotext + ')');
         $(oUL).prev().css("display", iCountVisibleItems ? "block" : "none");
     });
 }
-    
+
 /**
  * initialize server filter 
  * @since 1.25
  * @returns {undefined}
  */
-function initServerFilter(){
-    var iServer=0;
+function initServerFilter() {
+    var iServer = 0;
     $('#serverlist li').each(function () {
-         iServer++;
+        iServer++;
     });
-    var sFiltertext=localStorage.getItem('apachestatusFilterServer')+'';
-    if(sFiltertext===undefined){
-        sFiltertext='';
+    var sFiltertext = localStorage.getItem('apachestatusFilterServer') + '';
+    if (sFiltertext === undefined) {
+        sFiltertext = '';
     }
-    if (iServer>5){
+    if (iServer > 5) {
         $('#serverlist >li>a').append('<span class="info" style="margin-right: 1em;">-</span>');
-        var sHtml='<li><form class="form-inline">\n\
+        var sHtml = '<li><form class="form-inline">\n\
             <div class="form-group" style="margin-bottom: 0.5em; min-width: 20em;">\n\
                 <input type="text" id="esrvfilter" style="margin-left: 1em;" \n\
                     onkeypress="filterServer(this.value);" class="form-control" onkeydown="filterServer(this.value);" onkeyup="filterServer(this.value);" \n\
-                    placeholder="'+aLang['srvFilterPlaceholder']+'"\n\
-                    value="'+sFiltertext+'" />\n\
+                    placeholder="' + aLang['srvFilterPlaceholder'] + '"\n\
+                    value="' + sFiltertext + '" />\n\
                 <span id="srvcounter"></span>\n\
             </div></form></li>';
         $('#serverlist').prepend(sHtml);
@@ -151,43 +151,43 @@ function initServerFilter(){
  * @since 1.26
  * @returns {undefined}
  */
-function initKnob(){
-    var i=0;
-    var sTilename=false;
-    var aData=false;
-    var sFgColor=$('.tile .dial').css("color");
-    var sBgColor=$('.tile .dial').css("background-color");
+function initKnob() {
+    var i = 0;
+    var sTilename = false;
+    var aData = false;
+    var sFgColor = $('.tile .dial').css("color");
+    var sBgColor = $('.tile .dial').css("background-color");
     $(".tile .dial").each(function () {
         i++;
-        
+
         // tial name is the id "dial-[server]-[tilename]" 
         // @see php class datarenderer->renderTile()
-        sId=$(this).attr('id').replace(/^dial\-/, '');
-        sSrv=sId.replace(/\-.*/, '');
-        sTilename=sId.replace(/^.*\-/, '');
-        if (sTilename){
+        sId = $(this).attr('id').replace(/^dial\-/, '');
+        sSrv = sId.replace(/\-.*/, '');
+        sTilename = sId.replace(/^.*\-/, '');
+        if (sTilename) {
             var oCounter = new counterhistory(sSrv, sTilename);
-            aData=oCounter.getLast(50);
-            aDataLast=oCounter.getLast(1);
-            currentVal=aDataLast['max'];
+            aData = oCounter.getLast(50);
+            aDataLast = oCounter.getLast(1);
+            currentVal = aDataLast['max'];
             /*
-            console.log('----- ' + sTilename + ' ('+sId+') - max ' + aData['max'] + ' current: ' + currentVal );
-            console.log(aData);
-            console.log(aDataLast);
-            */
-            if(aData){
+             console.log('----- ' + sTilename + ' ('+sId+') - max ' + aData['max'] + ' current: ' + currentVal );
+             console.log(aData);
+             console.log(aDataLast);
+             */
+            if (aData) {
 
                 $(this).knob({
                     readOnly: true,
                     fgColor: sFgColor,
                     bgColor: sBgColor,
-                    max: aData['max']*1000,
+                    max: aData['max'] * 1000,
                     'width': '90px',
                     'height': '90px',
                     thickness: 0.04
                 });
-                $(this).val(currentVal*1000).trigger('change');
-                $('#progress-'+sId).css('width', (currentVal/aData['max']*100)+'%');
+                $(this).val(currentVal * 1000).trigger('change');
+                $('#progress-' + sId).css('width', (currentVal / aData['max'] * 100) + '%');
 
             }
         }
@@ -212,12 +212,12 @@ function initPage() {
  * @param {type} id
  * @returns {Boolean}
  */
-function showTab(id){
-    mydiv='.subh2 ';
+function showTab(id) {
+    mydiv = '.subh2 ';
     $(mydiv + ' > h3').hide();
     $(mydiv + ' > .subh3').hide();
-    $(mydiv + ' > '+id).show(); 
-    $(mydiv + ' > '+id+' + div.subh3').show();
+    $(mydiv + ' > ' + id).show();
+    $(mydiv + ' > ' + id + ' + div.subh3').show();
     $(mydiv + ' li a').blur();
     return false;
 }
@@ -243,12 +243,77 @@ function stickyGraph(sSrv, sVarname, sTitle) {
     var sav = bPlotterSticky;
     bPlotterSticky = false;
 
-    $('#'+sDivPlotter+' .btnclose').hide();
+    $('#' + sDivPlotter + ' .btnclose').hide();
     showGraph(sSrv, sVarname, sTitle);
     if (!sav) {
         bPlotterSticky = true;
-        $('#'+sDivPlotter+' .btnclose').show();
+        $('#' + sDivPlotter + ' .btnclose').show();
     }
+}
+
+function showGraphInline(sDivPlotter, sSrv, sVarname, iCount, sTitle) {
+    var oCounter = new counterhistory(sSrv, sVarname);
+    var aData = oCounter.getLast(iCount);
+
+    console.log('----- ' + sSrv + ' - ' + sVarname);
+    if (!aData || !aData.data || !aData.data.length ) {
+        $('#'+sDivPlotter).html('No data (yet).');
+        return false;
+    }
+    var sData = '',
+        sInfo = ''
+        ;
+
+    for (var i = 0; i < aData.data.length; i++) {
+        var aItem=aData.data[i];
+        sData+= (sData ? ', ' : '' ) + '{ "y": "'+aItem[0]+'", "a": ' + aItem[1]+ ' }';
+    }
+    sData='['+sData+']';
+    if (aLang) {
+        sInfo += 'values: ' + aData.data.length + '<br>';
+        sInfo += (aLang['statsCurrent']) ? aLang['statsCurrent'] + ': ' + aData['data'][0][1] + '<br>' : '';
+        sInfo += (aLang['statsMin']) ? aLang['statsMin'] + ': ' + aData['min'] + '<br>' : '';
+        sInfo += (aLang['statsMax']) ? aLang['statsMax'] + ': ' + aData['max'] + '<br>' : '';
+        sInfo += (aLang['statsAvg']) ? aLang['statsAvg'] + ': ' + aData['avg'] + '<br>' : '';
+    }
+    $('#'+sDivPlotter).html('<div class="infos">' + sInfo + '</div>');
+    console.log(JSON.parse(sData));
+    var config = {
+        data: JSON.parse(sData),
+        xkey: 'y',
+        ykeys: ['a'],
+        goals: [aData.min, aData.avg, aData.max],
+        goalLineColors: ['#4c4', '#fc2', '#c22'],
+        // ykeys: 'a',
+        // labels: ['Total Income', 'Total Outcome'],
+        labels: [ sTitle],
+        fillOpacity: 0.6,
+        hideHover: 'auto',
+        behaveLikeLine: true,
+        // resize: true,
+        pointFillColors: ['white'],
+        pointStrokeColors: ['black'],
+        // pointSize: '4px',
+        lineColors: ['#00c0ef'],
+        lineWidth:['4px']
+    };
+    config.element = sDivPlotter;
+    // config.stacked = true;
+    // Morris.Bar(config);
+    Morris.Line(config);
+
+    // renderHistory(sDivPlotter, oCounter.getLast(50), sTitle);
+    return true;
+}
+
+
+function showGraphInlineOLD(sDivPlotter, sSrv, sVarname, sTitle) {
+    var oCounter = new counterhistory(sSrv, sVarname);
+    var aData = oCounter.getLast(50);
+    console.log(aData);
+
+    renderHistory(sDivPlotter, oCounter.getLast(50), sTitle);
+    return true;
 }
 
 /**
@@ -273,8 +338,8 @@ function showGraph(sSrv, sVarname, sTitle) {
  * @returns {Boolean}
  */
 function hideGraph(bUnsticky) {
-    if(bUnsticky){
-        bPlotterSticky=false;
+    if (bUnsticky) {
+        bPlotterSticky = false;
     }
     if (bPlotterSticky) {
         return false;

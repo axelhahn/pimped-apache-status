@@ -17,6 +17,7 @@ if (count($aSrvStatus) > 0) {
 }
 
 $content = $oDatarenderer->themeBox(
-    $aCfg['icons']['original.php'] . ' ' . $aLangTxt['view_original.php_label']
+    $aCfg['icons']['original.php'] . ' ' . $aLangTxt['lblHelpOriginal']
     , $oDatarenderer->renderTabbedContent($aTC)
+    , $aLangTxt['lblHintHelpOriginal']
 );

@@ -60,6 +60,7 @@
         "performance-check.php": "<i class=\"fa fa-line-chart\"><\/i>",
         "allrequests.php": "<i class=\"fa fa-navicon\"><\/i>",
         "original.php": "<i class=\"fa fa-file-text-o\"><\/i>",
+        "utilization.php": "<i class=\"fa fa-dashboard\"><\/i>",
         "help.php": "<i class=\"fa fa-question-circle\"><\/i>",
         "help-doc": "<i class=\"fa fa-book\"><\/i>",
         "help-color": "<i class=\"fa fa-tint\"><\/i>",
@@ -97,6 +98,7 @@
     "selfurl": false,
     "showHint": true,
     "skin": "skin-purple",
+    "skin-color2": "bg-aqua",
     "tdbars": [
         "thCount"
     ],
@@ -106,6 +108,7 @@
         "performance-check.php",
         "allrequests.php",
         "original.php",
+        "utilization.php",
         "help.php"
     ],
     "viewsadmin": [

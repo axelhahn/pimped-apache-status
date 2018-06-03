@@ -44,6 +44,7 @@ $aLangTxt = array(
         'view_serverinfos.php_label'=>'Server-Infos',
         'view_help.php_label'=>'Hilfe',
         'view_dump.php_label'=>'Dumps',
+        'view_utilization.php_label'=>'Auslastung',
         'view_setup.php_label'=>'Setup',
         'view_update.php_label'=>'Update',
         'view_selectserver.php_label'=>'Liste der Gruppen und Server',
@@ -91,9 +92,10 @@ $aLangTxt = array(
         'lblTableHint_status_workers'=>'Die Tabelle zeigt den Status der Apache Worker Prozesse vom markierten Server bzw. von allen 
             Servern der Gruppe.<br>
             <ul>
-                <li>"total" ist die Gesamtzahl der Worker-Prozesse</li>
-                <li>"aktiv" Anzahl aller aktiven Prozesse (Der Status M ist ungleich "_" und ungleich ".").</li>
-                <li>"idle" ist die Anzahl der Prozesse im Status "_".</li>
+                <li>"Slots" ist das Maximum der konfigurierten Httpd-Prozesse</li>
+                <li>"Aktiv" Anzahl aller aktiven Prozesse (Der Status M ist ungleich "_" und ungleich ".").</li>
+                <li>"Idle" ist die Anzahl der Prozesse im Status "_".</li>
+                <li>"Unbenutzt" ist die Anzahl der Prozesse, die noch gestartet werden k&ouml;nnen.</li>
             </ul>',
 
         // ............................................................
@@ -174,22 +176,53 @@ $aLangTxt = array(
 
         // table for worker status
         'thWorkerServer' => 'Webserver',
-        'thWorkerTotal' => 'total',
-        'thWorkerActive' => 'aktiv',
-        'thWorkerWait' => 'idle',
+        'thWorkerTotal' => 'Slots',
+        'thWorkerActive' => 'Aktiv',
+        'thWorkerWait' => 'Idle',
+        'thWorkerUnused' => 'Unbenutzt',
         'thWorkerBar' => 'Grafik',
         'thWorkerActions' => 'Aktionen',
         'thCount'=>'Anzahl',
     
-        'bartitleFreeWorkers' => 'freie Worker-Prozesse',
-        'bartitleBusyWorkers' => 'aktive Worker-Prozesse',
-        'bartitleIdleWorkers' => 'idle Worker-Prozesse',
+        'bartitleUnusedWorkers' => '%s unbenutzte, noch startbare Prozesse',
+        'bartitleBusyWorkers' => '%s aktive Worker-Prozesse',
+        'bartitleIdleWorkers' => '%s idle Worker-Prozesse',
     
         'lblLink2Top' => 'Seitenanfang',
         'lblHintFilter' => 'Filtere nach',
         'lblReload' => 'Jetzt Aktualisieren',
         'lblExportLinks' => 'Tabelle (ungefiltert) exportieren',
 
+    // ------------------------------------------------------------
+    // original page
+    // ------------------------------------------------------------
+        'lblHelpOriginal'=>'Original server-status Ausgabe',
+        'lblHintHelpOriginal'=>'Hier wird die  Original-Ausgabe des Httpd server-status angezeigt',
+    
+    // ------------------------------------------------------------
+    // utilization page
+    // ------------------------------------------------------------
+        'lblHelpUtilization'=>'Auslastung',
+        'lblHintHelpUtilization'=>'Anzeige der Auslastung des einzelnen Systems',
+
+        'lblUtilizationLowActivityCritical'=>'HINWEIS: Der Wert unbenutzer Prozesse (%s von %s) ist extrem hoch. Vielleicht sind zu viele Prozesse konfiguriert oder es ist im Moment sehr geringer Traffic.',
+        'lblUtilizationLowActivityWarning'=>'HINWEIS: Der Wert unbenutzer Prozesse (%s von %s) ist recht hoch. Vielleicht sind zu viele Prozesse konfiguriert oder es ist im Moment wenig Traffic.',
+        'lblUtilizationHighActivityCritical'=>'HINWEIS: Die Anzahl der Prozesse (%s von %s) ist extrem hoch. Erh&ouml;he die Anzahl der Prozesse in der Konfiguration oder es braucht mehr Ressourcen/ Server, um den Traffic zu handhaben.',
+        'lblUtilizationHighActivityWarning'=>'HINWEIS: Die Anzahl der Prozesse (%s von %s) ist recht hoch. Es braucht bald mehr Prozesse in der Konfiguration oder mehr Ressourcen/ Server, um den Traffic zu handhaben.',
+
+        'lblUtilizationHighActivityWarning'=>'HINWEIS: Die Anzahl der Prozesse (%s von %s) ist recht hoch. Es braucht bald mehr Prozesse in der Konfiguration oder mehr Ressourcen/ Server, um den Traffic zu handhaben.',
+
+        'lblUtilizationWorkerProcessesActiveTitle'=>'aktiv besch&auml;ftigte Prozesse',
+        'lblUtilizationWorkerProcessesActive'=>'aktiv',
+        'lblUtilizationWorkerProcessesRunningTitle'=>'laufende Prozesse (aktiv und idle)',
+        'lblUtilizationWorkerProcessesRunning'=>'Prozesse',
+    
+        'lblUtilizationTraffic'=>'Durchsatz',
+        'lblUtilizationTrafficTotalAccesses'=>'Zugriffe ges.',
+        'lblUtilizationTrafficTotalTraffic'=>'Datenmenge ges.',
+        'lblUtilizationTrafficAvgAccesses'=>'Zugriffe',
+        'lblUtilizationTrafficAvgTraffic'=>'Daten-Durchsatz',
+    
     // ------------------------------------------------------------
     // help page
     // ------------------------------------------------------------
@@ -465,7 +498,9 @@ $aLangTxt = array(
         'cfg-showHint'=>'Hinweisboxen anzeigen (true/ false)',
             'cfg-values-showHint'=>'(boolean); Default ist true',
         'cfg-skin'=>'Aktiviertes Default-Skin.',
-            'cfg-values-skin'=>'(string)',
+            'cfg-values-skin'=>'(string) Werte s. Skinauswahl-Dropdown',
+        'cfg-skin-color2'=>'CSS-Klasse der Kacheln und Titelbalken der Graphen.',
+            'cfg-values-skin-color2'=>'(string) einer aus bg-aqua|bg-red|bg-green|bg-yellow',
         'cfg-tdbars'=>'Tabellenspalten mit Werten, zu denen eine Balkengrafik angezeigt werden soll. Der Maximumwert bekommt einen vollen Balken; alle anderen Breiten sind relativ.',
             'cfg-values-tdbars'=>'(array) mit Strings der Namen von Tabellenspalten',
         'cfg-tdlink'=>'Spezielle Links für Tabellenspalten.',

@@ -10,6 +10,10 @@
 
 ----------------------------------------------------------------------
 
+2018-06-XX: branch storeservermetadata
+  * added: utilization page
+  * added: config value skin-color2 to change color of tiles
+
 2018-05-31: v2.00.03
   * fix sortorder / datatable options
   * update web updater
