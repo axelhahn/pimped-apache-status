@@ -82,6 +82,10 @@ if (count($aSrvStatus) > 0) {
             . '<div class="hero">'
                 . '<span class="srvlabel">Server version</span>: '.$aSrvStatus[$sHost]['status']['Server Version'].'<br>'
                 . '<span class="srvlabel">Server uptime</span>: '.$aSrvStatus[$sHost]['status']['Server uptime'].'<br>'
+                . '<span class="srvlabel">'.$aLangTxt['lblUtilizationTrafficTotalAccesses'].'</span>: '.$aSrvStatus[$sHost]['status']['Total accesses'].'<br>'
+                . '<span class="srvlabel">'.$aLangTxt['lblUtilizationTrafficTotalTraffic'].'</span>: ' .$aSrvStatus[$sHost]['status']['Total Traffic'] .'<br>'
+                . '<span class="srvlabel">'.$aLangTxt['lblUtilizationTrafficAvgAccesses'].'</span>: '  .$aSrvStatus[$sHost]['counter']['requests/sec'] .' /s<br>'
+                . '<span class="srvlabel">'.$aLangTxt['lblUtilizationTrafficAvgTraffic'].'</span>: '   .$aSrvStatus[$sHost]['status']['size/sec']      .'/s<br>'
             . '</div>'
             ;
         
@@ -151,11 +155,21 @@ if (count($aSrvStatus) > 0) {
                     'progressvalue' => (int)($iActive/$iProcesses*100),
                     'progresstext' => '('.$iProcesses.') ... ',
                 ))
+                . getWidget(array(
+                    'bgcolor'=>'green',
+                    // 'color'=>'green',
+                    'icon'=>'<i class="fa fa-ticket"></i>',
+                    'text'=>$aLangTxt['lblUtilizationWorkerProcessesActiveTitle'],
+                    'number'=>($iProcesses - $iSlotsUnused),
+                    'progressvalue' => (int)(($iProcesses - $iSlotsUnused)/$iProcesses*100),
+                    'progresstext' => '('.$iProcesses.') ... ',
+                ))
                  * 
                  */
                 . showPlotter($sHost, 'requests_active', $iPlotterValues, $aLangTxt['lblUtilizationWorkerProcessesActive'],  $aLangTxt['lblUtilizationWorkerProcessesActiveTitle'])
                 . showPlotter($sHost, 'slots_busy',      $iPlotterValues, $aLangTxt['lblUtilizationWorkerProcessesRunning'], $aLangTxt['lblUtilizationWorkerProcessesRunningTitle'])
                 . '<div style="clear:both"></div>'
+                /*
                 . '<br>'
                 . '<h4>'.$aLangTxt['lblUtilizationTraffic'].'</h4>'
                 . '<div class="hero">'
@@ -168,12 +182,13 @@ if (count($aSrvStatus) > 0) {
                 . showPlotter($sHost, 'requests/sec', $iPlotterValues, $aLangTxt['lblUtilizationTrafficAvgAccesses'], $aLangTxt['lblUtilizationTrafficAvgAccesses'])
                 . showPlotter($sHost, 'size/sec',     $iPlotterValues, $aLangTxt['lblUtilizationTrafficAvgTraffic'],  $aLangTxt['lblUtilizationTrafficAvgTraffic'])
                 . '<div style="clear:both"></div>'
+                 */
                 ;
             
         
         // --------------------------------------------------------------------------------
         $aTC[] = array(
-            'tab' => $sHost,
+            'tab' => $aCfg['icons']['server'].' ' . $sHost,
             'content' => $sOverview . $sWorker
                 /*
                 . '<hr>'

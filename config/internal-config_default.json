@@ -67,7 +67,7 @@
         "help-thanks": "<i class=\"fa fa-comment-o\"><\/i>",
         "update.php": "<i class=\"fa fa-rocket\"><\/i>",
         
-        "server_count": "<i class=\"fa fa-hdd-o\"><\/i>",
+        "server": "<i class=\"fa fa-hdd-o\"><\/i>",
         "server_responsetime": "<i class=\"fa fa-clock-o\"><\/i>",
         "requests_all": "<i class=\"fa fa-ticket\"><\/i>",
         "requests_running": "<i class=\"fa fa-ticket\"><\/i>",

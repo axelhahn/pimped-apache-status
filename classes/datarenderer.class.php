@@ -536,8 +536,8 @@ class Datarenderer {
         $sReturn='';
         $aKeys2Store=array(
             'dummyJust2WriteSomething',
-            'requests/sec',
-            'size/sec',
+            // 'requests/sec',
+            // 'size/sec',
             'requests_active',
             'slots_busy',
         );
