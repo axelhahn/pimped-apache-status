@@ -19,6 +19,7 @@ if (!isset($adminindex)){
     // --- donwload or delete a library?
     $sLib2download=(array_key_exists('download', $_GET))?$_GET['download']:'';
     $sLib2delete=(array_key_exists('delete', $_GET))?$_GET['delete']:'';
+    $sVersion2delete=(array_key_exists('version', $_GET))?$_GET['version']:'';
     
     $sHtml='
         <div class="subh3">
@@ -38,7 +39,7 @@ if (!isset($adminindex)){
             . '<tbody>'
             ;
     
-    foreach($oCdn->getLibs() as $aLib){
+    foreach($oCdn->getLibs(true) as $sLibname=>$aLib){
         $iCount++;
         
         // --- download
@@ -51,7 +52,7 @@ if (!isset($adminindex)){
         // --- delete
         if ($sLib2delete && $aLib['lib']===$sLib2delete && $aLib['islocal']){
             // $sHtml.='deleting '.$sLib2delete.'...<br>';
-            $oCdn->delete($sLib2delete, $aLib['version']);
+            $oCdn->delete($sLib2delete, $sVersion2delete);
             echo "<script>window.setTimeout('location.href=\"?&action=vendor\"', 20);</script>";
             $oCdn->setLibs($aEnv['vendor']);
         }
@@ -63,11 +64,14 @@ if (!isset($adminindex)){
                     .$aCfg['icons']['adminvendor']
                     .$aLib['lib']
                 .'</strong></td>'
-                .'<td>'.$aLib['version'].'</td>'
+                .'<td>'
+                    .$aLib['version']
+                    .(isset($aLib['isunused']) && $aLib['isunused'] ? ' ('.$aLangTxt['AdminVendorLibUnused'].')' : '')
+                .'</td>'
                 .'<td>'
                 .($aLib['islocal']
                 
-                    ? '</td><td><button onclick="location.href=\''. getNewQs(array('delete'=>$aLib['lib'])).'\';" class="btn btn-danger"'
+                    ? '</td><td><button onclick="location.href=\''. getNewQs(array('delete'=>$aLib['lib'], 'version'=>$aLib['version'])).'\';" class="btn btn-danger"'
                         . ' title="'.$aLangTxt['ActionDeleteHint'].'"'
                         . '>'.$aCfg['icons']['actionDelete'].$aLangTxt['ActionDelete'].'</button></td>'
                         .'</td>'

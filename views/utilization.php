@@ -4,7 +4,7 @@
  * 
  * view: Utilisation of each server
  */
-$iPlotterValues = 15;
+$iPlotterValues = 50;
 
 
 // ----------------------------------------------------------------------
@@ -15,7 +15,7 @@ function showHint($sMessage){
     return '<div class="hintbox">'.$sMessage.'</div><br>';
 }
 
-function showPlotter($sHost, $sCounterItem, $iPlotterValues, $sDescription, $sTitle){
+function showPlotter($sHost, $sCounterItem, $iPlotterValues, $sDescription, $sTitle, $iMax){
     global $aCfg, $sJsOnReady;
     $sReturn='';
     static $iPlotterCounter;
@@ -26,10 +26,10 @@ function showPlotter($sHost, $sCounterItem, $iPlotterValues, $sDescription, $sTi
     $sIdWorker='graphPlotter'.$iPlotterCounter;
     $sReturn.='<div class="plottterinlinewrapper">'
             . '<div class="header '.$aCfg['skin-color2'].'">'.$sTitle.'</div>'
-            . '<div id="'.$sIdWorker.'" class="plottterinline"></div>'
+            . '<br><div id="'.$sIdWorker.'" class="plottterinline"></div>'
             . '</div>'
             ;
-    $sJsOnReady.='showGraphInline("'.$sIdWorker.'", "'.$sHost.'", "'.$sCounterItem.'", '.$iPlotterValues.', "'.$sDescription.'"); '."\n";
+    $sJsOnReady.='showGraphInline("'.$sIdWorker.'", "'.$sHost.'", "'.$sCounterItem.'", '.$iPlotterValues.', "'.$sDescription.'", '.$iMax.'); '."\n";
     return $sReturn;
 }
 
@@ -166,8 +166,16 @@ if (count($aSrvStatus) > 0) {
                 ))
                  * 
                  */
-                . showPlotter($sHost, 'requests_active', $iPlotterValues, $aLangTxt['lblUtilizationWorkerProcessesActive'],  $aLangTxt['lblUtilizationWorkerProcessesActiveTitle'])
-                . showPlotter($sHost, 'slots_busy',      $iPlotterValues, $aLangTxt['lblUtilizationWorkerProcessesRunning'], $aLangTxt['lblUtilizationWorkerProcessesRunningTitle'])
+                . showPlotter($sHost, 'requests_active', $iPlotterValues, $aLangTxt['lblUtilizationWorkerProcessesActive'],  $aLangTxt['lblUtilizationWorkerProcessesActiveTitle'], false)
+                . showPlotter($sHost, 'slots_busy',      $iPlotterValues, $aLangTxt['lblUtilizationWorkerProcessesRunning'], $aLangTxt['lblUtilizationWorkerProcessesRunningTitle'], false)
+                . showPlotter($sHost, 'requests_active', $iPlotterValues, $aLangTxt['lblUtilizationWorkerProcessesActive'],  
+                        sprintf($aLangTxt['lblUtilizationWorkerProcessesActiveTitleTotal'], $aSrvStatus[$sHost]['counter']['slots_total']),
+                        $aSrvStatus[$sHost]['counter']['slots_total']
+                        )
+                . showPlotter($sHost, 'slots_busy',      $iPlotterValues, $aLangTxt['lblUtilizationWorkerProcessesRunning'], 
+                        sprintf($aLangTxt['lblUtilizationWorkerProcessesRunningTitleTotal'], $aSrvStatus[$sHost]['counter']['slots_total']),
+                        $aSrvStatus[$sHost]['counter']['slots_total']
+                        )
                 . '<div style="clear:both"></div>'
                 /*
                 . '<br>'

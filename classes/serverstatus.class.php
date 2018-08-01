@@ -14,13 +14,14 @@ class ServerStatus {
     private $aServer = array();
     private $_fResponsetime = false;
     private static $curl_opts = array(
+        CURLOPT_HEADER => true,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_TIMEOUT => 5,
         CURLOPT_FAILONERROR => 1,
         CURLOPT_SSL_VERIFYHOST => 0,
         CURLOPT_SSL_VERIFYPEER => 0,
         CURLOPT_USERAGENT => 'pimped apache status',
-            // CURLMOPT_MAXCONNECTS => 10
+        // CURLMOPT_MAXCONNECTS => 10
     );
 
     /**
@@ -619,17 +620,23 @@ class ServerStatus {
         foreach ($this->aServer as $sServer => $aData) {
             $sUrl = $aData['status-url'];
 
-            $s = curl_multi_getcontent($curl_arr[$i]);
-            if (!$s) {
+            // $s = curl_multi_getcontent($curl_arr[$i]);
+            $aTmp=explode("\r\n\r\n", curl_multi_getcontent($curl_arr[$i]), 2);
+            
+            // TODO: save http reponse header
+            $sResponseHeader=$aTmp[0];
+            $sResponseBody=count($aTmp)>1 ? $aTmp[1] : false;
+            if (!$sResponseBody) {
                 if (curl_error($curl_arr[$i])) {
                     $aErrors[] = 'failed to fetch ' . $sUrl . ' - ' . curl_error($curl_arr[$i]) . ' - Maybe you need to check your server config.';
                 } else {
                     $aErrors[] = 'failed to fetch ' . $sUrl . ' - Maybe you need to check your server config.';
                 }
             } else {
-                $aServerdata = $this->_getServerData($s, $sServer);
+                $aServerdata = $this->_getServerData($sResponseBody, $sServer);
                 if ($aServerdata && is_array($aServerdata)) {
-                    // echo "<pre>"; print_r($aServerdata[$sServer]);
+                    $aServerdata[$sServer]['header']=$sResponseHeader;
+                    // echo "<pre>" . print_r($aServerdata[$sServer], 1).'</pre>';
                     if (array_key_exists("requests", $aServerdata[$sServer])) {
                         $this->a = array_merge($this->a, $aServerdata);
                     } else {

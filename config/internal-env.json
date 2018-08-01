@@ -1,7 +1,7 @@
 {
     "project": {
         "title": "Pimped Apache Status",
-        "version": "2.00.03",
+        "version": "2.01.00",
         "releasedate": "2018-05-31",
         "license": "GPL 3.0"
     },
@@ -26,7 +26,7 @@
         },
         "update": {
             "check": {
-                "url": "https:\/\/www.axel-hahn.de\/versions\/pimpedapachestatus_[VERSION].txt",
+                "url": "https:\/\/www.axel-hahn.de\/versions\/pimpedapachestatus_[VERSION].json",
                 "label": "",
                 "target": ""
             },
@@ -43,14 +43,12 @@
         }
     },
     "vendor": [
-        "admin-lte/2.4.2",
-        "jQuery-Knob/1.2.13",
-        "datatables/1.10.16",
+        "admin-lte/2.4.8",
+        "datatables/1.10.19",
         "font-awesome/4.7.0",
         "jquery/3.3.1",
-        "morris.js/0.5.1",
-        "raphael/2.2.7",
-        "twitter-bootstrap/3.3.7"
+        "twitter-bootstrap/3.3.7",
+        "Chart.js/2.7.2"
     ]
     
 }

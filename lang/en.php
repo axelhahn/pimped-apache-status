@@ -212,8 +212,10 @@ $aLangTxt = array(
         'lblUtilizationHighActivityWarning'=>'HINT: The value of processes (%s of %s) is high. Maybe you need more working processes or more ressources/ servers to handle the traffic soon.',
     
         'lblUtilizationWorkerProcessesActiveTitle'=>'active processes',
+        'lblUtilizationWorkerProcessesActiveTitleTotal'=>'active processes - in relation to %s available slots',
         'lblUtilizationWorkerProcessesActive'=>'active',
         'lblUtilizationWorkerProcessesRunningTitle'=>'running processes (active and idle)',
+        'lblUtilizationWorkerProcessesRunningTitleTotal'=>'running processes (active and idle) - in relation to %s available slots',
         'lblUtilizationWorkerProcessesRunning'=>'processes',
 
         'lblUtilizationTraffic'=>'Traffic',
@@ -272,13 +274,12 @@ $aLangTxt = array(
             </p>
             <ul>
                 <li>Admin LTE - Control panel template: <a href="https://adminlte.io/">https://adminlte.io/</a></li>
-                <li>jQuery: <a href="http://jquery.com/">http://jquery.com/</a></li>
+                <li>jQuery: <a href="https://jquery.com/">https://jquery.com/</a></li>
+                <li>Chart.js: <a href="https://www.chartjs.org/">https://www.chartjs.org/</a></li>
                 <li>Datatables - sortable tables: <a href="https://datatables.net/">https://datatables.net/</a></li>
                 <li>array2xml.class - XML export: <a href="http://www.lalit.org/lab/convert-php-array-to-xml-with-attributes">http://www.lalit.org/lab/convert-php-array-to-xml-with-attributes</a></li>
                 <li>Bootstrap - Html-Framework: <a href="http://getbootstrap.com/">http://getbootstrap.com/</a></li>
                 <li>Font-awesome - Icons: <a href="https://fontawesome.io/">https://fontawesome.io/</a></li>
-                <li>jQuery Knob - dials: <a href="https://github.com/aterrien/jQuery-Knob">https://github.com/aterrien/jQuery-Knob</a></li>
-                <li>Morris JS - charts: <a href="http://morrisjs.github.io/morris.js/index.html">http://morrisjs.github.io/morris.js/index.html</a></li>
             </ul>
             ',
     
@@ -451,6 +452,7 @@ $aLangTxt = array(
         'AdminVendorRemote'=>'Remote',
         'AdminVendorLibLocalinstallations'=>'<strong>%s</strong> libs are in use and <strong>%s</strong> of them are local. Download all libs for best performance.',
         'AdminVendorLibAllLocal'=>'All <strong>%s</strong> used libs are local.',
+        'AdminVendorLibUnused'=>'not used anymore',
     
         'AdminHintUpdates'=>'Update this web application.<br>',
     

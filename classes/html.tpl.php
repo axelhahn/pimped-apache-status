@@ -9,8 +9,8 @@
 
         <title>Pimped Apache Status 2</title>
         
-        <script src="{{APPDIR}}/javascript/functions.js" type="text/javascript"></script>
-        <script src="{{APPDIR}}/javascript/counterhistory.class.js" type="text/javascript"></script>
+        <script src="{{APPDIR}}/javascript/functions.min.js" type="text/javascript"></script>
+        <script src="{{APPDIR}}/javascript/counterhistory.class.min.js" type="text/javascript"></script>
 
         {{HEADER}}
         

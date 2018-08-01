@@ -3,16 +3,16 @@
 .barTotal{
     background:#ddd !important; 
     background:linear-gradient(#eee,#f8f8f8,#ddd) !important; 
-    border: 0px solid #aaa; height: 1.1em;}
+    border: 0px solid #aaa; height: 1.5em;}
 .barBusyWorker, 
      .barValue{
          background:#5e9 !important; 
          background:linear-gradient(10deg,#5e9,#9fc,#5e9) !important; 
-         height: 1.1em;float: left;}
+         height: 1.5em;float: left;}
 .barIdleWorker{
     background:#00a0c0 !important; 
     background:linear-gradient(#00a0c0,#ace,#00a0c0) !important; 
-    height: 1.1em; float: left;}
+    height: 1.5em; float: left;}
 
 /* colors for http action */
 .methodoptions{background:#f0f0f0; color: #888;}

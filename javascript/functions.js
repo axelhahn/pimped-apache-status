@@ -147,22 +147,17 @@ function initServerFilter() {
 }
 
 /**
- * init knob in tiles 
- * @since 1.26
+ * init progress bar in tiles 
  * @returns {undefined}
  */
-function initKnob() {
-    var i = 0;
+function initTileProgress() {
     var sTilename = false;
     var aData = false;
-    var sFgColor = $('.tile .dial').css("color");
-    var sBgColor = $('.tile .dial').css("background-color");
-    $(".tile .dial").each(function () {
-        i++;
+    $(".progress-bar").each(function () {
 
-        // tial name is the id "dial-[server]-[tilename]" 
+        // div name of progress bar is id "progress-[server]-[tilename]" 
         // @see php class datarenderer->renderTile()
-        sId = $(this).attr('id').replace(/^dial\-/, '');
+        sId = $(this).attr('id').replace(/^progress\-/, '');
         sSrv = sId.replace(/\-.*/, '');
         sTilename = sId.replace(/^.*\-/, '');
         if (sTilename) {
@@ -170,25 +165,8 @@ function initKnob() {
             aData = oCounter.getLast(50);
             aDataLast = oCounter.getLast(1);
             currentVal = aDataLast['max'];
-            /*
-             console.log('----- ' + sTilename + ' ('+sId+') - max ' + aData['max'] + ' current: ' + currentVal );
-             console.log(aData);
-             console.log(aDataLast);
-             */
             if (aData) {
-
-                $(this).knob({
-                    readOnly: true,
-                    fgColor: sFgColor,
-                    bgColor: sBgColor,
-                    max: aData['max'] * 1000,
-                    'width': '90px',
-                    'height': '90px',
-                    thickness: 0.04
-                });
-                $(this).val(currentVal * 1000).trigger('change');
                 $('#progress-' + sId).css('width', (currentVal / aData['max'] * 100) + '%');
-
             }
         }
     });
@@ -202,7 +180,7 @@ function initPage() {
     initDrawH3list();
     initSoftscroll();
     initServerFilter();
-    initKnob();
+    initTileProgress();
     $('body').append('<div id="' + sDivPlotter + '" class="plotter"></div>');
 }
 
@@ -251,24 +229,46 @@ function stickyGraph(sSrv, sVarname, sTitle) {
     }
 }
 
-function showGraphInline(sDivPlotter, sSrv, sVarname, iCount, sTitle) {
+/**
+ * render bar chart with avg line using Chart.js
+ * 
+ * @param {string}  sDivPlotter
+ * @param {string}  sSrv
+ * @param {string}  sVarname
+ * @param {integer} iCount
+ * @param {strng}   sTitle
+ * @returns {Boolean}
+ */
+function showGraphInline(sDivPlotter, sSrv, sVarname, iCount, sTitle, iMax) {
     var oCounter = new counterhistory(sSrv, sVarname);
     var aData = oCounter.getLast(iCount);
 
-    console.log('----- ' + sSrv + ' - ' + sVarname);
-    if (!aData || !aData.data || !aData.data.length ) {
-        $('#'+sDivPlotter).html('No data (yet).');
+    var idCanvas = sDivPlotter + '-chart';
+    if (!aData || !aData.data || !aData.data.length || aData['min'] === false) {
+        // $('#' + sDivPlotter).html('No data (yet).');
         return false;
     }
     var sData = '',
-        sInfo = ''
-        ;
+            sAvg = '',
+            sMax = '',
+            sMin = '',
+            aTimeAxis = [],
+            sInfo = ''
+            ;
 
-    for (var i = 0; i < aData.data.length; i++) {
-        var aItem=aData.data[i];
-        sData+= (sData ? ', ' : '' ) + '{ "y": "'+aItem[0]+'", "a": ' + aItem[1]+ ' }';
+    // get last data and create value arrays for the chart
+    for (var i = (aData.data.length - 1); i >= 0; i--) {
+        var aItem = aData.data[i];
+        // sData+= (sData ? ', ' : '' ) + '{ "x": "'+aItem[0]+'", "y": ' + aItem[1]+ '}';
+        aTimeAxis.push(new Date(aItem[0]));
+        sData += (sData ? ', ' : '') + (aItem[1]/1 === aItem[1] ? aItem[1] : '"'+aItem[1]+'"');
+        sAvg += (sAvg ? ', ' : '') + aData['avg'];
+        sMax += (sMax ? ', ' : '') + (iMax ? iMax : aData['max']);
+        sMin += (sMin ? ', ' : '') + aData['min'];
     }
-    sData='['+sData+']';
+    console.log(sData);
+
+    // create info box
     if (aLang) {
         sInfo += 'values: ' + aData.data.length + '<br>';
         sInfo += (aLang['statsCurrent']) ? aLang['statsCurrent'] + ': ' + aData['data'][0][1] + '<br>' : '';
@@ -276,43 +276,78 @@ function showGraphInline(sDivPlotter, sSrv, sVarname, iCount, sTitle) {
         sInfo += (aLang['statsMax']) ? aLang['statsMax'] + ': ' + aData['max'] + '<br>' : '';
         sInfo += (aLang['statsAvg']) ? aLang['statsAvg'] + ': ' + aData['avg'] + '<br>' : '';
     }
-    $('#'+sDivPlotter).html('<div class="infos">' + sInfo + '</div>');
-    console.log(JSON.parse(sData));
-    var config = {
-        data: JSON.parse(sData),
-        xkey: 'y',
-        ykeys: ['a'],
-        goals: [aData.min, aData.avg, aData.max],
-        goalLineColors: ['#4c4', '#fc2', '#c22'],
-        // ykeys: 'a',
-        // labels: ['Total Income', 'Total Outcome'],
-        labels: [ sTitle],
-        fillOpacity: 0.6,
-        hideHover: 'auto',
-        behaveLikeLine: true,
-        // resize: true,
-        pointFillColors: ['white'],
-        pointStrokeColors: ['black'],
-        // pointSize: '4px',
-        lineColors: ['#00c0ef'],
-        lineWidth:['4px']
-    };
-    config.element = sDivPlotter;
-    // config.stacked = true;
-    // Morris.Bar(config);
-    Morris.Line(config);
 
-    // renderHistory(sDivPlotter, oCounter.getLast(50), sTitle);
-    return true;
-}
+    // output
+    $('#' + sDivPlotter).html('<div class="infos">' + sInfo + '</div><canvas id="' + idCanvas + '"></canvas>');
+    var ctx = document.getElementById(idCanvas).getContext('2d');
+    var myChart = new Chart(ctx, {
 
+        type: 'bar',
+        data: {
+            labels: aTimeAxis,
+            datasets: [
+                {
+                    type: 'line',
+                    data: JSON.parse('[' + sAvg + ']'),
+                    borderColor: '#e0a010',
+                    borderWidth: 1,
+                    borderDash: [3, 3],
+                    fill: false,
+                    radius: 0
+                },
+                {
+                    type: 'line',
+                    data: JSON.parse('[' + sMin + ']'),
+                    borderColor: '#008000',
+                    borderWidth: 1,
+                    borderDash: [3, 3],
+                    fill: false,
+                    radius: 0
+                },
+                {
+                    type: 'line',
+                    data: JSON.parse('[' + sMax + ']'),
+                    borderColor: '#ff0000',
+                    borderWidth: 1,
+                    borderDash: [3, 3],
+                    fill: false,
+                    radius: 0
+                },
+                {
+                    type: 'bar',
+                    label: sTitle,
+                    data: JSON.parse('[' + sData + ']'),
+                    backgroundColor: '#80d0f4',
+                    lineTension: 0,
+                    radius: 0
+                }
+            ]
+        },
+        options: {
+            animation: {
+                duration: 0
+            },
+            legend: {
+                display: false
+            },
+            scales: {
+                xAxes: [{
+                        display: false
+                    }],
+                yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            max: (iMax ? iMax : aData['max'])
+                        }
+                    }]
+            },
+            title: {
+                display: false,
+                text: sTitle
+            }
+        }
+    });
 
-function showGraphInlineOLD(sDivPlotter, sSrv, sVarname, sTitle) {
-    var oCounter = new counterhistory(sSrv, sVarname);
-    var aData = oCounter.getLast(50);
-    console.log(aData);
-
-    renderHistory(sDivPlotter, oCounter.getLast(50), sTitle);
     return true;
 }
 
@@ -328,9 +363,16 @@ function showGraph(sSrv, sVarname, sTitle) {
     if (bPlotterSticky) {
         return false;
     }
-    var oCounter = new counterhistory(sSrv, sVarname);
-    renderHistory(sDivPlotter, oCounter.getLast(50), sTitle);
+    var sHtml = '<div class="btnclose" onclick="hideGraph(1);"> X </div>'
+            + '<div class="title">' + sTitle + '</div>'
+            + '<div id="hovergraph" class="graph">'
+            + '</div>'
+            ;
 
+    $("#" + sDivPlotter).html(sHtml).show();
+    if (!showGraphInline("hovergraph", sSrv, sVarname, 50, sTitle)) {
+        $("#" + sDivPlotter).hide();
+    }
 }
 
 /**
@@ -355,66 +397,4 @@ function hideGraph(bUnsticky) {
  */
 function twodigits(iVal) {
     return iVal > 9 ? iVal : "0" + iVal;
-}
-
-/**
- * render statistical graph; called by showGraph
- * @param {string} sDivname  target div where to put the bars 
- * @param {array}  aData     data items with date and value
- * @param {string} sTitle    title in popup
- * @returns {Boolean}
- */
-function renderHistory(sDivname, aData, sTitle) {
-
-    if (!aData || !aData['data'] || aData['data'].length < 10 || !aData['max']) {
-        return false;
-    }
-
-    var sHtml = '',
-            sInfo = '',
-            iDataHeight = 250,
-            iDataWidth = 600,
-            sClass = false,
-            sHint = false,
-            date = false;
-
-    sHtml += '<div class="btnclose" onclick="hideGraph(1);"> X </div>'
-            + '<div class="graph">'
-            + '<div class="title">' + sTitle + '</div>'
-            ;
-
-    for (var i = aData['data'].length - 1; i >= 0; i--) {
-        val = aData['data'][i][1] / 1;
-
-        date = new Date(aData['data'][i][0]);
-        iH = val / aData['max'] * iDataHeight;
-        iW = iDataWidth / aData['data'].length;
-        sClass = (i === 0) ? 'barcur' : '';
-
-        sHint = val + "\n\n"
-                + twodigits(date.getDate()) + "." + twodigits(date.getMonth() + 1) + "." + date.getFullYear()
-                + "\n" + twodigits(date.getHours()) + ":" + twodigits(date.getMinutes()) + ":" + twodigits(date.getSeconds())
-                ;
-
-        sHtml += '<div class="barcontainer" style="width:' + iW + 'px; height: ' + iDataHeight + 'px" title="' + sHint + '">'
-                + '<div class="bar ' + sClass + '" style="width:' + iW + 'px; height: ' + iH + 'px; margin-top:' + (iDataHeight - iH) + 'px; "> </div>'
-                + '</div>';
-    }
-    ihAvg = aData['avg'] / aData['max'] * iDataHeight;
-    ihCurrent = aData['data'][0][1] / aData['max'] * iDataHeight;
-
-    if (aLang) {
-        sInfo += (aLang['statsCurrent']) ? aLang['statsCurrent'] + ': ' + aData['data'][0][1] + '<br>' : '';
-        sInfo += (aLang['statsMin']) ? aLang['statsMin'] + ': ' + aData['min'] + '<br>' : '';
-        sInfo += (aLang['statsMax']) ? aLang['statsMax'] + ': ' + aData['max'] + '<br>' : '';
-        sInfo += (aLang['statsAvg']) ? aLang['statsAvg'] + ': ' + aData['avg'] + '<br>' : '';
-    }
-    sHtml += ''
-            + '<div class="avg" style="margin-top:' + (iDataHeight - ihAvg) + 'px; "> </div>'
-            + '<div class="current" style="margin-top:' + (iDataHeight - ihCurrent) + 'px; "> </div>'
-            + (sInfo ? '<div class="infos">' + sInfo + '</div>' : '')
-            + '</div>';
-
-    $("#" + sDivname).html(sHtml).show();
-    return true;
 }

@@ -10,9 +10,17 @@
 
 ----------------------------------------------------------------------
 
-2018-06-XX: branch storeservermetadata
+2018-08-01: v2.01.00
   * added: utilization page
-  * added: config value skin-color2 to change color of tiles
+  * added: config value "skin-color2" to change color of tiles
+  * removed: libraries morris-js, raphael, jQuery-Knob for differemt graphs
+  * added: Chart.js graphs
+  * fix: link to HOME (top left)
+  * update: new request to check a new version
+  * update: using datatables 1.10.19 now
+  * update: using AdminLTE to 2.4.8 now
+  * added: on vendor page unused libraries can be deleted
+  * update: use minified css and js files
 
 2018-05-31: v2.00.03
   * fix sortorder / datatable options

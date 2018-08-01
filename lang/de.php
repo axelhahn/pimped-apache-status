@@ -213,8 +213,10 @@ $aLangTxt = array(
         'lblUtilizationHighActivityWarning'=>'HINWEIS: Die Anzahl der Prozesse (%s von %s) ist recht hoch. Es braucht bald mehr Prozesse in der Konfiguration oder mehr Ressourcen/ Server, um den Traffic zu handhaben.',
 
         'lblUtilizationWorkerProcessesActiveTitle'=>'aktiv besch&auml;ftigte Prozesse',
+        'lblUtilizationWorkerProcessesActiveTitleTotal'=>'aktiv besch&auml;ftigte Prozesse - im Verh&auml;ltnis zu %s verf&uuml;gbaren Slots',
         'lblUtilizationWorkerProcessesActive'=>'aktiv',
         'lblUtilizationWorkerProcessesRunningTitle'=>'laufende Prozesse (aktiv und idle)',
+        'lblUtilizationWorkerProcessesRunningTitleTotal'=>'laufende Prozesse (aktiv und idle) - im Verh&auml;ltnis zu %s verf&uuml;gbaren Slots',
         'lblUtilizationWorkerProcessesRunning'=>'Prozesse',
     
         'lblUtilizationTraffic'=>'Durchsatz',
@@ -277,13 +279,12 @@ $aLangTxt = array(
             </p>
             <ul>
                 <li>Admin LTE - Control Panel Template: <a href="https://adminlte.io/">https://adminlte.io/</a></li>
-                <li>jQuery: <a href="http://jquery.com/">http://jquery.com/</a></li>
+                <li>jQuery: <a href="https://jquery.com/">https://jquery.com/</a></li>
+                <li>Chart.js: <a href="https://www.chartjs.org/">https://www.chartjs.org/</a></li>
                 <li>Datatables - sortierbare Tabellen: <a href="https://datatables.net/">https://datatables.net/</a></li>
                 <li>array2xml.class - XML Export: <a href="http://www.lalit.org/lab/convert-php-array-to-xml-with-attributes">http://www.lalit.org/lab/convert-php-array-to-xml-with-attributes</a></li>
                 <li>Bootstrap - Html-Framework: <a href="http://getbootstrap.com/">http://getbootstrap.com/</a></li>
                 <li>Font-awesome - Icons: <a href="https://fontawesome.io/">https://fontawesome.io/</a></li>
-                <li>jQuery Knob - Skalen: <a href="https://github.com/aterrien/jQuery-Knob">https://github.com/aterrien/jQuery-Knob</a></li>
-                <li>Morris JS - Charts: <a href="http://morrisjs.github.io/morris.js/index.html">http://morrisjs.github.io/morris.js/index.html</a></li>
             </ul>
             ',
     
@@ -456,6 +457,7 @@ $aLangTxt = array(
         'AdminVendorRemote'=>'Remote',
         'AdminVendorLibLocalinstallations'=>'<strong>%s</strong> verwendete Bibliotheken gesamt - davon liegen <strong>%s</strong> lokal. Lade alle herunter, um die beste Performance zu haben.',
         'AdminVendorLibAllLocal'=>'Alle <strong>%s</strong> verwendeten Bibliotheken sind lokal.',
+        'AdminVendorLibUnused'=>'nicht mehr verwendet',
     
         'AdminHintUpdates'=>'Update dieser Web-applikation.<br>',
 

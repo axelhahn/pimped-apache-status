@@ -682,24 +682,24 @@ class Datarenderer {
         }
         return $sReturn;
     }
-
     private function _genChart($aTable, $sTableId){
         $sReturn='';
         $sJs='';
         $iMaxJsValues=10;
-        /*
-            Morris.Donut({
-              element: 'donut-example',
-              data: [
-                {label: "Download Sales", value: 12},
-                {label: "In-Store Sales", value: 30},
-                {label: "Mail-Order Sales", value: 20}
-              ]
-            });
-         
-         */
         $iCount=0;
         $iRest=0;
+        
+        /*
+            for (var i = 0; i < aData.data.length; i++) {
+                var aItem = aData.data[i];
+                aTimeAxis.push(new Date(aItem[0]));
+                sData += (sData ? ', ' : '') + aItem[1];
+                sAvg += (sAvg ? ', ' : '') + aData['avg'];
+            }
+         
+         */
+        $aValX=array();
+        $aValY=array();
         foreach ($aTable as $row) {
             if(count($row) != 2){
                 return false;
@@ -708,8 +708,13 @@ class Datarenderer {
             $aVal=array_values($row);
             if (is_int($aVal[0])){
                 if($iMaxJsValues>$iCount){
+                    $aValX[]=$aVal[1];
+                    $aValY[]=$aVal[0];
+                    /*
                     $sJs.=$sJs ? ',': '';
                     $sJs.='{label: "'.$aVal[1].'", value: '.$aVal[0].'}';
+                     * 
+                     */
                 } else {
                     $iRest+=$aVal[0];
                 }
@@ -717,27 +722,65 @@ class Datarenderer {
             }
         }
         if($iRest){
-            $sJs.=',{label: "(...)", value: '.$iRest.'}';
+            // $sJs.=',{label: "(...)", value: '.$iRest.'}';
+            $aValX[]='(...)';
+            $aValY[]=$iRest;
         }
-
         $sDivIdBars='divChartBars'.$sTableId;
-        $sIdBars='Bars'.$sTableId;
-        $sDivIdDonut='divChartDonut'.$sTableId;
-        $sIdDonut='Donut'.$sTableId;
-        
-        $sBarsCallback='function(index, options, content) {'.$sIdDonut.'.select(index); return \'<div>\'+content+\'</div>\'; }';
-        $sJsOut='var '.$sIdDonut.' = Morris.Donut({element: \''.$sDivIdDonut.'\', data: ['.$sJs.'], resize: true }); '
-            . 'var '.$sIdBars.' = Morris.Bar({element: \''.$sDivIdBars.'\', data: ['.$sJs.'], xkey: \'label\', ykeys: [\'value\'], labels: [\'n\'], hoverCallback: '.$sBarsCallback.' });'
-                . '$(\'.morris-hover\').css("display", "none");'
+        $sIdCanvas='divChartBars'.$sTableId.'-chart';
+        $sJsOut='var ctx = document.getElementById(\''.$sIdCanvas.'\').getContext(\'2d\');
+        var myChart = new Chart(ctx, {
+
+        type: \'bar\',
+        data: {
+            labels: '.json_encode($aValX).',
+            datasets: [
+                {
+                    data: '.json_encode($aValY).',
+                    backgroundColor: \'#80d0f4\',
+                    lineTension: 0,
+                    label: 0,
+                    radius: 0
+                }
+            ]
+        },
+        options: {
+            animation: {
+                duration: 0
+            },
+            legend: {
+                display: false
+            },
+            scales: {
+                xAxes: [{
+                        display: false
+                    }],
+                yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+            },
+            title: {
+                display: true,
+                text: \'\'
+            }
+        }
+    });
+            
+                '
             ;
+
+        
         $sReturn.=''
-                . '<div class="chartsfortable" style="">'
-                    . '<div id="'.$sDivIdBars.'" class="divbars"></div>'
-                    . '<div id="'.$sDivIdDonut.'" class="divdonut"></div>'
+                . '<div class="chartsfortable">'
+                    . '<div id="'.$sDivIdBars.'" class="divbars">'
+                        . '<canvas id="' .$sIdCanvas. '" width="500" height="400">'
+                    . '</div>'
+                    // . '<div id="'.$sDivIdDonut.'" class="divdonut"></div>'
                     . '<script>' . $sJsOut . '</script>'
                 . '</div>'
                 ;
-        
         return $sReturn;
     }
 
@@ -1090,7 +1133,7 @@ class Datarenderer {
                     .'>
                       <span class="info-box-icon">'
                         .$sIcon
-                        . '<span style="float: right; position: relative; top: -85px; right: -17px;">'.$sKnob.'</span>'
+                        // . '<span style="float: right; position: relative; top: -85px; right: -17px;">'.$sKnob.'</span>'
                       .'</span>
                       <div class="info-box-content">
                         <span class="info-box-text">'
@@ -1131,8 +1174,11 @@ class Datarenderer {
         $aReturn = array();
         $iMaxWith = 600;
 
-        $aLinkPCheck = (array_key_exists('performance-check.php', $aEnv['links']['views']) && count($aSrvStatus) > 1
+        $aLinkPCheck = (array_key_exists('performance-check.php', $aEnv['links']['views']) && count($aSrvStatus) > 0
                 ) ? $aEnv['links']['views']['performance-check.php'] : false
+        ;
+        $aLinkUtilization = (array_key_exists('utilization.php', $aEnv['links']['views']) && count($aSrvStatus) > 0
+                ) ? $aEnv['links']['views']['utilization.php'] : false
         ;
 
         /*
@@ -1172,21 +1218,32 @@ class Datarenderer {
                 if ($iProcesses > $iMaxWith) {
                     $iBarFactor = $iMaxWith / $iProcesses;
                 }
-                $sHeight='height: 1.6em;';
-                $sBar = "<div class=\"barTotal\" style=\"width: " . ($iProcesses * $iBarFactor) . "px; $sHeight\" title=\"" . sprintf($aLangTxt['bartitleUnusedWorkers'], ($iProcesses - $iActive - $iWait)) . "\">
-                            <div class=\"barBusyWorker\" style=\"width: " . ($iActive * $iBarFactor) . "px; $sHeight\" title=\"" . sprintf($aLangTxt['bartitleBusyWorkers'], $iActive) . "\"> </div>
-                            <div class=\"barIdleWorker\" style=\"width: " . ($iWait * $iBarFactor) . "px; $sHeight\" title=\"" . sprintf($aLangTxt['bartitleIdleWorkers'], $iWait) . "\"> </div>
+                $sBar = "<div class=\"barTotal\" style=\"width: " . ($iProcesses * $iBarFactor) . "px;\" title=\"" . sprintf($aLangTxt['bartitleUnusedWorkers'], ($iProcesses - $iActive - $iWait)) . "\">
+                            <div class=\"barBusyWorker\" style=\"width: " . ($iActive * $iBarFactor) . "px;\" title=\"" . sprintf($aLangTxt['bartitleBusyWorkers'], $iActive) . "\"> </div>
+                            <div class=\"barIdleWorker\" style=\"width: " . ($iWait * $iBarFactor) . "px;\" title=\"" . sprintf($aLangTxt['bartitleIdleWorkers'], $iWait) . "\"> </div>
                         </div>";
                 $aTmp[$aLangTxt['thWorkerBar']] = $sBar;
             }
 
+            $aTmp[$aLangTxt['thWorkerActions']]='';
             // add link for performance check of a single server
             if ($aLinkPCheck) {
-                $aTmp[$aLangTxt['thWorkerActions']] = '<a href="' . $aLinkPCheck['url'] . '&servers=' . $sHost . '"'
+                $aTmp[$aLangTxt['thWorkerActions']] .= ''
+                        . '<a class="btn btn-default" href="' . $aLinkPCheck['url'] . '&servers=' . $sHost . '"'
                         . 'title="' . strip_tags($aLinkPCheck['label']) . ' - ' . $sHost . '"'
                         . '>'
-                        . str_replace(strip_tags($aLinkPCheck['label']), '', $aLinkPCheck['label']) . ' ' . $sHost
-                        . '</a>';
+                        . str_replace(strip_tags($aLinkPCheck['label']), '', $aLinkPCheck['label'])
+                        . '</a>'
+                        ;
+            }
+            if ($aLinkUtilization) {
+                $aTmp[$aLangTxt['thWorkerActions']] .= ' '
+                        . '<a class="btn btn-default" href="' . $aLinkUtilization['url'] . '&servers=' . $sHost . '"'
+                        . 'title="' . strip_tags($aLinkUtilization['label']) . ' - ' . $sHost . '"'
+                        . '>'
+                        . str_replace(strip_tags($aLinkUtilization['label']), '', $aLinkUtilization['label'])
+                        . '</a>'
+                        ;
             }
             $aReturn[] = $aTmp;
         }
