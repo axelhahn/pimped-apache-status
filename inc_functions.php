@@ -38,23 +38,6 @@ function getNewQs($aQueryParams = array()) {
     return $s;
 }
 
-/**
- * follow a given url by checking http header data and follow locations
- * @param string   $url          url to follow
- * @return string
- */
-function httpFollowUrl($sUrl) {
-    $sReturn = $sUrl;
-    $sData = httpGet($sUrl, 1);
-    preg_match('/Location:\ (.*)/', $sData, $aTmp);
-    if (count($aTmp)) {
-        $sNextUrl = trim($aTmp[1]);
-        if ($sNextUrl && $sNextUrl !== $sUrl) {
-            $sReturn = httpFollowUrl($sNextUrl);
-        }
-    }
-    return $sReturn;
-}
 
 /**
  * make an http get request and return the response body
@@ -132,46 +115,59 @@ function getTempdir(){
     $oLog->add(__FUNCTION__ . '() - set temp dir '.$sTmpDir);
     return $sTmpDir;
 }
+
+
 /**
- * check for an update of the product
- * @param bool  $bForce  force check and ignore ttl
- * @return type
+ * get array with update infos 
+ * Array
+ * (
+ *     [flag_update] => 
+ *     [message] => OK: this is the latest version.
+ *     [clientversion] => 2.00.03
+ *     [release] => stable
+ *     [latest_version] => 2.00.03
+ *     [download] => https://sourceforge.net/projects/pimpapachestat/files/latest/download
+ * )
+ * 
+ * @global type $aEnv
+ * @global array $aCfg
+ * @return array
  */
-function checkUpdate($bForce = false) {
-    global $aLangTxt;
+function getUpdateInfos($bForce = false){
     global $aEnv;
     global $aCfg;
     global $oLog;
-    $iTtl = (int) $aCfg["checkupdate"];
-
-    // if the user does not want an update check then respect it
-    if (!$iTtl && !$bForce) {
-        $oLog->add(__FUNCTION__ . ": is disabled");
-
-        return '<a href="' . $aEnv['links']['update']['updater']['url'] . '"'
-                . ' target="./admin/' . $aEnv['links']['update']['updater']['target'] . '&skin=' . $aEnv['active']['skin'] . '&lang=' . $aEnv['active']['lang'] . '"'
-                . ' class="button"'
-                . '>' . $aLangTxt['versionManualCheck'] . '</a>';
-        // return false;
-    }
-    
     $sUrlCheck = str_replace(" ", "%20", $aEnv['links']['update']['check']['url']);
     $sTarget = getTempdir() . '/checkupdate_' . md5($sUrlCheck) . '.tmp';
     $bExec = true;
-    if (file_exists($sTarget)) {
+    $iTtl = (int) $aCfg["checkupdate"];
+    
+    // defaults:
+    $sLatestUrl=(stripos($aEnv["project"]["version"], "beta")) 
+            ? $aEnv["links"]["update"]['downloadbeta']['url']
+            : $aEnv["links"]["update"]['download']['url']
+            ;
+
+    $aDefault=array(
+        'flag_update'=>false,
+        'message'=>'Request failed.',
+        'latest_version'=>'unknown',
+        'download'=>$sLatestUrl
+    );
+    
+    // 
+    if ($bForce) {
+        $bExec = true;
+        $oLog->add(__FUNCTION__ . " last exec: override: force parameter was found");
+    } else if (file_exists($sTarget)) {
         $bExec = false;
-        $aStat = stat($sTarget);
-        $iAge = time() - $aStat[9];
+        $iAge = time() - filemtime($sTarget);
         if ($iAge > $iTtl) {
             $bExec = true;
         }
         $oLog->add(__FUNCTION__ . " last exec: " . $iAge . " s ago - timer is $iTtl");
     } else {
         $oLog->add(__FUNCTION__ . " last exec: never (touchfile was not found)");
-    }
-    if ($bForce) {
-        $bExec = true;
-        $oLog->add(__FUNCTION__ . " last exec: override: force parameter was found");
     }
 
     if ($bExec) {
@@ -191,21 +187,49 @@ function checkUpdate($bForce = false) {
         $oLog->add(__FUNCTION__ . " reading cache $sTarget ...");
         $sResult = file_get_contents($sTarget);
     }
+    $aUpdateInfos= json_decode($sResult, 1);
+    $oLog->add(__FUNCTION__ . " <pre>".print_r($aUpdateInfos, 1)."</pre>");
+    return array_merge($aDefault, $aUpdateInfos);
+}
+/**
+ * check for an update of the product
+ * @param bool  $bForce  force check and ignore ttl
+ * @return type
+ */
+function checkUpdate($bForce = false) {
+    global $aLangTxt;
+    global $aEnv;
+    global $aCfg;
+    global $oLog;
+    $iTtl = (int) $aCfg["checkupdate"];
 
-    $sVersion = str_replace("UPDATE: v", "", str_replace(" is available", "", $sResult));
-    if (strpos($sResult, "UPDATE") === 0) {
+    // if the user does not want an update check then respect it
+    if (!$iTtl && !$bForce) {
+        $oLog->add(__FUNCTION__ . ": is disabled");
+        return '<a href="'
+            .(isset($_SERVER['REQUEST_URI']) && !strstr($_SERVER['REQUEST_URI'], '/admin/') ? './admin/' : '' )
+            .'?action=update&skin=' . $aEnv['active']['skin'] . '&lang=' . $aEnv['active']['lang'] . '"'
+            . ' class="button"'
+            . '>' . $aLangTxt['versionManualCheck'] . '</a>'
+            ;
+    }
+    $aUpdateInfos=getUpdateInfos($bForce);
+
+    $sVersion = $aUpdateInfos['latest_version'];
+    $bHasUpdate = $aUpdateInfos['flag_update'];
+    if ($bHasUpdate) {
         $sUrl = getNewQs()
                 . '&lang=' . $aEnv['active']['lang']
                 . '&skin=' . $aEnv['active']['skin']
                 . '&action=update'
         ;
-        $sResult = ' <span class="version-updateavailable" title="' . $sResult . '">'
+        $sResult = ' <span class="version-updateavailable" title="' . $aUpdateInfos['message'] . '">'
                     . '<a href="' . $sUrl . '">'
                     . sprintf($aLangTxt['versionUpdateAvailable'], $sVersion)
                     . '</a>'
                 . '</span>';
-    } else if (strpos($sResult, "OK") === 0) {
-        $sResult = ' <span class="version-uptodate" title="' . $sResult . '">'
+    } else {
+        $sResult = ' <span class="version-uptodate" title="' . $aUpdateInfos['message'] . '">'
                 . $aLangTxt['versionUptodate']
                 . '</span>';
     }
@@ -213,17 +237,6 @@ function checkUpdate($bForce = false) {
     return '<div id="checkversion">' . $sResult . '</div>';
 }
 
-/**
- * return a bool only: does exist a newer version or not?
- * (used in views/update.php)
- * @param string  
- * @return bool
- */
-function hasNewVersion($sUpdateOut = '') {
-    $sResult = $sUpdateOut ? $sUpdateOut : checkUpdate(true);
-    // echo htmlentities($sResult);
-    return (strpos($sResult, "UPDATE") > 0 ? true : false);
-}
 
 function getHtmlHead($aLangTxt) {
     global $aEnv;
@@ -244,43 +257,30 @@ function getHtmlHead($aLangTxt) {
         }
     }
     $oCdn->setLibs($aEnv['vendor']);
-    /*
-    echo '<!-- ';
-    print_r($oCdn->getLibs());
-    // echo $oCdn->getLibVersion('jquery');
-    echo $oCdn->getLibRelpath('jquery');
-    echo '--> ';
-     */
-    
     $sHeader = '<script>var aLang=' . json_encode($aLangJs) . ';</script>' . "\n"
 
-            // jQuery
-            . '<script src="' . $oCdn->getFullUrl($oCdn->getLibRelpath('jquery')."/jquery.min.js") . '"></script>' . "\n"
+        // jQuery
+        . '<script src="' . $oCdn->getFullUrl($oCdn->getLibRelpath('jquery')."/jquery.min.js") . '"></script>' . "\n"
 
-            // datatbles
-            . '<script src="' . $oCdn->getFullUrl($oCdn->getLibRelpath('datatables')."/js/jquery.dataTables.min.js") . '"></script>' . "\n"
-            . '<link rel="stylesheet" href="' . $oCdn->getFullUrl($oCdn->getLibRelpath('datatables')."/css/jquery.dataTables.min.css") . '">' . "\n"
+        // datatables
+        . '<script src="' . $oCdn->getFullUrl($oCdn->getLibRelpath('datatables')."/js/jquery.dataTables.min.js") . '"></script>' . "\n"
+        . '<link rel="stylesheet" href="' . $oCdn->getFullUrl($oCdn->getLibRelpath('datatables')."/css/jquery.dataTables.min.css") . '">' . "\n"
 
-            // Admin LTE
-            . '<script src="' . $oCdn->getFullUrl($oCdn->getLibRelpath('admin-lte')."/js/adminlte.min.js") . '" type="text/javascript"></script>' . "\n"
-            . '<link rel="stylesheet" href="' . $oCdn->getFullUrl($oCdn->getLibRelpath('admin-lte')."/css/AdminLTE.min.css") . '">' . "\n"
-            . '<link rel="stylesheet" href="' . $oCdn->getFullUrl($oCdn->getLibRelpath('admin-lte')."/css/skins/_all-skins.min.css") . '">' . "\n"
+        // Admin LTE
+        . '<script src="' . $oCdn->getFullUrl($oCdn->getLibRelpath('admin-lte')."/js/adminlte.min.js") . '" type="text/javascript"></script>' . "\n"
+        . '<link rel="stylesheet" href="' . $oCdn->getFullUrl($oCdn->getLibRelpath('admin-lte')."/css/AdminLTE.min.css") . '">' . "\n"
+        . '<link rel="stylesheet" href="' . $oCdn->getFullUrl($oCdn->getLibRelpath('admin-lte')."/css/skins/_all-skins.min.css") . '">' . "\n"
 
-            // Bootstrap    
-            . '<link href="' . $oCdn->getFullUrl($oCdn->getLibRelpath('twitter-bootstrap').'/css/bootstrap.min.css') . '" rel="stylesheet">'
-            . '<link href="' . $oCdn->getFullUrl($oCdn->getLibRelpath('twitter-bootstrap').'/css/bootstrap-theme.min.css') . '" rel="stylesheet">'
-            . '<script src="' . $oCdn->getFullUrl($oCdn->getLibRelpath('twitter-bootstrap').'/js/bootstrap.min.js') . '" type="text/javascript"></script>'
+        // Bootstrap    
+        . '<link href="' . $oCdn->getFullUrl($oCdn->getLibRelpath('twitter-bootstrap').'/css/bootstrap.min.css') . '" rel="stylesheet">'
+        . '<link href="' . $oCdn->getFullUrl($oCdn->getLibRelpath('twitter-bootstrap').'/css/bootstrap-theme.min.css') . '" rel="stylesheet">'
+        . '<script src="' . $oCdn->getFullUrl($oCdn->getLibRelpath('twitter-bootstrap').'/js/bootstrap.min.js') . '" type="text/javascript"></script>'
 
-            // Font awesome
-            . '<link href="' . $oCdn->getFullUrl('font-awesome/4.7.0/css/font-awesome.min.css') . '" rel="stylesheet">'
+        // Font awesome
+        . '<link href="' . $oCdn->getFullUrl('font-awesome/4.7.0/css/font-awesome.min.css') . '" rel="stylesheet">'
 
-            // Morris
-            . '<script src="' . $oCdn->getFullUrl("raphael/2.2.7/raphael.min.js") . '"></script>' . "\n"
-            . '<script src="' . $oCdn->getFullUrl("morris.js/0.5.1/morris.min.js") . '"></script>' . "\n"
-
-            // Knob
-            . '<script src="' . $oCdn->getFullUrl("jQuery-Knob/1.2.13/jquery.knob.min.js") . '"></script>' . "\n"
-
+        // Chart.js
+        . '<script src="' . $oCdn->getFullUrl($oCdn->getLibRelpath('Chart.js').'/Chart.min.js') . '" type="text/javascript"></script>'
     ;
     return $sHeader;
 }

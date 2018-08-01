@@ -14,13 +14,14 @@ class ServerStatus {
     private $aServer = array();
     private $_fResponsetime = false;
     private static $curl_opts = array(
+        CURLOPT_HEADER => true,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_TIMEOUT => 5,
         CURLOPT_FAILONERROR => 1,
         CURLOPT_SSL_VERIFYHOST => 0,
         CURLOPT_SSL_VERIFYPEER => 0,
         CURLOPT_USERAGENT => 'pimped apache status',
-            // CURLMOPT_MAXCONNECTS => 10
+        // CURLMOPT_MAXCONNECTS => 10
     );
 
     /**
@@ -46,6 +47,45 @@ class ServerStatus {
         return $oLog->add("class " . __CLASS__ . " - " . $sMessage, $sLevel);
     }
 
+    /**
+     * helper function transform byte/ kB/ MB into an integer
+     * 
+     * @param string $value  value i.e. "1.32 kB"
+     * @return integer
+     */
+    private function _getCountervalue($value){
+        $iReturn=false;
+        $aTmp=explode(' ', $value);
+        if($aTmp && isset($aTmp[0])){
+            if (preg_replace('/[0-9\.]/', '', $aTmp[0]) > ''){
+                return false;
+            }
+            $iReturn=trim($aTmp[0]);
+            if($iReturn===''){
+                return false;
+            }
+            $iReturn=($iReturn[0]==='.' ? '0'.$iReturn : $iReturn);
+            
+            if (isset($aTmp[1])){
+                switch ($aTmp[1]) {
+                    case "B":
+                        // byte ... no multiplicator
+                        break;
+                    case "kB":
+                        $iReturn=$iReturn*1024;
+                        break;
+                    case "MB":
+                        $iReturn=$iReturn*1024*1024;
+                        break;
+
+                    default:
+                        $iReturn=false;
+                        break;
+                }
+            }
+        }
+        return $iReturn;
+    }
     /**
      * parse response of original apachestatus and put it to an array
      * @param string $sStatus    response from serverstatus request (html code)
@@ -73,7 +113,9 @@ class ServerStatus {
         $sRegFields = '/\<th\>(.*)\<\/th\>/Um'; // to fetch column names in th
         $sRegexRequests = '/\<tr\>\<td\>\<b\>(.*\n)*.*\<\/td\>\<\/tr\>/U';
         $sRegexRequests2 = '/<td[\ nowrap]*\>(.*)\<\/td\>/mU';
+        $sRegexScoreboard = '/<pre>(.*)\<\/pre\>/U';
 
+        
         // ----- get status infos
         if (preg_match_all($sRegexStatus, $sStatusNobr, $aStatusinfos)) {
             if ($aStatusinfos[1]) {
@@ -86,16 +128,24 @@ class ServerStatus {
                         // found a key value pair
                         if (count($aStatusinfos3) == 2) {
                             $aReturn[$sHostname]['status'][$aStatusinfos3[0]] = $aStatusinfos3[1];
+                            $iCounter=$this->_getCountervalue($aStatusinfos3[1]);
+                            if($iCounter!==false){
+                                $aReturn[$sHostname]['counter'][$aStatusinfos3[0]] = $iCounter;
+                            }
                         } else {
                             $sLine = strip_tags($aStatusinfos3[0]);
                             if (strpos($sLine, " CPU load") > 0) {
                                 $aReturn[$sHostname]['status']['CPU load'] = str_replace(" CPU load", "", $sLine);
                             }
                             if (strpos($sLine, " requests/sec") > 0) {
-                                $aReturn[$sHostname]['status']['requests/sec'] = str_replace(" requests/sec", "", $sLine);
+                                $value=str_replace(" requests/sec", "", $sLine);
+                                $aReturn[$sHostname]['status']['requests/sec'] = $value;
+                                $aReturn[$sHostname]['counter']['requests/sec'] = $this->_getCountervalue($value);
                             }
                             if (strpos($sLine, "/second") > 0) {
-                                $aReturn[$sHostname]['status']['size/sec'] = str_replace("/second", "", $sLine);
+                                $value=str_replace("/second", "", $sLine);
+                                $aReturn[$sHostname]['status']['size/sec'] = $value;
+                                $aReturn[$sHostname]['counter']['size/sec'] = $this->_getCountervalue($value);
                             }
                             // TODO: this line is left - what are u, s, cu, cs?
                             // CPU Usage: u1548.32 s194.7 cu.15 cs0 - 3.9% CPU load
@@ -142,6 +192,57 @@ class ServerStatus {
                 }
             }
         }
+        // ----- scoreboard
+        $aScoreKeys=array(
+            "S"=>array('label'=>'Starting up', 'count'=>0),
+            "R"=>array('label'=>'Reading Request', 'count'=>0),
+            "W"=>array('label'=>'Sending Reply', 'count'=>0),
+            "K"=>array('label'=>'Keepalive (read)', 'count'=>0),
+            "D"=>array('label'=>'DNS Lookup', 'count'=>0),
+            "C"=>array('label'=>'Closing connection', 'count'=>0),
+            "L"=>array('label'=>'Logging', 'count'=>0),
+            "G"=>array('label'=>'Gracefully finishing', 'count'=>0),
+            "I"=>array('label'=>'Idle cleanup of worker', 'count'=>0),
+            // at the end: inactive slots
+            "."=>array('label'=>'Open slot with no current process', 'count'=>0),
+            "_"=>array('label'=>'Waiting for Connection', 'count'=>0),
+        );
+        $aScore=array();
+
+        $dummy = preg_match_all($sRegexScoreboard, $sStatusNobr, $aTmpTable);
+        if ($dummy) {
+            $sScoreString=$aTmpTable[1][0];
+            $iActive=0;
+
+            for ($i=0; $i<strlen($sScoreString);$i++){
+                $sChar=$sScoreString[$i];
+                if(!isset($aScore[$sChar])){
+                    $aScore['keys'][$sChar]=array(
+                        'label'=>isset($aScoreKeys[$sChar]) ? $aScoreKeys[$sChar]['label'] : 'value ['.$sChar.']', 
+                        'count'=>0
+                    );
+                }
+                $aScore['keys'][$sChar]['count']++;
+                if ($sChar != "." && $sChar != "_"){
+                    $iActive++;
+                }
+            }
+            $aScore['value']=$sScoreString;
+            $aScore['slots_total']=strlen($sScoreString);
+            $aScore['slots_busy']=count($aReturn[$sHostname]['requests']);
+            $aScore['slots_free']=$aScore['slots_total'] - $aScore['slots_busy'];
+            
+            $aReturn[$sHostname]['counter']['slots_total']=strlen($sScoreString);
+            $aReturn[$sHostname]['counter']['slots_busy']=count($aReturn[$sHostname]['requests']);
+            $aReturn[$sHostname]['counter']['slots_unused']=$aScore['slots_total'] - $aScore['slots_busy'];
+            $aReturn[$sHostname]['counter']['requests_active']=$iActive;
+            $aReturn[$sHostname]['counter']['requests_waiting']=$aScore['slots_busy'] - $iActive;
+        }
+        // die('<pre>'.print_r($aReturn[$sHostname]['counter'], 1));
+        $aReturn[$sHostname]['counter']['scoreboard'] = $aScore;
+        
+        // ----- get status infos
+        
         $aReturn[$sHostname]['orig'] = $sStatus;
 
         return $aReturn;
@@ -519,17 +620,23 @@ class ServerStatus {
         foreach ($this->aServer as $sServer => $aData) {
             $sUrl = $aData['status-url'];
 
-            $s = curl_multi_getcontent($curl_arr[$i]);
-            if (!$s) {
+            // $s = curl_multi_getcontent($curl_arr[$i]);
+            $aTmp=explode("\r\n\r\n", curl_multi_getcontent($curl_arr[$i]), 2);
+            
+            // TODO: save http reponse header
+            $sResponseHeader=$aTmp[0];
+            $sResponseBody=count($aTmp)>1 ? $aTmp[1] : false;
+            if (!$sResponseBody) {
                 if (curl_error($curl_arr[$i])) {
                     $aErrors[] = 'failed to fetch ' . $sUrl . ' - ' . curl_error($curl_arr[$i]) . ' - Maybe you need to check your server config.';
                 } else {
                     $aErrors[] = 'failed to fetch ' . $sUrl . ' - Maybe you need to check your server config.';
                 }
             } else {
-                $aServerdata = $this->_getServerData($s, $sServer);
+                $aServerdata = $this->_getServerData($sResponseBody, $sServer);
                 if ($aServerdata && is_array($aServerdata)) {
-                    // echo "<pre>"; print_r($aServerdata[$sServer]);
+                    $aServerdata[$sServer]['header']=$sResponseHeader;
+                    // echo "<pre>" . print_r($aServerdata[$sServer], 1).'</pre>';
                     if (array_key_exists("requests", $aServerdata[$sServer])) {
                         $this->a = array_merge($this->a, $aServerdata);
                     } else {

@@ -11,7 +11,6 @@
 // html header
 // ======================================================================
 // default CSS and JS
-$sDirBS = $sSelfURL . '/javascript/bootstrap3';
 $sHead = '<link rel="stylesheet" type="text/css" href="' . $sSelfURL . '/templates/' . basename(dirname(__FILE__)) . '/style.min.css" media="screen">'
         ;
 
@@ -34,15 +33,8 @@ if ($aEnv["active"]["reload"]) {
 // - a reload button
 // ----------------------------------------------------------------------
 
-// TODO
-// ob_start();
 $oLog->add(__FILE__ . ' start ');
-// TODO
-// $content = ob_get_contents();
-// ob_end_clean();
-
-// $oMsg->add('I am a beta version', 'info');
-// $oMsg->add('Error while showing error message', 'error');
+$sUrlHome=(isset($_SERVER['REQUEST_URI']) && strstr($_SERVER['REQUEST_URI'], '/admin/') ? './../?' : '?' );
 $sBody = '
     
     <header class="main-header">
@@ -153,7 +145,7 @@ $sBody = '
     <section class="sidebar">
         <ul class="sidebar-menu">
         <li class="treeview">
-            <a href="?"><span style="font-size:150%; white-space: normal;">'
+            <a href="'.$sUrlHome.'"><span style="font-size:150%; white-space: normal;">'
                 // . $aCfg['icons']['title'] 
                 . $aEnv["project"]["title"]
                 . '
@@ -230,7 +222,7 @@ $sBody = '
                 }
                 $oLog->add(__FILE__ . ' tiles done');
             }
-            $sTiles=$sTiles ? '<div class="box-body">'.$sTiles.'</div>' :'';
+            $sTiles=$sTiles ? '<br><div class="row">'.$sTiles.'</div>' :'';
             $sBody.=$sTiles.'
         
       <!-- /.box -->

@@ -21,10 +21,15 @@ $sApproot=dirname(dirname(__DIR__));
 $sZipfile = getTempdir() . '/__pimpapachestat-latest.zip';
 $sTargetPath = $sApproot;
 
+/*
 $sLatestUrl=(stripos($aEnv["project"]["version"], "beta")) 
         ? $aEnv["links"]["update"]['downloadbeta']['url']
         : $aEnv["links"]["update"]['download']['url']
         ;
+*/
+
+$aUpdateInfos=getUpdateInfos();
+$sLatestUrl=$aUpdateInfos['download'];
 
 $oInstaller=new ahwi(array(
     'product'=>'dummy',
@@ -41,14 +46,15 @@ if (!array_key_exists('doinstall', $_GET)) {
     // ------------------------------------------------------------
     // step 1: welcome
     // ------------------------------------------------------------
-    $sUpdateInfo=checkUpdate(true);
+    $aUpdateInfos=getUpdateInfos(true);
     $sHtml .= '<h4 id="h3' . md5('update') . '">'. $aLangTxt["lblUpdate"] . '</h4>'
-            . '<div class="subh3"><br>'
-            . (hasNewVersion($sUpdateInfo)
+            . '<div class="subh3">'
+            . '<div class="hintbox">'
+            . ($aUpdateInfos['flag_update']
                 ? $aLangTxt['lblUpdateNewerVerionAvailable'].'<br>'
                 : $aLangTxt['lblUpdateNoNewerVerionAvailable'].'<br>'
                 )
-            . '<br>'
+            . '</div>'
             . sprintf($aLangTxt["lblUpdateHints"], $sLatestUrl)
             . sprintf($aLangTxt['lblUpdateInstalldir'], $oInstaller->getInstalldir())
             . '</div>'

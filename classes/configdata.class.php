@@ -140,8 +140,7 @@ class configData {
      * 
      * @param  string  $sKey  optional: key of a single item
      * @return mixed
-     */
-    public function getConfig($sKey=false) {
+    public function getConfig_OLD($sKey=false) {
         $aCfg=array_merge($this->_aDefaults, $this->_aUser);
         if($sKey){
             if (array_key_exists($sKey, $aCfg)){
@@ -152,7 +151,28 @@ class configData {
         }
         return $aCfg;
     }
-
+     */
+    
+    
+    /**
+     * get an item or full array of config (merged from defaults and user config)
+     * 
+     * @see  $this->getDefaultkeys()
+     * 
+     * @param  string  $sKey    optional: key of a single item
+     * @param  string  $aArray  optional: array to search in; default is false (=merge of aDefaults and user settings)
+     * @return mixed
+     */
+    function getConfig($sKey=false, $aArray=false){
+        $sDivider='.';
+        if(!$aArray){
+            $aArray=array_merge($this->_aDefaults, $this->_aUser);
+        }
+        if(!$sKey){
+            return $aArray;
+        }
+        return $this->_oCfg->getValue($sKey, $aArray);
+    }
 
     // ----------------------------------------------------------------------
     // public functions setter

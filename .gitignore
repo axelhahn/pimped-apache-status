@@ -5,3 +5,5 @@
 /views/singleserver.php
 /config/__2_delete_config_user.php
 /classes/render-adminlte.class.php
+/views/dump.php
+/api/cli.php

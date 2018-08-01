@@ -12,7 +12,7 @@ namespace axelhahn;
  * $oCdn->new axelhahn\cdnorlocal();
  * echo $oCdn->getHtmlInclude("jquery/3.2.1/jquery.min.js");
  * 
- * @version 1.0
+ * @version 1.0.1
  * @author Axel Hahn
  * @link https://www.axel-hahn.de
  * @license GPL
@@ -103,7 +103,7 @@ class cdnorlocal {
 
     
     /**
-     * return the local filename (maybe it does not exist
+     * return the local filename (maybe it does not exist)
      * 
      * @param string $sRelUrl  relative url of css/ js file (i.e. "jquery/3.2.1/jquery.min.js")
      * @return string
@@ -212,12 +212,35 @@ class cdnorlocal {
         return true;
     }
     /**
-     * return all libs from lib stack ... TODO
+     * return all libs from lib stack; with enabled flag entries in local 
+     * vendor cache will be added to show the versions that can be deleted
+     * (detectable by subkey "isunused" => true)
+     * 
+     * @param boolean  $bDetectUnused  flag: detect unused local libs
      * @return array
      */
-    public function getLibs(){
+    public function getLibs($bDetectUnused=false){
         $this->_wd(__METHOD__ . "()");
-        return $this->_aLibs;
+        $aReturn=$this->_aLibs;
+        if($bDetectUnused){
+            foreach(glob($this->sVendorDir.'/*') as $sDir){
+                $sMyLib=basename($sDir);
+                foreach(glob($this->sVendorDir.'/'.$sMyLib.'/*') as $sVersiondir){
+                    $sMyVersion=basename($sVersiondir);
+                    if(!$aReturn[$sMyLib.'/'.$sMyVersion]){
+                        $aReturn[$sMyLib.'/'.$sMyVersion]=array(
+                            'lib'=>$sMyLib,
+                            'version'=>$sMyVersion,
+                            'relpath' => $sMyLib.'/'.$sMyVersion,
+                            'islocal'=>1,
+                            'isunused'=>1,
+                        );
+                    }
+                }
+            }
+            ksort($aReturn);
+        }
+        return $aReturn;
     }
     
     /**

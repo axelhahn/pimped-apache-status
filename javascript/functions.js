@@ -11,7 +11,7 @@ function initDrawH3list() {
     var sHtml = '';
     var sMenuid = '.sidebar-menu>li.active>span.submenu';
     var sH3id = false;
-    
+
     // menu animation
     // $('#sbright').hide() && window.setTimeout("$('#sbright').slideDown(400)", 50);
 
@@ -30,7 +30,7 @@ function initDrawH3list() {
         sHtml = '';
         $(sMenuid).hide();
     } else {
-        $(sMenuid).html('<ul class="treeview-menu" style="display: block;">'+sHtml+'</ul>');
+        $(sMenuid).html('<ul class="treeview-menu" style="display: block;">' + sHtml + '</ul>');
     }
 
 }
@@ -65,80 +65,80 @@ function initSoftscroll() {
  * @param {string} s  filtertext
  * @returns {undefined}
  */
-function filterServer(s){
+function filterServer(s) {
 
-    var iCount=0;
-    if(s==='null'){
-        s='';
+    var iCount = 0;
+    if (s === 'null') {
+        s = '';
     }
     localStorage.setItem('apachestatusFilterServer', s);
     $('#serverlist ul li a').each(function () {
-        if (!s || $(this).html().indexOf(s)>=0){
+        if (!s || $(this).html().indexOf(s) >= 0) {
             iCount++;
-            $(this).css("display", "block" );
+            $(this).css("display", "block");
         } else {
-            $(this).css("display", "none" );
+            $(this).css("display", "none");
         }
     });
-    
+
     // show count of hits
-    $('#srvcounter').html( s ? iCount : '' );
-    
+    $('#srvcounter').html(s ? iCount : '');
+
     // enable active server
     $('#serverlist ul li.active a').each(function () {
-        $(this).css("display", "block" );
+        $(this).css("display", "block");
     });
 
     // switch view between list and cascaded menu
-    var bShowAsListmenu=iCount<25;
+    var bShowAsListmenu = iCount < 25;
     $('#serverlist>li ').each(function () {
         bShowAsListmenu ? $(this).removeClass("dropdown-submenu") : $(this).addClass("dropdown-submenu");
-        $(this).attr("onmouseover", bShowAsListmenu ?  "" : "$(this).addClass(\'open\');" );
-        $(this).attr("onmouseout",  bShowAsListmenu ?  ""  : "$(this).removeClass(\'open\');" );
+        $(this).attr("onmouseover", bShowAsListmenu ? "" : "$(this).addClass(\'open\');");
+        $(this).attr("onmouseout", bShowAsListmenu ? "" : "$(this).removeClass(\'open\');");
     });
-    
+
     // show count of items and filtered view
     $('#serverlist li ul').each(function () {
         bShowAsListmenu ? $(this).removeClass("dropdown-menu") : $(this).addClass("dropdown-menu");
-        iCountItems=$(this).find("li>a").length;
-        iCountVisibleItems=0;
-        oUL=$(this);
+        iCountItems = $(this).find("li>a").length;
+        iCountVisibleItems = 0;
+        oUL = $(this);
         $(oUL).find("li>a").each(function () {
-            if ($(this).css("display")==="block"){
+            if ($(this).css("display") === "block") {
                 iCountVisibleItems++;
             }
         });
-        sInfotext=iCountVisibleItems!=iCountItems
-            ? iCountVisibleItems + '/ ' + iCountItems 
-            : iCountItems
-            ;
-        $(oUL).prev().children(".info").html(' ('+sInfotext+')');
+        sInfotext = iCountVisibleItems != iCountItems
+                ? iCountVisibleItems + '/ ' + iCountItems
+                : iCountItems
+                ;
+        $(oUL).prev().children(".info").html(' (' + sInfotext + ')');
         $(oUL).prev().css("display", iCountVisibleItems ? "block" : "none");
     });
 }
-    
+
 /**
  * initialize server filter 
  * @since 1.25
  * @returns {undefined}
  */
-function initServerFilter(){
-    var iServer=0;
+function initServerFilter() {
+    var iServer = 0;
     $('#serverlist li').each(function () {
-         iServer++;
+        iServer++;
     });
-    var sFiltertext=localStorage.getItem('apachestatusFilterServer')+'';
-    if(sFiltertext===undefined){
-        sFiltertext='';
+    var sFiltertext = localStorage.getItem('apachestatusFilterServer') + '';
+    if (sFiltertext === undefined) {
+        sFiltertext = '';
     }
-    if (iServer>5){
+    if (iServer > 5) {
         $('#serverlist >li>a').append('<span class="info" style="margin-right: 1em;">-</span>');
-        var sHtml='<li><form class="form-inline">\n\
+        var sHtml = '<li><form class="form-inline">\n\
             <div class="form-group" style="margin-bottom: 0.5em; min-width: 20em;">\n\
                 <input type="text" id="esrvfilter" style="margin-left: 1em;" \n\
                     onkeypress="filterServer(this.value);" class="form-control" onkeydown="filterServer(this.value);" onkeyup="filterServer(this.value);" \n\
-                    placeholder="'+aLang['srvFilterPlaceholder']+'"\n\
-                    value="'+sFiltertext+'" />\n\
+                    placeholder="' + aLang['srvFilterPlaceholder'] + '"\n\
+                    value="' + sFiltertext + '" />\n\
                 <span id="srvcounter"></span>\n\
             </div></form></li>';
         $('#serverlist').prepend(sHtml);
@@ -147,48 +147,26 @@ function initServerFilter(){
 }
 
 /**
- * init knob in tiles 
- * @since 1.26
+ * init progress bar in tiles 
  * @returns {undefined}
  */
-function initKnob(){
-    var i=0;
-    var sTilename=false;
-    var aData=false;
-    var sFgColor=$('.tile .dial').css("color");
-    var sBgColor=$('.tile .dial').css("background-color");
-    $(".tile .dial").each(function () {
-        i++;
-        
-        // tial name is the id "dial-[server]-[tilename]" 
+function initTileProgress() {
+    var sTilename = false;
+    var aData = false;
+    $(".progress-bar").each(function () {
+
+        // div name of progress bar is id "progress-[server]-[tilename]" 
         // @see php class datarenderer->renderTile()
-        sId=$(this).attr('id').replace(/^dial\-/, '');
-        sSrv=sId.replace(/\-.*/, '');
-        sTilename=sId.replace(/^.*\-/, '');
-        if (sTilename){
+        sId = $(this).attr('id').replace(/^progress\-/, '');
+        sSrv = sId.replace(/\-.*/, '');
+        sTilename = sId.replace(/^.*\-/, '');
+        if (sTilename) {
             var oCounter = new counterhistory(sSrv, sTilename);
-            aData=oCounter.getLast(50);
-            aDataLast=oCounter.getLast(1);
-            currentVal=aDataLast['max'];
-            /*
-            console.log('----- ' + sTilename + ' ('+sId+') - max ' + aData['max'] + ' current: ' + currentVal );
-            console.log(aData);
-            console.log(aDataLast);
-            */
-            if(aData){
-
-                $(this).knob({
-                    readOnly: true,
-                    fgColor: sFgColor,
-                    bgColor: sBgColor,
-                    max: aData['max']*1000,
-                    'width': '90px',
-                    'height': '90px',
-                    thickness: 0.04
-                });
-                $(this).val(currentVal*1000).trigger('change');
-                $('#progress-'+sId).css('width', (currentVal/aData['max']*100)+'%');
-
+            aData = oCounter.getLast(50);
+            aDataLast = oCounter.getLast(1);
+            currentVal = aDataLast['max'];
+            if (aData) {
+                $('#progress-' + sId).css('width', (currentVal / aData['max'] * 100) + '%');
             }
         }
     });
@@ -202,7 +180,7 @@ function initPage() {
     initDrawH3list();
     initSoftscroll();
     initServerFilter();
-    initKnob();
+    initTileProgress();
     $('body').append('<div id="' + sDivPlotter + '" class="plotter"></div>');
 }
 
@@ -212,12 +190,12 @@ function initPage() {
  * @param {type} id
  * @returns {Boolean}
  */
-function showTab(id){
-    mydiv='.subh2 ';
+function showTab(id) {
+    mydiv = '.subh2 ';
     $(mydiv + ' > h3').hide();
     $(mydiv + ' > .subh3').hide();
-    $(mydiv + ' > '+id).show(); 
-    $(mydiv + ' > '+id+' + div.subh3').show();
+    $(mydiv + ' > ' + id).show();
+    $(mydiv + ' > ' + id + ' + div.subh3').show();
     $(mydiv + ' li a').blur();
     return false;
 }
@@ -243,12 +221,134 @@ function stickyGraph(sSrv, sVarname, sTitle) {
     var sav = bPlotterSticky;
     bPlotterSticky = false;
 
-    $('#'+sDivPlotter+' .btnclose').hide();
+    $('#' + sDivPlotter + ' .btnclose').hide();
     showGraph(sSrv, sVarname, sTitle);
     if (!sav) {
         bPlotterSticky = true;
-        $('#'+sDivPlotter+' .btnclose').show();
+        $('#' + sDivPlotter + ' .btnclose').show();
     }
+}
+
+/**
+ * render bar chart with avg line using Chart.js
+ * 
+ * @param {string}  sDivPlotter
+ * @param {string}  sSrv
+ * @param {string}  sVarname
+ * @param {integer} iCount
+ * @param {strng}   sTitle
+ * @returns {Boolean}
+ */
+function showGraphInline(sDivPlotter, sSrv, sVarname, iCount, sTitle, iMax) {
+    var oCounter = new counterhistory(sSrv, sVarname);
+    var aData = oCounter.getLast(iCount);
+
+    var idCanvas = sDivPlotter + '-chart';
+    if (!aData || !aData.data || !aData.data.length || aData['min'] === false) {
+        // $('#' + sDivPlotter).html('No data (yet).');
+        return false;
+    }
+    var sData = '',
+            sAvg = '',
+            sMax = '',
+            sMin = '',
+            aTimeAxis = [],
+            sInfo = ''
+            ;
+
+    // get last data and create value arrays for the chart
+    for (var i = (aData.data.length - 1); i >= 0; i--) {
+        var aItem = aData.data[i];
+        // sData+= (sData ? ', ' : '' ) + '{ "x": "'+aItem[0]+'", "y": ' + aItem[1]+ '}';
+        aTimeAxis.push(new Date(aItem[0]));
+        sData += (sData ? ', ' : '') + (aItem[1]/1 === aItem[1] ? aItem[1] : '"'+aItem[1]+'"');
+        sAvg += (sAvg ? ', ' : '') + aData['avg'];
+        sMax += (sMax ? ', ' : '') + (iMax ? iMax : aData['max']);
+        sMin += (sMin ? ', ' : '') + aData['min'];
+    }
+    console.log(sData);
+
+    // create info box
+    if (aLang) {
+        sInfo += 'values: ' + aData.data.length + '<br>';
+        sInfo += (aLang['statsCurrent']) ? aLang['statsCurrent'] + ': ' + aData['data'][0][1] + '<br>' : '';
+        sInfo += (aLang['statsMin']) ? aLang['statsMin'] + ': ' + aData['min'] + '<br>' : '';
+        sInfo += (aLang['statsMax']) ? aLang['statsMax'] + ': ' + aData['max'] + '<br>' : '';
+        sInfo += (aLang['statsAvg']) ? aLang['statsAvg'] + ': ' + aData['avg'] + '<br>' : '';
+    }
+
+    // output
+    $('#' + sDivPlotter).html('<div class="infos">' + sInfo + '</div><canvas id="' + idCanvas + '"></canvas>');
+    var ctx = document.getElementById(idCanvas).getContext('2d');
+    var myChart = new Chart(ctx, {
+
+        type: 'bar',
+        data: {
+            labels: aTimeAxis,
+            datasets: [
+                {
+                    type: 'line',
+                    data: JSON.parse('[' + sAvg + ']'),
+                    borderColor: '#e0a010',
+                    borderWidth: 1,
+                    borderDash: [3, 3],
+                    fill: false,
+                    radius: 0
+                },
+                {
+                    type: 'line',
+                    data: JSON.parse('[' + sMin + ']'),
+                    borderColor: '#008000',
+                    borderWidth: 1,
+                    borderDash: [3, 3],
+                    fill: false,
+                    radius: 0
+                },
+                {
+                    type: 'line',
+                    data: JSON.parse('[' + sMax + ']'),
+                    borderColor: '#ff0000',
+                    borderWidth: 1,
+                    borderDash: [3, 3],
+                    fill: false,
+                    radius: 0
+                },
+                {
+                    type: 'bar',
+                    label: sTitle,
+                    data: JSON.parse('[' + sData + ']'),
+                    backgroundColor: '#80d0f4',
+                    lineTension: 0,
+                    radius: 0
+                }
+            ]
+        },
+        options: {
+            animation: {
+                duration: 0
+            },
+            legend: {
+                display: false
+            },
+            scales: {
+                xAxes: [{
+                        display: false
+                    }],
+                yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            max: (iMax ? iMax : aData['max'])
+                        }
+                    }]
+            },
+            title: {
+                display: false,
+                text: sTitle
+            }
+        }
+    });
+
+    return true;
 }
 
 /**
@@ -263,9 +363,16 @@ function showGraph(sSrv, sVarname, sTitle) {
     if (bPlotterSticky) {
         return false;
     }
-    var oCounter = new counterhistory(sSrv, sVarname);
-    renderHistory(sDivPlotter, oCounter.getLast(50), sTitle);
+    var sHtml = '<div class="btnclose" onclick="hideGraph(1);"> X </div>'
+            + '<div class="title">' + sTitle + '</div>'
+            + '<div id="hovergraph" class="graph">'
+            + '</div>'
+            ;
 
+    $("#" + sDivPlotter).html(sHtml).show();
+    if (!showGraphInline("hovergraph", sSrv, sVarname, 50, sTitle)) {
+        $("#" + sDivPlotter).hide();
+    }
 }
 
 /**
@@ -273,8 +380,8 @@ function showGraph(sSrv, sVarname, sTitle) {
  * @returns {Boolean}
  */
 function hideGraph(bUnsticky) {
-    if(bUnsticky){
-        bPlotterSticky=false;
+    if (bUnsticky) {
+        bPlotterSticky = false;
     }
     if (bPlotterSticky) {
         return false;
@@ -290,66 +397,4 @@ function hideGraph(bUnsticky) {
  */
 function twodigits(iVal) {
     return iVal > 9 ? iVal : "0" + iVal;
-}
-
-/**
- * render statistical graph; called by showGraph
- * @param {string} sDivname  target div where to put the bars 
- * @param {array}  aData     data items with date and value
- * @param {string} sTitle    title in popup
- * @returns {Boolean}
- */
-function renderHistory(sDivname, aData, sTitle) {
-
-    if (!aData || !aData['data'] || aData['data'].length < 10 || !aData['max']) {
-        return false;
-    }
-
-    var sHtml = '',
-            sInfo = '',
-            iDataHeight = 250,
-            iDataWidth = 600,
-            sClass = false,
-            sHint = false,
-            date = false;
-
-    sHtml += '<div class="btnclose" onclick="hideGraph(1);"> X </div>'
-            + '<div class="graph">'
-            + '<div class="title">' + sTitle + '</div>'
-            ;
-
-    for (var i = aData['data'].length - 1; i >= 0; i--) {
-        val = aData['data'][i][1] / 1;
-
-        date = new Date(aData['data'][i][0]);
-        iH = val / aData['max'] * iDataHeight;
-        iW = iDataWidth / aData['data'].length;
-        sClass = (i === 0) ? 'barcur' : '';
-
-        sHint = val + "\n\n"
-                + twodigits(date.getDate()) + "." + twodigits(date.getMonth() + 1) + "." + date.getFullYear()
-                + "\n" + twodigits(date.getHours()) + ":" + twodigits(date.getMinutes()) + ":" + twodigits(date.getSeconds())
-                ;
-
-        sHtml += '<div class="barcontainer" style="width:' + iW + 'px; height: ' + iDataHeight + 'px" title="' + sHint + '">'
-                + '<div class="bar ' + sClass + '" style="width:' + iW + 'px; height: ' + iH + 'px; margin-top:' + (iDataHeight - iH) + 'px; "> </div>'
-                + '</div>';
-    }
-    ihAvg = aData['avg'] / aData['max'] * iDataHeight;
-    ihCurrent = aData['data'][0][1] / aData['max'] * iDataHeight;
-
-    if (aLang) {
-        sInfo += (aLang['statsCurrent']) ? aLang['statsCurrent'] + ': ' + aData['data'][0][1] + '<br>' : '';
-        sInfo += (aLang['statsMin']) ? aLang['statsMin'] + ': ' + aData['min'] + '<br>' : '';
-        sInfo += (aLang['statsMax']) ? aLang['statsMax'] + ': ' + aData['max'] + '<br>' : '';
-        sInfo += (aLang['statsAvg']) ? aLang['statsAvg'] + ': ' + aData['avg'] + '<br>' : '';
-    }
-    sHtml += ''
-            + '<div class="avg" style="margin-top:' + (iDataHeight - ihAvg) + 'px; "> </div>'
-            + '<div class="current" style="margin-top:' + (iDataHeight - ihCurrent) + 'px; "> </div>'
-            + (sInfo ? '<div class="infos">' + sInfo + '</div>' : '')
-            + '</div>';
-
-    $("#" + sDivname).html(sHtml).show();
-    return true;
 }

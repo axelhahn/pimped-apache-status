@@ -25,6 +25,12 @@ class confighandler {
      */
     protected $_bAutosave=true;
     
+    /**
+     * divider for array subkeys in string parameters
+     * @var type 
+     */
+    protected $_sDivider='.';
+    
     // ----------------------------------------------------------------------
     // CONSTRUCTOR
     // ----------------------------------------------------------------------
@@ -85,7 +91,7 @@ class confighandler {
      * @param string  $sIndex  key
      * @return boolean
      */
-    public function itemdelete($sIndex, $sValue) {
+    public function itemdelete($sIndex) {
         if(!array_key_exists($sIndex, $this->_aCfg)){
             return false;
         }
@@ -161,10 +167,39 @@ class confighandler {
     }
     
     /**
-     * set a complete config (be careful)
-     * @return array
+     * get a value from array
+     * 
+     * @param string  $sKey    keystructure - levels are divided by _sDivider
+     * @param array   $aArray  optional array; default is false (=$this->_aCfg)
+     * @return any
      */
-    public function set($aArray) {
+    function getValue($sKey=false, $aArray=false){
+        if(!$aArray){
+            $aArray=$this->_aCfg;
+        }
+        if(!$sKey){
+            return $aArray;
+        }
+
+        $aTmp=preg_split('/\\'.$this->_sDivider.'/', $sKey);
+        $sSubkey=array_shift($aTmp);
+        if(!isset($aArray[$sSubkey])){
+            die("a varname [$sSubkey] does not exist in the config.\n");
+        }
+        if(count($aTmp)){
+            return $this->getValue(implode($this->_sDivider, $aTmp), $aArray[$sSubkey]);
+        }
+        return $aArray[$sSubkey];
+    }
+    
+    
+    /**
+     * set a complete config (be careful)
+     * 
+     * @param array  $aArray  complete config array
+     * @return boolean
+     */
+    public function set_OLD($aArray) {
         if(!is_array($aArray)){
             return false;
         }
@@ -172,7 +207,39 @@ class confighandler {
         $this->_save();
         return true;
     }
-    
+    /**
+     * set a complete config (be careful!) or a subitem of the config
+     * The config array will be saved
+     * 
+     * @param array  $value     value
+     * @param string $sVarname  optional: key of the config - can contain _sDivider to divide levels
+     * @return boolean
+     */
+    function set($value, $sVarname=false){
+        if(!$sVarname){
+            $this->_aCfg=$value;
+        } else {
+            $aArray=&$this->_aCfg;
+            $aTmp=preg_split('/\\'.$this->_sDivider.'/', $sVarname);
+            $sLastKey=array_pop($aTmp);
+            if(count($aTmp)){
+                foreach($aTmp as $sKeyname){
+                    if(!isset($aArray[$sKeyname])){
+                        $aArray[$sKeyname]=array();
+                    }
+                    $aArray=&$aArray[$sKeyname];
+                }
+            }
+            if(is_array($aArray[$sLastKey])){
+                $aArray[$sLastKey][]=$value;
+            } else {
+                $aArray[$sLastKey]=$value;
+            }
+        }
+        $this->_save();
+        return true;
+    }
+
     /**
      * set a config id and load its items
      * @param string  $sId  id of config (without extension)
