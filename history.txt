@@ -13,6 +13,7 @@
 2018-09-12: v2.01.01
   * fixed: admin area did not work if installation was directly below 
     webroot and the vendor libs were downloaded (thanks to toubsen)
+  * fixed: inital install dialog to set a password (thanks to toubsen)
 
 2018-08-01: v2.01.00
   * added: utilization page
