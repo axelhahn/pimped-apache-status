@@ -243,7 +243,7 @@ function getHtmlHead($aLangTxt) {
     
     require_once(__DIR__ . '/classes/cdnorlocal.class.php');
     
-    $sVendorUrl=(strpos($_SERVER['REQUEST_URI'], '/admin/') ? '.' : '') . './vendor/';
+    $sVendorUrl=(strpos($_SERVER['REQUEST_URI'], '/admin/')===false ? '' : '.') . './vendor/';
     $oCdn = new axelhahn\cdnorlocal(array(
         'vendordir'=>__DIR__ . '/vendor', 
         'vendorurl'=>$sVendorUrl, 
