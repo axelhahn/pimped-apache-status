@@ -317,7 +317,7 @@ class cdnorlocaladmin extends cdnorlocal{
             $sFileId=$aItem['file'];
 
             if(!is_dir(dirname($sLocalfile))){
-                mkdir(dirname($sLocalfile), 755, 1);
+                mkdir(dirname($sLocalfile), 0755, 1);
             }
 
             // Add initialized cURL object to array
@@ -382,7 +382,7 @@ class cdnorlocaladmin extends cdnorlocal{
         $this->_wd(__METHOD__ . "($sLibrary)");
         $sJsonfile=$this->_getInfoFilename($sLibrary);
         if(!is_dir(dirname($sJsonfile))){
-            mkdir(dirname($sJsonfile), 755, 1);
+            mkdir(dirname($sJsonfile), 0755, 1);
         }
         return file_put_contents($sJsonfile, json_encode($this->aLibs[$sLibrary]));
     }

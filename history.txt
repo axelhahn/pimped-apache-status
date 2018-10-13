@@ -10,6 +10,15 @@
 
 ----------------------------------------------------------------------
 
+2018-10-13: v2.01.02
+  * fixed: library download - permission for new directory was set to 0755 
+    (instead of 755)
+
+2018-09-12: v2.01.01
+  * fixed: admin area did not work if installation was directly below 
+    webroot and the vendor libs were downloaded (thanks to toubsen)
+  * fixed: inital install dialog to set a password (thanks to toubsen)
+
 2018-08-01: v2.01.00
   * added: utilization page
   * added: config value "skin-color2" to change color of tiles
