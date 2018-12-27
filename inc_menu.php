@@ -20,7 +20,7 @@ foreach ($aServergroups as $sGroup => $aServers) {
             $aEnv["links"]["servers"][$sGroup]["subitems"][$sServer]["url"] = getNewQs(array("servers" => $sServer, "group" => $sGroup, "url" => ""));
 
             $sLabel = array_key_exists("label", $aData) ? $aData['label'] : $sServer;
-            $aEnv["links"]["servers"][$sGroup]["subitems"][$sServer]["label"] = $sLabel;
+            $aEnv["links"]["servers"][$sGroup]["subitems"][$sServer]["label"] = $aCfg['icons']['server'].' '.$sLabel;
         }
     }
 
@@ -30,7 +30,7 @@ foreach ($aServergroups as $sGroup => $aServers) {
             ) {
         $aEnv["links"]["servers"][$sGroup]["active"] = true;
     }
-    $aEnv["links"]["servers"][$sGroup]["label"] = $aLangTxt['menuGroup'] . ' ' . $sGroup;
+    $aEnv["links"]["servers"][$sGroup]["label"] = $aCfg['icons']['group'].' '.$aLangTxt['menuGroup'] . ' ' . $sGroup;
     $aEnv["links"]["servers"][$sGroup]["class"] = "group";
     $aEnv["links"]["servers"][$sGroup]["url"] = getNewQs(array("servers" => "", "group" => $sGroup, "url" => ""));
 }

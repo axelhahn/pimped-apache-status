@@ -199,7 +199,7 @@ class Datarenderer {
         }
         $i = 0;
         foreach (array_keys($array) as $key) {
-            if (in_array($key, $aCfg["hideRows"])) {
+            if (in_array($key, $aCfg["hideCols"])) {
                 continue;
             }
             if ($key == $keyname) {
@@ -315,7 +315,7 @@ class Datarenderer {
 
         // loop over columns and set table cell values for the single row
         foreach (array_keys($aHeader) as $key) {
-            if (in_array($key, $aCfg["hideRows"])) {
+            if (in_array($key, $aCfg["hideCols"])) {
                 continue;
             }
             // $s is value of the table cell
@@ -586,7 +586,7 @@ class Datarenderer {
     public function renderA($aLink) {
         $sReturn = '<a ';
 
-        foreach (array("class", "id", "onclick", "target") as $sAttribute) {
+        foreach (array("class", "id", "onclick", "target", "title") as $sAttribute) {
             if (array_key_exists($sAttribute, $aLink)) {
                 $sReturn.=$sAttribute . '="' . $aLink[$sAttribute] . '" ';
             }
@@ -827,7 +827,7 @@ class Datarenderer {
             $sRow = '';
             $sHead = '';
             foreach ($row as $key => $value) {
-                if (in_array($key, $aCfg["hideRows"])) {
+                if (in_array($key, $aCfg["hideCols"])) {
                     continue;
                 }
                 if (!$sHtml) {
@@ -875,7 +875,39 @@ class Datarenderer {
         return $sHtml;
     }
 
-    /**
+    protected function _getTableFilter($sKey){
+        /*
+        'requests_running' => array(
+            'sType' => 'requests',
+            'aRules' => array(
+                array("add", "M", "gt", " "),
+                array("remove", "M", "eq", "_"),
+                array("remove", "M", "eq", "."),
+            ),
+        ),
+         */
+        global $aCfg;
+        $this->log(__FUNCTION__ . "($sKey) start");
+        $aFilter=$this->aFilterPresets[$sKey];
+        if(isset($aCfg['hideRows'][$sKey]) && count($aCfg['hideRows'][$sKey])){
+            $aCustom=$aCfg['hideRows']['*'] ? array_merge($aCfg['hideRows']['*'],$aCfg['hideRows'][$sKey]) : $aCfg['hideRows'][$sKey];
+            foreach($aCustom as $aFilteritem){
+                if(!$aFilter['aRules']){
+                    $aFilter['aRules']=array();
+                }
+                if(count($aFilteritem)===4){
+                    $this->log(__FUNCTION__ . "($sKey) adding filter item <pre>".print_r($aFilteritem, 1)."</pre>");
+                    $aFilter['aRules'][]=$aFilteritem;
+                } else {
+                    $this->log(__FUNCTION__ . "($sKey) WARNING: skipping filter item <pre>".print_r($aFilteritem, 1)."</pre>");
+                }
+            }
+        }
+        $this->log(__FUNCTION__ . "($sKey) end ... return is <pre>".print_r($aFilter, 1)."</pre>");
+        return $aFilter;
+    }
+
+        /**
      * create a section with header, hint and tabledata
      * @global array $aSrvStatus    array with server status data
      * @global array $aLangTxt      array with translated texts
@@ -884,6 +916,7 @@ class Datarenderer {
      * @return string               html code
      */
     public function renderTable($sKey = false) {
+        global $aCfg;
         $this->log(__FUNCTION__ . "($sKey) start");
         global $aSrvStatus, $aLangTxt, $aCfg;
 
@@ -910,7 +943,8 @@ class Datarenderer {
         require_once 'serverstatus.class.php';
         $oServerStatus = new ServerStatus();
         $this->log(__FUNCTION__ . " start oServerStatus->dataFilter");
-        $aTData = $oServerStatus->dataFilter($aSrvStatus, $this->aFilterPresets[$sKey]);
+        // $aTData = $oServerStatus->dataFilter($aSrvStatus, $this->aFilterPresets[$sKey]);
+        $aTData = $oServerStatus->dataFilter($aSrvStatus, $this->_getTableFilter($sKey));
         $this->log(__FUNCTION__ . " done oServerStatus->dataFilter");
         if (!count($aTData)) {
             // $oLog->add('Table <em>'.$sKey.'</em> was not rendered. No data.', 'error');
@@ -958,6 +992,16 @@ class Datarenderer {
         return $this->themeTable($sTitle, $this->renderRequestTable($aTData, $sTableOptions), $sHint, $sExport);
     }
 
+    public function renderHostTab($aSrvStatus, $sHost){
+        global $aCfg;
+        return $aCfg['icons']['server'].' '.$sHost
+            . ' <span class="badge">'.$aSrvStatus[$sHost]['counter']['requests_active'].'</span>'
+            . '<br>'
+            .$this->renderWorkersBar($aSrvStatus, $sHost, '150px', '1em;')
+        ;
+    }
+                
+    
     /**
      * generate a menu with li elements - surrounded with ul class"tabs"
      * to get a tabbed list; use $aEnv["links"]["name"] as first parameter
@@ -975,7 +1019,7 @@ class Datarenderer {
             $iTabid++;
             $sTabid='tab_'.$iTabid;
             
-            $sTabs.='<li class="'.($sTabs ? '' : 'active').'"><a href="#'.$sTabid.'" data-toggle="tab" aria-expanded="false">'.$aTabdata['tab'].'</a></li>';
+            $sTabs.='<li class="tab '.($sTabs ? '' : 'active').'"><a href="#'.$sTabid.'" data-toggle="tab" aria-expanded="false">'.$aTabdata['tab'].'</a></li>';
             $sContent.='<div class="tab-pane'.($sContent ? '' : ' active').'" id="'.$sTabid.'">'.$aTabdata['content'].'</div>';
         }
         return '<div class="nav-tabs-custom">
@@ -1164,15 +1208,15 @@ class Datarenderer {
 
     /**
      * get Metadata for workers (total, active, wait) as an array
-     * @global array $aLangTxt     language dependent texts
-     * @param array  $aSrvStatus   server status array
-     * @param bool   $bGenerateBar flag: get html code for a bar for active workers
+     * @global array  $aLangTxt     language dependent texts
+     * @param array   $aSrvStatus   server status array
+     * @param bool    $bGenerateBar flag: get html code for a bar for active workers
+     * @param integer $iMaxWith     width of status bar in px; default: 600
      * @return string
      */
-    public function _getWorkersData($aSrvStatus, $bGenerateBar = false) {
+    public function _getWorkersData($aSrvStatus, $bGenerateBar = false, $iMaxWith=600) {
         global $aLangTxt, $aEnv;
         $aReturn = array();
-        $iMaxWith = 600;
 
         $aLinkPCheck = (array_key_exists('performance-check.php', $aEnv['links']['views']) && count($aSrvStatus) > 0
                 ) ? $aEnv['links']['views']['performance-check.php'] : false
@@ -1213,16 +1257,7 @@ class Datarenderer {
             );
 
             if ($bGenerateBar) {
-                $iBarFactor = 1;
-
-                if ($iProcesses > $iMaxWith) {
-                    $iBarFactor = $iMaxWith / $iProcesses;
-                }
-                $sBar = "<div class=\"barTotal\" style=\"width: " . ($iProcesses * $iBarFactor) . "px;\" title=\"" . sprintf($aLangTxt['bartitleUnusedWorkers'], ($iProcesses - $iActive - $iWait)) . "\">
-                            <div class=\"barBusyWorker\" style=\"width: " . ($iActive * $iBarFactor) . "px;\" title=\"" . sprintf($aLangTxt['bartitleBusyWorkers'], $iActive) . "\"> </div>
-                            <div class=\"barIdleWorker\" style=\"width: " . ($iWait * $iBarFactor) . "px;\" title=\"" . sprintf($aLangTxt['bartitleIdleWorkers'], $iWait) . "\"> </div>
-                        </div>";
-                $aTmp[$aLangTxt['thWorkerBar']] = $sBar;
+                $aTmp[$aLangTxt['thWorkerBar']] = $this->renderWorkersBar($aSrvStatus, $sHost, min(array($iMaxWith, $iProcesses)).'px');
             }
 
             $aTmp[$aLangTxt['thWorkerActions']]='';
@@ -1270,6 +1305,135 @@ class Datarenderer {
     }
     
     /**
+     * render table with worker status: total/ active/ waiting workers
+     * @global type $aLangTxt   language dependend texts
+     * @global array $aCfg  user configuration
+     * @param type $aSrvStatus data array of apache status
+     * @return string html code
+     */
+    public function renderGroupAndServers($aSrvStatus) {
+        global $aLangTxt, $aCfg, $aEnv;
+
+        if (!count($aSrvStatus)) {
+            // $oLog->add('Workers table was not rendered. No data.', 'error');
+            return false;
+        }
+        $sHtmlGroup='';
+        $sHtmlServer='';
+        
+        $bHasServerfilter=isset($aEnv["active"]["servers"]) && $aEnv["active"]["servers"]>'';
+
+        $aTData = $this->_getWorkersData($aSrvStatus, true, 175);
+        
+        $sHtmlServer.=''
+            . ($bHasServerfilter
+                ? $this->renderA(array(
+                    'class'=>'btn btn-default',
+                    'url'=>getNewQs(array('servers'=>'')), // removes param "servers=..."
+                    // 'title'=>$aCfg['icons']['actionDelete'] . ' '.$aEnv["active"]["servers"],
+                    'label'=> $aCfg['icons']['actionDelete'] . ' ' . sprintf($aLangTxt['lblServerInfosRemove'], $aEnv["active"]["servers"]),
+                    ))
+                    .'<br><br>'
+                : ''
+            )
+        ;
+        $aTotal=array(
+            1=>0,
+            2=>0,
+            3=>0,
+            4=>0,
+        );
+        foreach($aTData as $aSrvdata){
+            $aKeys = array_keys($aSrvdata);
+            $sHtmlServer.='<div class="serveritem">'
+                . '<strong>'
+                    .'<span>'.$aCfg['icons']['server'].'</span>'
+                    . ' <span class="badge">'.$aSrvdata[$aKeys[2]].'</span>'
+                    . '<br>'
+                    . $aSrvdata[$aKeys[0]]
+                . '</strong><br>'
+                    . $aKeys[1].': '.$aSrvdata[$aKeys[1]].'; '
+                    . $aKeys[2].': '.$aSrvdata[$aKeys[2]].'<br>'
+                    . $aKeys[3].': '.$aSrvdata[$aKeys[3]].'; '
+                    . $aKeys[4].': '.$aSrvdata[$aKeys[4]]
+                    . '<br>'
+                    . $aSrvdata[$aKeys[5]].'<br>' // graph
+                    . $aSrvdata[$aKeys[6]].'<br>' // buttons
+                .'</div>'
+            ;
+            $aTotal[1]+=$aSrvdata[$aKeys[1]];
+            $aTotal[2]+=$aSrvdata[$aKeys[2]];
+            $aTotal[3]+=$aSrvdata[$aKeys[3]];
+            $aTotal[4]+=$aSrvdata[$aKeys[4]];
+        }
+        if(!$bHasServerfilter){
+            $sHtmlGroup.= ''
+                . '<div class="servergroup '.$aCfg['skin-color2'].'">'
+                    . '<strong>'
+                        .'<span>'.$aTotal[2].'</span>'
+                        // . ' <span class="badge">'.$aTotal[2].'</span>'
+                        . '<br>'
+                        . $aCfg['icons']['group'].$aEnv["active"]["group"]
+                    . '</strong><br>'
+                    . sprintf($aLangTxt['lblServerInfosServercount'], count($aTData)).'<br>'
+                    // . $aKeys[2].': <strong>'.$aTotal[2].'</strong><br>'
+                    . '<br>'
+                    /*
+                        . $aKeys[1].': '.$aTotal[1].'; '
+                        . $aKeys[2].': '.$aTotal[2].'<br>'
+                        . $aKeys[3].': '.$aTotal[3].'; '
+                        . $aKeys[4].': '.$aTotal[4]
+                        . '<br><br>'
+                     * 
+                     */
+                    . $this->renderA(array(
+                        'class'=>'btn btn-default',
+                        'url'=>getNewQs(array('servers'=>'', 'view'=>'performance-check.php')),
+                        'title'=> strip_tags($aEnv['links']['views']['performance-check.php']['label']),
+                        'label'=>$aEnv['links']['views']['performance-check.php']['label'],
+                        ))  
+                    . ' '
+                    . $this->renderA(array(
+                        'class'=>'btn btn-default',
+                        'url'=>getNewQs(array('servers'=>'', 'view'=>'utilization.php')),
+                        'title'=> strip_tags($aEnv['links']['views']['utilization.php']['label']),
+                        'label'=>$aEnv['links']['views']['utilization.php']['label'],
+                        ))  
+                .'</div>'
+            ;
+        }
+        return $this->themeBox(
+                // $aCfg['icons']['serverinfos.php'].' '.
+                $aLangTxt['view_serverinfos.php_label'], 
+                $sHtmlGroup.$sHtmlServer,
+                $aLangTxt['lblHintServerInfos']
+        );
+    }
+    /**
+     * get html code for a bar with DIVs showing the workers
+     * 
+     * @param array   $aSrvStatus  server status array
+     * @param string  $sHost       hostname
+     * @param string  $sWith       css width
+     * @param string  $sHeight     css height
+     * @return string
+     */
+    public function renderWorkersBar($aSrvStatus, $sHost, $sWith='100%', $sBarHeight='') {
+        global $aLangTxt;
+        $iProcesses = $aSrvStatus[$sHost]['counter']['slots_total'];
+        $iSlotsUnused = $aSrvStatus[$sHost]['counter']['slots_unused'];
+        $iActive = $aSrvStatus[$sHost]['counter']['requests_active'];
+        $iWait = $aSrvStatus[$sHost]['counter']['requests_waiting'];
+        
+        $sHeight=$sBarHeight ? ' height: '.$sBarHeight.';' : '';
+        return '<div class="barTotal" '
+                    . 'style="width: ' . $sWith . ';'.$sHeight.'" '
+                    . 'title="' . sprintf($aLangTxt['bartitleUnusedWorkers'], ($iProcesses - $iActive - $iWait)) . '">
+                    <div class="barBusyWorker" style="width: ' . ($iActive/$iProcesses*100) . '%;'.$sHeight.'" title="' . sprintf($aLangTxt['bartitleBusyWorkers'], $iActive) . '"> </div>
+                    <div class="barIdleWorker" style="width: ' . ($iWait/$iProcesses*100) . '%;'.$sHeight.'" title="' . sprintf($aLangTxt['bartitleIdleWorkers'], $iWait) . '"> </div>
+                </div>';
+        
+    }    /**
      * render table with worker status: total/ active/ waiting workers
      * @global type $aLangTxt   language dependend texts
      * @global array $aCfg  user configuration

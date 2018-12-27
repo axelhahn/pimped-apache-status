@@ -41,7 +41,7 @@ $aLangTxt = array(
  
         'view_allrequests.php_label'=>'All requests',
         'view_original.php_label'=>'Original server-status',
-        'view_performance-check.php_label'=>'Performance checks',
+        'view_performance-check.php_label'=>'Active Requests',
         'view_serverinfos.php_label'=>'Server info',
         'view_utilization.php_label'=>'Utilization',
         'view_help.php_label'=>'Help',
@@ -193,6 +193,13 @@ $aLangTxt = array(
         'lblHintFilter' => 'Filter table by',
         'lblReload' => 'Refresh now',
         'lblExportLinks' => 'Export (unfiltered) table',
+
+    // ------------------------------------------------------------
+    // serverinfos
+    // ------------------------------------------------------------
+        'lblHintServerInfos'=>'Show selected group and its servers with the count of currently active requests.',
+        'lblServerInfosServercount'=>'servers: <strong>%s</strong>',
+        'lblServerInfosRemove'=>'Remove filter [%s]',
 
     // ------------------------------------------------------------
     // original page
@@ -480,8 +487,10 @@ $aLangTxt = array(
             'cfg-values-tmpdir'=>'(string) Default is tmp (= [Appdir]/tmp]).',
         'cfg-execTimeRequest'=>'An array to define values in [ms] for long requests: one for warning and one for critical long requests.',
             'cfg-values-execTimeRequest'=>'(integer)',
-        'cfg-hideRows'=>'Array of rows to hide. You can save some space not to display all colums. Warning: do not hide important rows!',
-            'cfg-values-hideRows'=>'(array) with names of rows.',
+        'cfg-hideCols'=>'Array of columns to hide. You can save some space not to display all colums. Warning: do not hide important rows!',
+            'cfg-values-hideCols'=>'(array) with names of columns.',
+        'cfg-hideRows'=>'Array of rows to hide.<br>The first level is the name of the view.<br>It is one of requests_running|requests_mostrequested|requests_hostlist|requests_methods|requests_clients or * for all views<br><br>Below that key is a list of arrays with 4 values.<ul><li>keyword: add|remove</li><li>column name (the same like in the visible table header columns)</li><li>operator: one of lt|le|eq|ne|ge|gt|regex</li><li>value: value to compare or regex</li></ul>',
+            'cfg-values-hideRows'=>'(array)',
         'cfg-icons'=>'Do not override this.',
             'cfg-values-icons'=>'(array)',
         'cfg-lang'=>'Currently active default language',

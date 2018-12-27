@@ -10,6 +10,15 @@
 
 ----------------------------------------------------------------------
 
+2018-12-27: v2.02.00
+  * ADDED section in server info page: it shows current group and its servers
+  * ADDED config value: hideRows to remove rows by given rules
+  * FIX javascript: remove unnecessary call of console.log()
+  * UPDATE icons for groups
+  * UPDATE config value: rename hideRows to hideCols
+  * UPDATE server tabs in Original Serer-status and Untilization contain 
+    count of current requests and worker status bar
+
 2018-10-13: v2.01.02
   * fixed: library download - permission for new directory was set to 0755 
     (instead of 755)

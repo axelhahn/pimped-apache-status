@@ -382,9 +382,9 @@ class ServerStatus {
      *         'sortorder'    const    SORT_ASC, SORT_DESC, SORT_REGULAR, SORT_NUMERIC, SORT_STRING
      *         'aRules'       array    rules to reduce visible data
      *              array( action , columnname , operator , value )
-     *                  action:   add/ add_or/ remove
-     *                  column:   key of array
-     *                  operator: lt le eq ne ge gt regex
+     *                  action:   one of add|add_or|remove
+     *                  column:   a name of a column in status or requests section
+     *                  operator: one of lt|le|eq|ne|ge|gt|regex
      *                  value:    value to compare
      *         'bGroup'       boolean  sort a specific row 
      *         'iLimit'       integer  max count of returned rows

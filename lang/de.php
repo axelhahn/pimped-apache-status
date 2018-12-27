@@ -40,7 +40,7 @@ $aLangTxt = array(
  
         'view_allrequests.php_label'=>'Alle Requests',
         'view_original.php_label'=>'Original Server-status',
-        'view_performance-check.php_label'=>'Performance-Daten',
+        'view_performance-check.php_label'=>'Aktive Requests',
         'view_serverinfos.php_label'=>'Server-Infos',
         'view_help.php_label'=>'Hilfe',
         'view_dump.php_label'=>'Dumps',
@@ -192,6 +192,13 @@ $aLangTxt = array(
         'lblHintFilter' => 'Filtere nach',
         'lblReload' => 'Jetzt Aktualisieren',
         'lblExportLinks' => 'Tabelle (ungefiltert) exportieren',
+
+    // ------------------------------------------------------------
+    // serverinfos
+    // ------------------------------------------------------------
+        'lblHintServerInfos'=>'Anzeige der gew&auml;hlten Gruppe und deren Server mit Angabe der derzeit aktiven Requests.',
+        'lblServerInfosServercount'=>'Server: <strong>%s</strong>',
+        'lblServerInfosRemove'=>'Filter [%s] entfernen',
 
     // ------------------------------------------------------------
     // original page
@@ -485,8 +492,10 @@ $aLangTxt = array(
             'cfg-values-tmpdir'=>'(string) Default ist tmp (= [Appdir]/tmp]).',
         'cfg-execTimeRequest'=>'Array zur Definition der Zeitlimits in [ms] f&uuml;r for langlaufende Requests: ein Wert für Warnungen, einer für kritische.',
             'cfg-values-execTimeRequest'=>'(integer)',
-        'cfg-hideRows'=>'Array der auszublendenden Spalten. Man kann etwas Platz sparen, indem nicht gewünschte Spalten ausblendet. Warnung: blenden sie keine wichtigen Spalten aus!',
-            'cfg-values-hideRows'=>'(array) Namen der Tabellenspalten.',
+        'cfg-hideCols'=>'Array der auszublendenden Spalten. Man kann etwas Platz sparen, indem nicht gewünschte Spalten ausblendet. Warnung: blenden sie keine wichtigen Spalten aus!',
+            'cfg-values-hideCols'=>'(array) Namen der Tabellenspalten.',
+        'cfg-hideRows'=>'Array der auszublendenden Zeilen pro Ansicht.<br>Der Name der ersten Ebene ist der Name des Views.<br>Es ist eines aus requests_running|requests_mostrequested|requests_hostlist|requests_methods|requests_clients oder * f&uuml;r alle Ansichtne<br><br>Unterhalb des Keys ist eine Liste von Arrays mit 4 Werten.<ul><li>Keyword: add|remove</li><li>Name der Spalte (wie in den Tabellenspalten genannt)</li><li>Operator: einer aus lt|le|eq|ne|ge|gt|regex</li><li>Wert: Vergleichswert oder Regex</li></ul>',
+            'cfg-values-hideRows'=>'(array)',
         'cfg-icons'=>'Dieses nicht &uuml;berschreiben.',
             'cfg-values-icons'=>'(array)',
         'cfg-lang'=>'Aktive Standard-Sprache.',

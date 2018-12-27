@@ -120,7 +120,7 @@ $sBody = '
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">'
                 . $aCfg['icons']['group'] . $aLangTxt['menuGroup']
                 . ' <span>' . $aEnv['active']['group']
-                . ($aEnv['active']['servers'] ? ' -&rsaquo; ' . $aEnv['active']['servers'] : '')
+                . ($aEnv['active']['servers'] ? ' -&rsaquo; ' . $aCfg['icons']['server'].' '.$aEnv['active']['servers'] : '')
                 . '</span> <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu" id="serverlist">'
