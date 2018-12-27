@@ -37,7 +37,8 @@ div.hero{border: 2px solid #eee; background: #f8f8f8; padding: 1em; font-size: 1
 h3.box-title{color:#9ab !important;font-size: 250% !important;}
 section h1{color:#578; font-size: 130%;}
 
-nav .nav a i{color:#fc8;}
+.navbar ul.nav li a>i{color:#fc8;}
+ul#serverlist li a i{color:#333;}
 nav .nav a span{opacity:0.7; text-shadow: none;}
 nav .nav a span.caret{color:#89a;}
 #divmainbody ul.nav li a {color:#aaa;}
@@ -157,6 +158,51 @@ nav .nav a span.caret{color:#89a;}
                 min-height: 400px;
 }
 
+div.serveritem{
+    border: 1px dashed #d2d6de; 
+    background: #f8f8f8; 
+    float: left; 
+    height: 21em;
+    margin: 0 1em 1em 0;
+    max-width: 200px;
+    padding: 1em; 
+    text-align: center;
+}
+div.servergroup{
+    float: left; 
+    height: 21em;
+    margin: 0 1em 1em 0;
+    padding: 1em; 
+    text-align: center;
+    max-width: 500px;
+}
+div.serveritem strong,
+div.servergroup strong
+{
+    font-size:140%;
+}
+div.serveritem strong span{
+    color: #d2d6de;
+    font-size: 300%;
+}
+div.servergroup strong span{
+    color: #fff;
+    font-size: 400%;
+}
+div.serveritem span.badge{font-size: 120%; background: #abc;color: #fff;}
+div.serveritem:hover{   
+    background: #fff; 
+}
+
+span.badge{font-size: 120%; background: #abc;}
+
+.tab{font-size: 130%;}
+.tab a{color:#bcd !important;}
+.tab i{font-size: 180%;}
+.tab .barTotal{opacity:0.3;}
+.tab.active a{color:#123 !important;}
+.tab:hover .barTotal, .tab.active .barTotal{opacity:1;}
+
 
 /* headlines */   
 /*
@@ -192,11 +238,11 @@ div.subh4 {margin-left: 10px; margin-bottom: 10px; padding-left: 10px; border-le
 
 
 .hintbox{
-         background: #fcf0d0;
+         background: #fcf4e8;
          border: 0px solid #fff;
          border-radius: 5px; 
          padding: 10px; margin: 0 0 1em;
-         color:#245;
+         color:#876;
 }
 
 .divNew{display: none; background: #cec;}

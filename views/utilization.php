@@ -4,6 +4,7 @@
  * 
  * view: Utilisation of each server
  */
+
 $iPlotterValues = 50;
 
 
@@ -79,6 +80,8 @@ if (count($aSrvStatus) > 0) {
     foreach ($aSrvStatus as $sHost => $aData) {
         
         $sOverview=''
+            . '<h4>' .$aCfg['icons']['server'].' '. $sHost . '</h4>'
+                
             . '<div class="hero">'
                 . '<span class="srvlabel">Server version</span>: '.$aSrvStatus[$sHost]['status']['Server Version'].'<br>'
                 . '<span class="srvlabel">Server uptime</span>: '.$aSrvStatus[$sHost]['status']['Server uptime'].'<br>'
@@ -99,15 +102,8 @@ if (count($aSrvStatus) > 0) {
             $iSlotsUnused = $aSrvStatus[$sHost]['counter']['slots_unused'];
             $iActive = $aSrvStatus[$sHost]['counter']['requests_active'];
             $iWait = $aSrvStatus[$sHost]['counter']['requests_waiting'];
-            
 
-            $sBarHeight='3em';
-            $iMaxWith = 100; // in percent
-            $iBarFactor = $iMaxWith / $iProcesses;
-            $sScoreBar = "<div class=\"barTotal\" style=\"width: 100%; height: $sBarHeight;\" title=\"" . sprintf($aLangTxt['bartitleUnusedWorkers'], ($iProcesses - $iActive - $iWait)) . "\">
-                        <div class=\"barBusyWorker\" style=\"width: " . ($iActive * $iBarFactor) . "%; height: $sBarHeight;\" title=\"" . sprintf($aLangTxt['bartitleBusyWorkers'], $iActive) . "\"> </div>
-                        <div class=\"barIdleWorker\" style=\"width: " . ($iWait * $iBarFactor) . "%; height: $sBarHeight;\" title=\"" . sprintf($aLangTxt['bartitleIdleWorkers'], $iWait) . "\"> </div>
-                    </div>";
+            $sScoreBar = $oDatarenderer->renderWorkersBar($aSrvStatus, $sHost, '100%', '4em');
             
             /*
                 $aLangTxt['thWorkerTotal'] => $iProcesses,
@@ -196,7 +192,7 @@ if (count($aSrvStatus) > 0) {
         
         // --------------------------------------------------------------------------------
         $aTC[] = array(
-            'tab' => $aCfg['icons']['server'].' ' . $sHost,
+            'tab' => $oDatarenderer->renderHostTab($aSrvStatus, $sHost),
             'content' => $sOverview . $sWorker
                 /*
                 . '<hr>'

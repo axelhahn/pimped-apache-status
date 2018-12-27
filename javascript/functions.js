@@ -266,7 +266,7 @@ function showGraphInline(sDivPlotter, sSrv, sVarname, iCount, sTitle, iMax) {
         sMax += (sMax ? ', ' : '') + (iMax ? iMax : aData['max']);
         sMin += (sMin ? ', ' : '') + aData['min'];
     }
-    console.log(sData);
+    // console.log(sData);
 
     // create info box
     if (aLang) {

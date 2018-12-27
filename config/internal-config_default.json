@@ -29,6 +29,7 @@
         "warning": "1000",
         "critical": "5000"
     },
+    "hideCols": [],
     "hideRows": [],
     "icons": {
         "adminservers": "<i class=\"fa fa-cubes\"><\/i> ",
@@ -50,7 +51,7 @@
         
         "title": "<i class=\"fa fa-square\"><\/i> ",
         "gotop": "<i class=\"fa fa-arrow-up\"><\/i> ",
-        "group": "<i class=\"fa fa-folder-o\"><\/i> ",
+        "group": "<i class=\"fa fa-cubes\"><\/i> ",
         "time": "<i class=\"fa fa-clock-o\"><\/i> ",
         "refresh": "<i class=\"fa fa-refresh\"><\/i> ",
         "skin": "<i class=\"fa fa-tint\"><\/i> ",
