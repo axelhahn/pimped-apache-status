@@ -9,6 +9,7 @@ $aLangTxt = array(
     'menuHeaderConfig'=>'Configuration',
     'menuAdmin'=>'Setup ',
     'menuGroup'=>'Group: ',
+    'menuGroupNone'=>'(none)',
     'menuLang'=>'Language: ',
     'menuSkin'=>'Skin: ',
     'menuReload'=>'Reload interval: ',

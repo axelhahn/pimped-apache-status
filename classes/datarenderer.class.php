@@ -1321,6 +1321,7 @@ class Datarenderer {
         $sHtmlGroup='';
         $sHtmlServer='';
         
+        $bIsExternalUrl=isset($aSrvStatus['testurl']);
         $bHasServerfilter=isset($aEnv["active"]["servers"]) && $aEnv["active"]["servers"]>'';
 
         $aTData = $this->_getWorkersData($aSrvStatus, true, 175);
@@ -1366,7 +1367,7 @@ class Datarenderer {
             $aTotal[3]+=$aSrvdata[$aKeys[3]];
             $aTotal[4]+=$aSrvdata[$aKeys[4]];
         }
-        if(!$bHasServerfilter){
+        if(!$bHasServerfilter && !$bIsExternalUrl){
             $sHtmlGroup.= ''
                 . '<div class="servergroup '.$aCfg['skin-color2'].'">'
                     . '<strong>'
