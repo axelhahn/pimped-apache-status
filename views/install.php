@@ -81,7 +81,7 @@ if(is_array($_POST) && count($_POST)){
             )
         );
         if ($_POST['pw1']){
-            $aUsersetup['auth']=md5($_POST['pw1']);
+            $aUsersetup['auth']['password']=md5($_POST['pw1']);
         } else {
             $aUsersetup['auth']=false;
         }
