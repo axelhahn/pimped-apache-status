@@ -10,6 +10,12 @@
 
 ----------------------------------------------------------------------
 
+2019-01-03: v2.03.00
+  * UPDATE: Login with Basic Auth was replaced by Login form (for FCGI)
+  * FIX: user setup at initial setup
+  * FIX: remove warnings if bookmarklet is used
+  * ADDED: Show warnings in formulars if SSL is not used
+
 2018-12-27: v2.02.00
   * ADDED section in server info page: it shows current group and its servers
   * ADDED config value: hideRows to remove rows by given rules
