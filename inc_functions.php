@@ -74,7 +74,6 @@ function httpGet($url, $bHeaderOnly = false) {
 function checkAuth() {
     global $aCfg;
     global $aLangTxt;    
-    // echo '<pre>'.print_r($aCfg, 1).'</pre>'; die();
     if (
             !$aCfg['auth'] || !array_key_exists('user', $aCfg['auth']) || !array_key_exists('password', $aCfg['auth']) 
             || ($aCfg['auth']['user'] == 'admin' && !$aCfg['auth']['password'] )
@@ -93,7 +92,6 @@ function checkAuth() {
             header('location: ?');
         }
     }
-    // echo "DEBUG:"; print_r($_SESSION); print_r($aCfg['auth']);
     if(isset($_POST['username'])){
         $_SESSION['lastUser']=isset($_POST['username']) ? $_POST['username'] : '';
         $_SESSION['lastPasswordhash']=isset($_POST['password']) ? md5($_POST['password']) : '';
@@ -107,6 +105,9 @@ function checkAuth() {
     ) {
         return true;
     }
+    $_SESSION['lastUser']='';
+    $_SESSION['lastPasswordhash']='';
+    
     session_destroy();
     return false;
 }
