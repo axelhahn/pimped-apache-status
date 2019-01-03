@@ -1321,7 +1321,8 @@ class Datarenderer {
         $sHtmlGroup='';
         $sHtmlServer='';
         
-        $bIsExternalUrl=isset($aSrvStatus['testurl']);
+        // $bIsExternalUrl=isset($aSrvStatus['testurl']);
+        $bIsExternalUrl=isset($_GET['url']) && $_GET['url'];
         $bHasServerfilter=isset($aEnv["active"]["servers"]) && $aEnv["active"]["servers"]>'';
 
         $aTData = $this->_getWorkersData($aSrvStatus, true, 175);
@@ -1346,12 +1347,18 @@ class Datarenderer {
         );
         foreach($aTData as $aSrvdata){
             $aKeys = array_keys($aSrvdata);
+            $sServername=$aSrvdata[$aKeys[0]];
+            
+            $sServername=strlen($aSrvdata[$aKeys[0]])>15
+                ?substr($aSrvdata[$aKeys[0]], 0, 15).'(...)'
+                :$aSrvdata[$aKeys[0]]
+            ;
             $sHtmlServer.='<div class="serveritem">'
                 . '<strong>'
                     .'<span>'.$aCfg['icons']['server'].'</span>'
                     . ' <span class="badge">'.$aSrvdata[$aKeys[2]].'</span>'
                     . '<br>'
-                    . $aSrvdata[$aKeys[0]]
+                    . $sServername
                 . '</strong><br>'
                     . $aKeys[1].': '.$aSrvdata[$aKeys[1]].'; '
                     . $aKeys[2].': '.$aSrvdata[$aKeys[2]].'<br>'

@@ -29,7 +29,7 @@ if($bIsAuthenticated){
     }
     $i = 0;
     if (isset($sTestUrl)) {
-        $oServerStatus->addServer('testurl', array('status-url' => $sTestUrl));
+        $oServerStatus->addServer('url-'.md5($sTestUrl), array('status-url' => $sTestUrl));
     } else if ($aServers2Collect) {
         foreach ($aServers2Collect as $sWebserver) {
             $oServerStatus->addServer($sWebserver, $aServergroups[$aEnv["active"]["group"]]['servers'][$sWebserver]);
