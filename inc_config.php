@@ -82,7 +82,7 @@ if (!$sData) {
 }
 
 // @since v1.16
-checkAuth();
+$bIsAuthenticated=checkAuth();
 
 $aCfg['datatableOptions']["oLanguage"]= json_decode($sData, 1);
 

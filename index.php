@@ -10,48 +10,51 @@ global $aSrvMeta;
 
 // --- load default and user config
 require("inc_config.php");
-
-// --- check update param ... re-locate into admin
-if (array_key_exists('action', $_GET) && $_GET['action']){
-    header('location: admin/'. str_replace('&amp;','&',getNewQs()). '&action='.$_GET['action']);
-}
-
 require("inc_menu.php");
 
-
-require_once './classes/serverstatus.class.php';
-$oServerStatus = new ServerStatus();
-
-// given status url overrides server selection
-if (array_key_exists("url", $_GET)) {
-    // $parts=  parse_url($_GET["url"]);
-    $aTestUrl = $_GET["url"];
-}
-$i = 0;
-if (isset($aTestUrl)) {
-    $oServerStatus->addServer('testurl', array('status-url' => $aTestUrl));
-} else if ($aServers2Collect) {
-    foreach ($aServers2Collect as $sWebserver) {
-        $oServerStatus->addServer($sWebserver, $aServergroups[$aEnv["active"]["group"]]['servers'][$sWebserver]);
-        $i++;
+if($bIsAuthenticated){
+    // --- check update param ... re-locate into admin
+    if (array_key_exists('action', $_GET) && $_GET['action']){
+        header('location: admin/'. str_replace('&amp;','&',getNewQs()). '&action='.$_GET['action']);
     }
-}
 
-$oLog->add('start $oServerStatus->getStatus() ');
 
-$aStatus = $oServerStatus->getStatus();
-if (count($aStatus["errors"])) {
-    foreach ($aStatus["errors"] as $sErr) {
-        $oMsg->add($sErr, 'error');
+    require_once './classes/serverstatus.class.php';
+    $oServerStatus = new ServerStatus();
+
+    // given status url overrides server selection
+    if (array_key_exists("url", $_GET)) {
+        // $parts=  parse_url($_GET["url"]);
+        $sTestUrl = $_GET["url"];
     }
-}
-$oLog->add('done $oServerStatus->getStatus() ');
+    $i = 0;
+    if (isset($sTestUrl)) {
+        $oServerStatus->addServer('testurl', array('status-url' => $sTestUrl));
+    } else if ($aServers2Collect) {
+        foreach ($aServers2Collect as $sWebserver) {
+            $oServerStatus->addServer($sWebserver, $aServergroups[$aEnv["active"]["group"]]['servers'][$sWebserver]);
+            $i++;
+        }
+    }
 
-$aSrvStatus = $aStatus["data"];
-$aSrvMeta = $aStatus["meta"];
+    $oLog->add('start $oServerStatus->getStatus() ');
 
-if (!count($aServers2Collect) && isset($aCfgUser) ) {
-    $oMsg->add(sprintf($aLangTxt['error-no-server-in-group'], $aEnv["active"]["group"]), 'error');
+    $aStatus = $oServerStatus->getStatus();
+    if (count($aStatus["errors"])) {
+        foreach ($aStatus["errors"] as $sErr) {
+            $oMsg->add($sErr, 'error');
+        }
+    }
+    $oLog->add('done $oServerStatus->getStatus() ');
+
+    $aSrvStatus = $aStatus["data"];
+    $aSrvMeta = $aStatus["meta"];
+
+    if (!count($aServers2Collect) && isset($aCfgUser) ) {
+        $oMsg->add(sprintf($aLangTxt['error-no-server-in-group'], $aEnv["active"]["group"]), 'error');
+    }
+} else {
+    $aEnv["active"]["view"]='login.php';
 }
 
 

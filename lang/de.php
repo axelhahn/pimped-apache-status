@@ -23,6 +23,7 @@ $aLangTxt = array(
     'error-server-not-in-group'=>'Server [%s] exisitert nicht in der Gruppe [%s].',
     'error-no-server-in-group'=>'Es wurde noch kein Server in der Gruppe [%s] angelegt. Bitte legen Sie einen unter Admin - Server an.',
     'error-no-server'=>'Es wurde kein Server gefunden.',
+    'error-no-ssl'=>'Sicherheitswarnung: Diese Webseite verwendet kein SSL!<br>Der Webbrowser versendet die eingegebenen Daten inkl. Passwort unverschl&uuml;sselt / im Klartext.',
     
     // ------------------------------------------------------------
     // version check
@@ -87,6 +88,12 @@ $aLangTxt = array(
         'lblRepeatPassword'=>'Passwort wiederholen',
         'lblInitialSetupSaved'=>'OK, Daten wurden gespeichert.',
         'lblInitialSetupSaveFailed'=>'Irgendwas ging schief. Bitte gib einen Benutzernamen ein und 2 x dasselbe Passwort.',
+
+        // ............................................................
+        'lblLogin'=>'Anmeldung',
+        'lblLoginHint'=>'Du musst dich anmelden, um Zugriff auf die Monitoring-Daten zu erhalten.',
+        'lblLoginIsAuthenticated'=>'Sie sind bereits angemeldet.',
+        'lblLoginDoLogout'=>'Benutzer %s abmelden',
 
         // ............................................................
         'lblTable_status_workers'=>'Worker Status',
@@ -401,6 +408,7 @@ $aLangTxt = array(
         'ActionDownloadHint'=>'Bibliothek herunterladen und von local verwenden.',
         'ActionOK'=>'OK',
         'ActionOKHint'=>'&Auml;nderungen speichern',
+        'ActionLogin'=>'Anmelden',
         'ActionResetToDefaults'=>'Zur&uuml;cksetzen',
         'ActionResetToDefaultsHint'=>'Zur&uuml;cksetzen auf Standardwert',
     

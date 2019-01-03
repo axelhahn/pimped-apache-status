@@ -73,7 +73,7 @@ function httpGet($url, $bHeaderOnly = false) {
  */
 function checkAuth() {
     global $aCfg;
-    global $aLangTxt;
+    global $aLangTxt;    
     // echo '<pre>'.print_r($aCfg, 1).'</pre>'; die();
     if (
             !$aCfg['auth'] || !array_key_exists('user', $aCfg['auth']) || !array_key_exists('password', $aCfg['auth']) 
@@ -81,16 +81,34 @@ function checkAuth() {
     ) {
         return true;
     }
-
+        
+    session_start([
+        'cookie_lifetime' => 86400,
+    ]);
+    
+    // logout on [anyurl]?logout
+    if(isset($_SESSION['lastUser']) && $_SESSION['lastUser']){
+        if ($_SERVER['QUERY_STRING']==='logout'){
+            session_destroy();
+            header('location: ?');
+        }
+    }
+    // echo "DEBUG:"; print_r($_SESSION); print_r($aCfg['auth']);
+    if(isset($_POST['username'])){
+        $_SESSION['lastUser']=isset($_POST['username']) ? $_POST['username'] : '';
+        $_SESSION['lastPasswordhash']=isset($_POST['password']) ? md5($_POST['password']) : '';
+    } else {
+        $_SESSION['lastUser']=isset($_SESSION['lastUser']) ? $_SESSION['lastUser'] : '';
+        $_SESSION['lastPasswordhash']=isset($_SESSION['lastPasswordhash']) ? $_SESSION['lastPasswordhash'] : '';
+    }
+    // react if the user or pw were changed in the config
     if (
-            array_key_exists('PHP_AUTH_USER', $_SERVER) && array_key_exists('PHP_AUTH_PW', $_SERVER) && $aCfg['auth']['user'] == $_SERVER['PHP_AUTH_USER'] && $aCfg['auth']['password'] == md5($_SERVER['PHP_AUTH_PW'])
+            $aCfg['auth']['user'] == $_SESSION['lastUser'] && $aCfg['auth']['password'] == $_SESSION['lastPasswordhash']
     ) {
         return true;
     }
-
-    header('WWW-Authenticate: Basic realm="Pimped Apache Status"');
-    header('HTTP/1.0 401 Unauthorized');
-    die($aLangTxt["authAccessDenied"]);
+    session_destroy();
+    return false;
 }
 
 /**
@@ -138,7 +156,8 @@ function getUpdateInfos($bForce = false){
     global $aCfg;
     global $oLog;
     $sUrlCheck = str_replace(" ", "%20", $aEnv['links']['update']['check']['url']);
-    $sTarget = getTempdir() . '/checkupdate_' . md5($sUrlCheck) . '.tmp';
+    // $sTarget = getTempdir() . '/checkupdate_' . md5($sUrlCheck) . '.tmp';
+    $sTarget = getTempdir() . '/checkupdate.tmp';
     $bExec = true;
     $iTtl = (int) $aCfg["checkupdate"];
     
@@ -176,18 +195,22 @@ function getUpdateInfos($bForce = false){
         if (!$sResult) {
             $sResult = ' <span class="version-updateerror">' . $aLangTxt['versionError'] . '</span>';
             $oLog->add(__FUNCTION__ . " unable to check version.");
+            $aUpdateInfos=array();
         } else {
             $oLog->add(__FUNCTION__ . " <pre>$sResult</pre>");
             
-            if (!file_put_contents($sTarget, $sResult)){
+            if (!@file_put_contents($sTarget, $sResult)){
+                echo "WARNING: unable to write file [$sTarget] - This slows down the performance.<br>";
                 $oLog->add(__FUNCTION__ . " unable to write file [$sTarget]", "error");
             }
+            $aUpdateInfos = json_decode($sResult, 1);
         }
     } else {
         $oLog->add(__FUNCTION__ . " reading cache $sTarget ...");
         $sResult = file_get_contents($sTarget);
+        $aUpdateInfos = json_decode($sResult, 1);
     }
-    $aUpdateInfos= json_decode($sResult, 1);
+    
     $oLog->add(__FUNCTION__ . " <pre>".print_r($aUpdateInfos, 1)."</pre>");
     return array_merge($aDefault, $aUpdateInfos);
 }

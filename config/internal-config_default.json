@@ -56,6 +56,7 @@
         "refresh": "<i class=\"fa fa-refresh\"><\/i> ",
         "skin": "<i class=\"fa fa-tint\"><\/i> ",
         "lang": "<i class=\"fa fa-comment\"><\/i> ",
+        "logout": "<i class=\"fa fa-power-off\"><\/i> ",
         "export": "<i class=\"fa fa-download\"><\/i> ",
         "serverinfos.php": "<i class=\"fa fa-tasks\"><\/i>",
         "performance-check.php": "<i class=\"fa fa-line-chart\"><\/i>",

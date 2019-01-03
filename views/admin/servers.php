@@ -115,6 +115,10 @@ if ($sAppAction) {
 
 <?php
 
+if (!isset($_SERVER['HTTPS'])){
+    $oMsg->add($aLangTxt['error-no-ssl'], 'error');
+}
+
 $sHtml.='<h4>' . $aLangTxt['AdminLblServers'] . '</h4>'
         . '<div class="subh3">'
         . '<div class="hintbox">'
