@@ -229,11 +229,11 @@ class ServerStatus {
             }
             $aScore['value']=$sScoreString;
             $aScore['slots_total']=strlen($sScoreString);
-            $aScore['slots_busy']=count($aReturn[$sHostname]['requests']);
+            $aScore['slots_busy']=isset($aReturn[$sHostname]['requests']) ? count($aReturn[$sHostname]['requests']) : 0;
             $aScore['slots_free']=$aScore['slots_total'] - $aScore['slots_busy'];
             
             $aReturn[$sHostname]['counter']['slots_total']=strlen($sScoreString);
-            $aReturn[$sHostname]['counter']['slots_busy']=count($aReturn[$sHostname]['requests']);
+            $aReturn[$sHostname]['counter']['slots_busy']=isset($aReturn[$sHostname]['requests']) ? count($aReturn[$sHostname]['requests']) : 0;
             $aReturn[$sHostname]['counter']['slots_unused']=$aScore['slots_total'] - $aScore['slots_busy'];
             $aReturn[$sHostname]['counter']['requests_active']=$iActive;
             $aReturn[$sHostname]['counter']['requests_waiting']=$aScore['slots_busy'] - $iActive;

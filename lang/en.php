@@ -9,6 +9,7 @@ $aLangTxt = array(
     'menuHeaderConfig'=>'Configuration',
     'menuAdmin'=>'Setup ',
     'menuGroup'=>'Group: ',
+    'menuGroupNone'=>'(none)',
     'menuLang'=>'Language: ',
     'menuSkin'=>'Skin: ',
     'menuReload'=>'Reload interval: ',
@@ -23,6 +24,7 @@ $aLangTxt = array(
     'error-server-not-in-group'=>'Server [%s] does not exist in group [%s].',
     'error-no-server-in-group'=>'No server was defined in the selected group [%s]. Add one in the setup.',
     'error-no-server'=>'No server was given to analyze. After adding servers in the config select a server or server group on top.',
+    'error-no-ssl'=>'Security Warning: This site does not use SSL!<br>Your webbrowser will transmit form data including passwords as unencrypted, clear text.',
 
     // ------------------------------------------------------------
     // version check
@@ -87,6 +89,11 @@ $aLangTxt = array(
         'lblRepeatPassword'=>'Repeat password',
         'lblInitialSetupSaved'=>'OK, data were saved.',
         'lblInitialSetupSaveFailed'=>'Something went wrong. Please enter a username and twice the same password.',
+        // ............................................................
+        'lblLogin'=>'Login',
+        'lblLoginHint'=>'You need to authenticate to access the monitoring data.',
+        'lblLoginIsAuthenticated'=>'You are already logged in.',
+        'lblLoginDoLogout'=>'Logout %s',
 
         // ............................................................
         'lblTable_status_workers'=>'Worker status',
@@ -395,6 +402,7 @@ $aLangTxt = array(
         'ActionDownloadHint'=>'Download this library.',
         'ActionOK'=>'OK',
         'ActionOKHint'=>'Save changes',
+        'ActionLogin'=>'Login',
         'ActionResetToDefaults'=>'Reset',
         'ActionResetToDefaultsHint'=>'Reset to default value',
     

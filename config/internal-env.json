@@ -1,7 +1,7 @@
 {
     "project": {
         "title": "Pimped Apache Status",
-        "version": "2.02.00",
+        "version": "2.03.00",
         "releasedate": "2018-12-27",
         "license": "GPL 3.0"
     },
@@ -32,11 +32,6 @@
             },
             "download": {
                 "url": "https:\/\/sourceforge.net\/projects\/pimpapachestat\/files\/latest\/download",
-                "label": "",
-                "target": ""
-            },
-            "downloadbeta": {
-                "url": "https:\/\/github.com\/axelhahn\/pimped-apache-status\/archive\/beta-v2.zip",
                 "label": "",
                 "target": ""
             }

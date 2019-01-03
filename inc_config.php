@@ -82,7 +82,7 @@ if (!$sData) {
 }
 
 // @since v1.16
-checkAuth();
+$bIsAuthenticated=checkAuth();
 
 $aCfg['datatableOptions']["oLanguage"]= json_decode($sData, 1);
 
@@ -99,6 +99,8 @@ $aEnv["active"]["skin"] = array_key_exists("skin", $_GET) ? $_GET["skin"] : $aCf
 
 // --- autoreload
 $aEnv["active"]["reload"] = array_key_exists("reload", $_GET) ? $_GET["reload"] : false;
+
+$bIsExternalUrl=isset($_GET["url"]);
 
 // -- servergroup
 // --- load server groups and servers
@@ -117,7 +119,10 @@ if (!count($aServergroups) && is_array($aUserCfg) ){
     }
 }
 
-$aEnv["active"]["group"] = array_key_exists("group", $_GET) ? $_GET["group"] : false;
+$aEnv["active"]["group"] = $bIsExternalUrl 
+    ? $aLangTxt['menuGroupNone']
+    : (array_key_exists("group", $_GET) ? $_GET["group"] : false)
+    ;
 if (!$aEnv["active"]["group"]) {
 
     foreach ($aServergroups as $sGroup => $aData) {
@@ -129,7 +134,7 @@ if (!$aEnv["active"]["group"]) {
 
 $aEnv["active"]["servers"] = array_key_exists("servers", $_GET) ? $_GET["servers"] : false;
 
-if ($aServergroups && !array_key_exists($aEnv["active"]["group"], $aServergroups)) {
+if (!$bIsExternalUrl && $aServergroups && !array_key_exists($aEnv["active"]["group"], $aServergroups)) {
     $oMsg->add(sprintf($aLangTxt['error-wrong-group'], $aEnv["active"]["group"]), 'error');
 }
 
@@ -139,22 +144,24 @@ if(is_array($aUserCfg)){
         $oMsg->add(sprintf($aLangTxt['error-no-group'], $aEnv["active"]["group"]), 'error');
     } else {
 
-        foreach ($aServergroups[$aEnv["active"]["group"]]["servers"] as $sHost => $aData2) {
-            $aServers2Collect[] = $sHost;
-        }
-
-        $aServers2Collect = array_key_exists("servers", $_GET) ? explode(",", $_GET["servers"]) : $aServers2Collect;
-
-        // check: all servers are in my group?
-        if ($aServers2Collect) {
-            foreach ($aServers2Collect as $sHost) {
-                if (!array_key_exists($sHost, $aServergroups[$aEnv["active"]["group"]]['servers'])) {
-                    $oMsg->add(sprintf($aLangTxt['error-server-not-in-group'], $sHost, $aEnv["active"]["group"]), 'error');
-                }
+        if(!$bIsExternalUrl){
+            foreach ($aServergroups[$aEnv["active"]["group"]]["servers"] as $sHost => $aData2) {
+                $aServers2Collect[] = $sHost;
             }
-        } else {
-            if (!isset($adminindex) || !$adminindex){
-                $oMsg->add(sprintf($aLangTxt['error-no-server']), 'error');
+
+            $aServers2Collect = array_key_exists("servers", $_GET) ? explode(",", $_GET["servers"]) : $aServers2Collect;
+
+            // check to show config warnings: all servers are in my group?
+            if ($aServers2Collect) {
+                foreach ($aServers2Collect as $sHost) {
+                    if (!array_key_exists($sHost, $aServergroups[$aEnv["active"]["group"]]['servers'])) {
+                        $oMsg->add(sprintf($aLangTxt['error-server-not-in-group'], $sHost, $aEnv["active"]["group"]), 'error');
+                    }
+                }
+            } else {
+                if (!isset($adminindex) || !$adminindex){
+                    $oMsg->add(sprintf($aLangTxt['error-no-server']), 'error');
+                }
             }
         }
     }

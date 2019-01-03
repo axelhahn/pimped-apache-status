@@ -111,6 +111,12 @@ $sBody = '
                 </li>
                 ' : ''
         ) . '
+            ' . (isset($_SESSION['lastUser']) && $_SESSION['lastUser'] ? '
+                <li class="dropdown">
+                    <a href="?logout">'. $aCfg['icons']['logout'] . $_SESSION['lastUser'].'</a>
+                </li>
+                ' : ''
+        ) . '
           </ul>
           
         <div id="navbar" class="collapse navbar-collapse">

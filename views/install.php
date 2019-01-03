@@ -15,6 +15,9 @@ if(file_exists(__DIR__ . '/../config/config_user.php')){
         'content'=>$aLangTxt['lblHelplblInitialSetupTab0']
     );
 }
+if (!isset($_SERVER['HTTPS'])){
+    $oMsg->add($aLangTxt['error-no-ssl'], 'error');
+}
 
 $aTC[] = array(
     'tab'=>$aLangTxt['lblInitialSetupTab1'],

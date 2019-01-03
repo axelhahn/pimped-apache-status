@@ -45,6 +45,9 @@ foreach(array_keys($aUserCfg) as $sKey){
     }
 }
 
+if (!isset($_SERVER['HTTPS'])){
+    $oMsg->add($aLangTxt['error-no-ssl'], 'error');
+}
 
 // ----------------------------------------------------------------------
 // 2 tabs for raw data
