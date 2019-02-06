@@ -32,6 +32,7 @@ Ressources:
 ## LICENSE
   GNU GPL v 3.0
 
+![Screesnhot Pimped Apache Status](https://www.axel-hahn.de/assets/projects/pimped-apache-status/01-history-popup.png)
 
 ## REQUIREMENTS
   * On the system you want to install the pimped Apache status:
