@@ -1169,7 +1169,7 @@ class Datarenderer {
                      */
                     .'<div class="col-md-2">
                         <!-- Apply any bg-* class to to the info-box to color it -->
-                    <div class="info-box '.$aCfg['skin-color2'].' tile ' . $sTilename . '"'
+                    <div class="info-box '.$aCfg['skin-color2'].' tile ' . $sTilename . '" '
                         . 'title="' . $sHint . '" '
                         . 'onmouseover="showGraph(\'' . $sSrvIndex . '\', \'' . $sTilename . '\', \'' . $sTitle . '\');" '
                         . 'onmouseout="hideGraph();" '
@@ -1264,7 +1264,7 @@ class Datarenderer {
             // add link for performance check of a single server
             if ($aLinkPCheck) {
                 $aTmp[$aLangTxt['thWorkerActions']] .= ''
-                        . '<a class="btn btn-default" href="' . $aLinkPCheck['url'] . '&servers=' . $sHost . '"'
+                        . '<a class="btn btn-default" href="' . $aLinkPCheck['url'] . '&servers=' . $sHost . '" '
                         . 'title="' . strip_tags($aLinkPCheck['label']) . ' - ' . $sHost . '"'
                         . '>'
                         . str_replace(strip_tags($aLinkPCheck['label']), '', $aLinkPCheck['label'])
@@ -1273,7 +1273,7 @@ class Datarenderer {
             }
             if ($aLinkUtilization) {
                 $aTmp[$aLangTxt['thWorkerActions']] .= ' '
-                        . '<a class="btn btn-default" href="' . $aLinkUtilization['url'] . '&servers=' . $sHost . '"'
+                        . '<a class="btn btn-default" href="' . $aLinkUtilization['url'] . '&servers=' . $sHost . '" '
                         . 'title="' . strip_tags($aLinkUtilization['label']) . ' - ' . $sHost . '"'
                         . '>'
                         . str_replace(strip_tags($aLinkUtilization['label']), '', $aLinkUtilization['label'])
