@@ -467,6 +467,7 @@ $aLangTxt = array(
         'AdminVendorRemote'=>'Remote',
         'AdminVendorLibLocalinstallations'=>'<strong>%s</strong> libs are in use and <strong>%s</strong> of them are local. Download all libs for best performance.',
         'AdminVendorLibAllLocal'=>'All <strong>%s</strong> used libs are local.',
+        'AdminVendorLibDelete'=>'Unused local libs: <strong>%s</strong>',
         'AdminVendorLibUnused'=>'not used anymore',
     
         'AdminHintUpdates'=>'Update this web application.<br>',

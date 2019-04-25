@@ -9,7 +9,7 @@ require_once 'cdnorlocal.class.php';
  * admin functions to request API, download, read existing local downloads
  * This file is needed by admin/index.php only - NOT in your projects to publish
  *
- * @version 1.0
+ * @version 1.0.2
  * @author Axel Hahn
  * @link https://www.axel-hahn.de
  * @license GPL

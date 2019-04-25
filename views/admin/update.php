@@ -113,6 +113,8 @@ if (!array_key_exists('doinstall', $_GET)) {
                     . '<a href="../?"'
                         . ' class="btn btn-default"'
                         . '>' . $aLangTxt["lblUpdateContinue"] . '</a>';
+                // force update check to refresh the locally cached version infos
+                getUpdateInfos(true);
             } else {
                 $sHtml.=$aLangTxt['lblUpdateUnzipFailed'] . '</div>';
             }

@@ -3,9 +3,6 @@ if (!isset($adminindex)){
     die("Abort.");
 }
 
-    $iCount=0;
-    $iCountLocal=0;
-    
     require_once(__DIR__ . '/../../classes/cdnorlocal-admin.class.php');
     
     $sVendorUrl=(strpos($_SERVER['REQUEST_URI'], '/admin/?') ? '.' : '') . './vendor/';
@@ -40,7 +37,6 @@ if (!isset($adminindex)){
             ;
     
     foreach($oCdn->getLibs(true) as $sLibname=>$aLib){
-        $iCount++;
         
         // --- download
         if ($sLib2download && $aLib['lib']===$sLib2download && !$aLib['islocal']){
@@ -55,9 +51,6 @@ if (!isset($adminindex)){
             $oCdn->delete($sLib2delete, $sVersion2delete);
             echo "<script>window.setTimeout('location.href=\"?&action=vendor\"', 20);</script>";
             $oCdn->setLibs($aEnv['vendor']);
-        }
-        if ($aLib['islocal']){
-            $iCountLocal++;
         }
         $sHtml.='<tr>'
                 . '<td><strong>'
@@ -87,8 +80,14 @@ if (!isset($adminindex)){
     }
     $sHtml.='</tbody></table>';
     
+    $iCount=count($oCdn->getLibs());
+    $iCountLocal=count($oCdn->getFilteredLibs(array('islocal'=>1,'isunused'=>0)));
+    $iCountUnused=count($oCdn->getFilteredLibs(array('islocal'=>1,'isunused'=>1)));
+    
     echo (($iCount && $iCount===$iCountLocal)
             ? sprintf($aLangTxt["AdminVendorLibAllLocal"], $iCount)
             : sprintf($aLangTxt["AdminVendorLibLocalinstallations"], $iCount, $iCountLocal)
-    ). $sHtml;
+    ).'<br>'
+    .($iCountUnused ? sprintf($aLangTxt["AdminVendorLibDelete"], $iCountUnused).'<br>' : '')
+    .$sHtml;
     // echo 'Libs:<br><pre>'. print_r($oCdn->getLibs(),1). '</pre>---<br>';    

@@ -473,6 +473,7 @@ $aLangTxt = array(
         'AdminVendorRemote'=>'Remote',
         'AdminVendorLibLocalinstallations'=>'<strong>%s</strong> verwendete Bibliotheken gesamt - davon liegen <strong>%s</strong> lokal. Lade alle herunter, um die beste Performance zu haben.',
         'AdminVendorLibAllLocal'=>'Alle <strong>%s</strong> verwendeten Bibliotheken sind lokal.',
+        'AdminVendorLibDelete'=>'Lokale, nicht mehr benutze Bibliotheken: <strong>%s</strong>',
         'AdminVendorLibUnused'=>'nicht mehr verwendet',
     
         'AdminHintUpdates'=>'Update dieser Web-applikation.<br>',
