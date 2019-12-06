@@ -156,6 +156,7 @@ function getUpdateInfos($bForce = false){
     global $aEnv;
     global $aCfg;
     global $oLog;
+    global $aLangTxt;    
     $sUrlCheck = str_replace(" ", "%20", $aEnv['links']['update']['check']['url']);
     // $sTarget = getTempdir() . '/checkupdate_' . md5($sUrlCheck) . '.tmp';
     $sTarget = getTempdir() . '/checkupdate.tmp';
