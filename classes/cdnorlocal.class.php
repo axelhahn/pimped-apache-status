@@ -22,7 +22,7 @@ namespace axelhahn;
  * AND/ OR
  * https://unpkg.com/
  * 
- * @version 1.0.5
+ * @version 1.0.8
  * @author Axel Hahn
  * @link https://www.axel-hahn.de
  * @license GPL
@@ -55,7 +55,24 @@ class cdnorlocal {
      * @var string
      */
     var $sCdnUrl='https://cdnjs.cloudflare.com/ajax/libs';
-    
+    var $aCdnUrls=array(
+        'cdnjs.cloudflare.com'=>array(
+            'about'=>'',
+            'url'=>'https://cdnjs.cloudflare.com/ajax/libs/[PKG]/[VERSION]/[FILE]',
+            'urlLatest'=>'https://cdnjs.cloudflare.com/ajax/libs/[PKG]/[VERSION]/[FILE]',
+        ),
+        /*
+        'cdn.jsdelivr.net'=>array(
+            'about'=>'',
+            'url'=>'https://cdn.jsdelivr.net/npm/[PKG]@[VERSION]/[FILE]',
+        ),
+        'unpkg.com'=>array(
+            'about'=>'',
+            'url'=>'https://unpkg.com/[PKG]@[VERSION]/[FILE]',
+        ),
+         */
+    );
+    protected $_sCdn=false;
 
     var $_aLibs=array();
     
@@ -92,6 +109,9 @@ class cdnorlocal {
             $this->setVendorUrl('/vendor');
             $this->setVendorDir($_SERVER['DOCUMENT_ROOT'].'/vendor');
         }
+        // $this->_sCdn=array_key_first($this->aCdnUrls);
+        reset($this->aCdnUrls);
+        $this->_sCdn=key($this->aCdnUrls);
     }
 
     /**
@@ -135,6 +155,22 @@ class cdnorlocal {
             ;
     }
     
+    /**
+     * set a CDN to deliver sources; returns true if the CDN is supported;
+     * returns false if CDN is not supported
+     * 
+     * @see getCdns() to get a list of supported CDNs
+     * 
+     * @param string $sNewCdn
+     * @return boolean
+     */
+    public function setCdn($sNewCdn){
+        if(array_key_exists($sNewCdn, $this->aCdnUrls)){
+            $this->_sCdn=$sNewCdn;
+            return true;
+        }
+        return false;
+    }
 
     /**
      * set a vendor url to use as link for libraries
@@ -221,6 +257,21 @@ class cdnorlocal {
         ksort($this->_aLibs);
         $this->_wd(__METHOD__ . " ... ".print_r($this->_aLibs, 1));
         return true;
+    }
+    
+    /**
+     * get array with a flat list of supported CDNs
+     * @return array
+     */
+    public function getCdns(){
+        return array_keys($this->aCdnUrls);
+    }
+    /**
+     * get array with a flat list of supported CDNs
+     * @return array
+     */
+    public function getCurrentCdn(){
+        return $this->_sCdn;
     }
     /**
      * return array of all libs filtered by criteria
@@ -345,7 +396,34 @@ class cdnorlocal {
     // 
     // ----------------------------------------------------------------------
     
-
+    protected function _splitRelUrl($sRelUrl){
+        $aTmp= preg_match_all('#^(.*)/(.*)/(.*)$#U', $sRelUrl, $aMatches);
+        if(!count($aMatches)===4){
+            return false;
+        }
+        return array(
+            'pkg'=>$aMatches[1][0],
+            'version'=>$aMatches[2][0],
+            'file'=>$aMatches[3][0],
+        );
+    }
+    
+    public function getFullCdnUrl($sRelUrl, $sCdn=false){
+        $sReturn='';
+        if(!$sCdn){
+            $sCdn=$this->_sCdn;
+        }
+        $aSplits=$this->_splitRelUrl($sRelUrl);
+        $sTemplate=isset($this->aCdnUrls[$sCdn]['url']) ? $this->aCdnUrls[$sCdn]['url'] : false;
+        if(!$aSplits || !$sTemplate){
+            return false;
+        }
+        return str_replace(
+            array('[PKG]','[VERSION]','[FILE]'),
+            array($aSplits['pkg'], $aSplits['version'], $aSplits['file']),
+            $this->aCdnUrls[$sCdn]['url']
+        );
+    }
 
     /**
      * get full url based on relative filename. It returns the url of
@@ -365,9 +443,9 @@ class cdnorlocal {
      */
     public function getFullUrl($sRelUrl){
         return ($this->getLocalfile($sRelUrl)
-                ? $this->sVendorUrl
-                : $this->sCdnUrl
-                ).'/'.$sRelUrl;
+            ? $this->sVendorUrl.'/'.$sRelUrl
+            : $this->getFullCdnUrl($sRelUrl)
+        );
         
     }
     

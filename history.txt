@@ -10,6 +10,11 @@
 
 ----------------------------------------------------------------------
 
+2019-12-06: v2.03.04
+  * MERGE/ FIX inc_functions.php - thanks to LeoShivas
+  * UPDATE adminLte/2.4.18, jquery/3.4.1, font-awesome/5.11.2 (v4 --> v5)
+  * UPDATE cdnorlocal
+
 2019-04-25: v2.03.03
   * UPDATE adminLte/2.4.10, jquery/3.4.0, Chart.js/2.8.0
   * FIX: vendor libs show count used/ unused libs

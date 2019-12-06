@@ -1,5 +1,4 @@
 <?php
-global $aLangTxt;
 $aLangTxt = array(
 
     'id'=>'deutsch',

@@ -14,6 +14,8 @@ global $oMsg;
 global $oLog;
 global $aServergroups, $aDefaultCfg, $aCfg;
 global $sJsOnReady;
+global $aLangTxt;
+
 $sJsOnReady = '';
 $aServers2Collect = array();
 $sGetStarted = '<br>see documentation <a href="https://www.axel-hahn.de/docs/apachestatus/get_started.htm">get started<a>.';

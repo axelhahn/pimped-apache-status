@@ -41,6 +41,7 @@ function getNewQs($aQueryParams = array()) {
 
 /**
  * make an http get request and return the response body
+ * @global array   $oLog         logger class
  * @param string   $url          url to fetch
  * @param boolean  $bHeaderOnly  send header only
  * @return string
@@ -68,7 +69,8 @@ function httpGet($url, $bHeaderOnly = false) {
 
 /**
  * check authentication if a user and password were configured
- * @global array  $aCfg  config from ./config/config_user.json
+ * @global array $aCfg      configuration settings
+ * @global array $aLangTxt  language specific texts
  * @return boolean
  */
 function checkAuth() {
@@ -115,6 +117,8 @@ function checkAuth() {
 /**
  * search temp directory using tmpdir in config. if false then use system
  * temp dir
+ * @global array $aCfg      configuration settings
+ * @global array $oLog      logger class
  * @param bool  $bForce  force check and ignore ttl
  * @return type
  */
@@ -148,15 +152,17 @@ function getTempdir(){
  *     [download] => https://sourceforge.net/projects/pimpapachestat/files/latest/download
  * )
  * 
- * @global type $aEnv
- * @global array $aCfg
+ * @global array $aCfg      configuration settings
+ * @global array $aEnv      environment
+ * @global array $aLangTxt  language specific texts
+ * @global array $oLog      logger class
  * @return array
  */
 function getUpdateInfos($bForce = false){
-    global $aEnv;
     global $aCfg;
-    global $oLog;
+    global $aEnv;
     global $aLangTxt;    
+    global $oLog;
     $sUrlCheck = str_replace(" ", "%20", $aEnv['links']['update']['check']['url']);
     // $sTarget = getTempdir() . '/checkupdate_' . md5($sUrlCheck) . '.tmp';
     $sTarget = getTempdir() . '/checkupdate.tmp';
@@ -218,13 +224,17 @@ function getUpdateInfos($bForce = false){
 }
 /**
  * check for an update of the product
+ * @global array $aCfg      configuration settings
+ * @global array $aEnv      environment
+ * @global array $aLangTxt  language specific texts
+ * @global array $oLog      logger class
  * @param bool  $bForce  force check and ignore ttl
  * @return type
  */
 function checkUpdate($bForce = false) {
-    global $aLangTxt;
-    global $aEnv;
     global $aCfg;
+    global $aEnv;
+    global $aLangTxt;
     global $oLog;
     $iTtl = (int) $aCfg["checkupdate"];
 
@@ -262,7 +272,12 @@ function checkUpdate($bForce = false) {
     return '<div id="checkversion">' . $sResult . '</div>';
 }
 
-
+/**
+ * render head section of html page
+ * @global array $aEnv      environment
+ * @param type $aLangTxt
+ * @return string
+ */
 function getHtmlHead($aLangTxt) {
     global $aEnv;
     
@@ -302,7 +317,7 @@ function getHtmlHead($aLangTxt) {
         . '<script src="' . $oCdn->getFullUrl($oCdn->getLibRelpath('twitter-bootstrap').'/js/bootstrap.min.js') . '" type="text/javascript"></script>'
 
         // Font awesome
-        . '<link href="' . $oCdn->getFullUrl('font-awesome/4.7.0/css/font-awesome.min.css') . '" rel="stylesheet">'
+        . '<link href="' . $oCdn->getFullUrl($oCdn->getLibRelpath('font-awesome').'/css/all.min.css') . '" rel="stylesheet">'
 
         // Chart.js
         . '<script src="' . $oCdn->getFullUrl($oCdn->getLibRelpath('Chart.js').'/Chart.min.js') . '" type="text/javascript"></script>'
