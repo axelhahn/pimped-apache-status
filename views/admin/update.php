@@ -46,21 +46,40 @@ if (!array_key_exists('doinstall', $_GET)) {
     // ------------------------------------------------------------
     // step 1: welcome
     // ------------------------------------------------------------
+    require_once(__DIR__ . '/../../classes/cdnorlocal-admin.class.php');
+    
+    $sVendorUrl=(strpos($_SERVER['REQUEST_URI'], '/admin/?') ? '.' : '') . './vendor/';
+    $oCdn2 = new axelhahn\cdnorlocaladmin(array(
+        'vendordir'=>__DIR__ . '/../../vendor', 
+        'vendorurl'=>$sVendorUrl, 
+        'debug'=>0
+    ));
+    $oCdn2->setLibs($aEnv['vendor']);
+    $iCountUnused=count($oCdn2->getFilteredLibs(array('islocal'=>1,'isunused'=>1)));
+    
     $aUpdateInfos=getUpdateInfos(true);
     $sHtml .= '<h4 id="h3' . md5('update') . '">'. $aLangTxt["lblUpdate"] . '</h4>'
             . '<div class="subh3">'
-            . '<div class="hintbox">'
-            . ($aUpdateInfos['flag_update']
-                ? $aLangTxt['lblUpdateNewerVerionAvailable'].'<br>'
-                : $aLangTxt['lblUpdateNoNewerVerionAvailable'].'<br>'
-                )
-            . '</div>'
-            . sprintf($aLangTxt["lblUpdateHints"], $sLatestUrl)
-            . sprintf($aLangTxt['lblUpdateInstalldir'], $oInstaller->getInstalldir())
+                . '<div class="hintbox">'
+                    . ($aUpdateInfos['flag_update']
+                        ? $aLangTxt['lblUpdateNewerVerionAvailable'].'<br>'
+                        : $aLangTxt['lblUpdateNoNewerVerionAvailable'].'<br>'
+                        )
+                . '</div>'
+                . sprintf($aLangTxt["lblUpdateHints"], $sLatestUrl)
+                . sprintf($aLangTxt['lblUpdateInstalldir'], $oInstaller->getInstalldir())
             . '</div>'
             . '<a href="' . getNewQs(array('doinstall' => 'download')) . '"'
             . ' class="btn btn-default"'
             . '>' . $aLangTxt["lblUpdateContinue"] . '</a>'
+            . ($iCountUnused
+                    ? '<br><br><br><br>'.sprintf($aLangTxt['lblUpdateUnusedVendorlibs'], '<strong>'.$iCountUnused.'</strong>').' ... '
+                        . '<a href="' . getNewQs(array('action' => 'vendor')) . '"'
+                        . ' class="btn btn-default"'
+                        . '>' . $aCfg['icons']['adminvendor'] . ' '. $aLangTxt["AdminMenuvendor"] . '</a>'
+
+                    : ''
+              )
             ;
     
 } else {

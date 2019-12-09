@@ -145,7 +145,7 @@ if (count($aSrvStatus) > 0) {
                 . getWidget(array(
                     'bgcolor'=>'green',
                     // 'color'=>'green',
-                    'icon'=>'<i class="fa fa-ticket"></i>',
+                    'icon'=>'<i class="fas fa-ticket-alt"></i>',
                     'text'=>$aLangTxt['lblUtilizationWorkerProcessesActiveTitle'],
                     'number'=>$iActive,
                     'progressvalue' => (int)($iActive/$iProcesses*100),
@@ -154,7 +154,7 @@ if (count($aSrvStatus) > 0) {
                 . getWidget(array(
                     'bgcolor'=>'green',
                     // 'color'=>'green',
-                    'icon'=>'<i class="fa fa-ticket"></i>',
+                    'icon'=>'<i class="fas fa-ticket-alt"></i>',
                     'text'=>$aLangTxt['lblUtilizationWorkerProcessesActiveTitle'],
                     'number'=>($iProcesses - $iSlotsUnused),
                     'progressvalue' => (int)(($iProcesses - $iSlotsUnused)/$iProcesses*100),

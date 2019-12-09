@@ -32,7 +32,7 @@ function renameOld($filename){
 ?>
 <html>
     <head>
-        <link href="<?php echo $oCdn->getFullUrl('font-awesome/4.7.0/css/font-awesome.min.css'); ?>" rel="stylesheet">
+        <link href="<?php echo $oCdn->getFullUrl('font-awesome/5.11.2/css/all.min.css'); ?>" rel="stylesheet">
     </head>
 </html>
 <style>
@@ -46,7 +46,7 @@ function renameOld($filename){
 </style>
 <body>
     <div>
-        <h1><i class="fa fa-magic" aria-hidden="true"></i> Pimped Apache Status :: Converter for config files</h1>
+        <h1><i class="fas fa-magic" aria-hidden="true"></i> Pimped Apache Status :: Converter for config files</h1>
          This converter upgrades the config files from version 1.x to 2.x<br>
          It creates JSON files in config directory and renames the old configs.
 
@@ -84,7 +84,7 @@ function renameOld($filename){
 
         <h2>Done</h2>
         go to Pimped Apache Status
-            <a href="./"><i class="fa fa-tachometer" aria-hidden="true"></i> Monitoring</a>
-            <a href="./admin/?"><i class="fa fa-cog"></i> Admin</a><br>
+            <a href="./"><i class="fas fa-tachometer-alt" aria-hidden="true"></i> Monitoring</a>
+            <a href="./admin/?&action=settings"><i class="fas fa-cog"></i> Admin .. Settings</a><br>
     </div>
 </body>

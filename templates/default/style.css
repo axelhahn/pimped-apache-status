@@ -1,6 +1,6 @@
 @import url("requests.min.css");
 
-body{background:#ccc; color: #444; margin: 0;}
+body{background:#ccc; color: #444; margin: 0; height: auto !important;}
 *{font-size: 1em;}
 
 /* ---------------------------------------------------------------------- 

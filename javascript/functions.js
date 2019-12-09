@@ -22,7 +22,7 @@ function initDrawH3list() {
             this.id = sH3id;
         if (this.id !== "h3menu") {
             i++;
-            sHtml += '<li><a href="#' + sH3id + '" class="scroll-link"><i class="fa fa-angle-right"></i>' + this.innerHTML.replace(/(<([^>]+)>)/ig, "") + '</a></li>';
+            sHtml += '<li><a href="#' + sH3id + '" class="scroll-link"><i class="fas fa-angle-right"></i>&nbsp;' + this.innerHTML.replace(/(<([^>]+)>)/ig, "") + '</a></li>';
         }
 
     });
@@ -49,7 +49,7 @@ function initSoftscroll() {
                 target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
                 if (target.length) {
                     $('html,body').animate({
-                        scrollTop: target.offset().top - 70
+                        scrollTop: target.offset().top - 30
                     }, 300);
                     return false;
                 }

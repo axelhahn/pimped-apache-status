@@ -31,6 +31,7 @@ $aLangTxt = array(
     'versionError'=>'??',
     'versionUpdateAvailable'=>'Version %s is available',
     'versionManualCheck'=>'check for a new version',
+    'lblUpdateUnusedVendorlibs'=>'One more hint: on occasion you can delete %s unused vendor libs.',
     
     'authAccessDenied'=>'<h1>Access denied.</h1>User and password are required.',
     

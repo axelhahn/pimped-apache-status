@@ -29,13 +29,6 @@ unset($aEnv["links"]["reload"]);
 require_once '../classes/datarenderer.class.php';
 $oDatarenderer = new Datarenderer();
 
-$content = '<div id="divtiles">'
-        . '<h2>'
-        . '<i class="fa fa-cog"></i> Admin'
-        . '</h2>'
-        . '</div><br>'
-// . $oDatarenderer->renderTabs($aTabs)
-;
 $content = '';
 $sIncView = $bIsAuthenticated ? ('admin/' . ($sAction ? $sAction : 'servers') . '.php') : 'login.php'
 ;

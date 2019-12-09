@@ -40,7 +40,7 @@ $sHtml=''
                     . '</div>'
                 . '</div>'
 
-                . '<button class="btn btn-primary" type="submit"    ><i class="fa fa-check"></i> '.$aLangTxt['ActionLogin'].'</button>'
+                . '<button class="btn btn-primary" type="submit"    ><i class="fas fa-check"></i> '.$aLangTxt['ActionLogin'].'</button>'
                 . '<div style="clear: both"></div>'
             . '</form>'
         )
