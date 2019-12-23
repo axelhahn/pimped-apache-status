@@ -21,8 +21,8 @@ $aServers2Collect = array();
 $sGetStarted = '<br>see documentation <a href="https://www.axel-hahn.de/docs/apachestatus/get_started.htm">get started<a>.';
 
 
-$oCfg=new confighandler("internal-env");
-$aEnv=$oCfg->get();
+$oCfg=new axelhahn\confighandler("internal-env");
+$aEnv=$oCfg->getFullConfig();
 
 // I wanna see all warnings 
 if (stripos($aEnv["project"]["version"], "beta")) {
@@ -41,12 +41,12 @@ $oLog->add('$_POST: <pre>' . print_r($_POST, 1).'</pre>');
 require_once("inc_functions.php");
 $oLog->add('inc_function was loaded');
 
-$aDefaultCfg=$oCfg->get("internal-config_default");
+$aDefaultCfg=$oCfg->getFullConfig("internal-config_default");
 if (!is_array($aDefaultCfg) || !count($aDefaultCfg)) {
     die("ERROR: Config was not loaded. Reinstall with a fresh download.");
 }
 
-$aUserCfg=$oCfg->get("config_user");
+$aUserCfg=$oCfg->getFullConfig("config_user");
 if (!is_array($aUserCfg)|| !count($aUserCfg)) {
     $_GET["view"]='install.php';
 }
@@ -106,14 +106,14 @@ $bIsExternalUrl=isset($_GET["url"]);
 
 // -- servergroup
 // --- load server groups and servers
-$aServergroups=$oCfg->get("config_servers");
+$aServergroups=$oCfg->getFullConfig("config_servers");
 
 // if no server was configured then setup defaults
 if (!count($aServergroups) && is_array($aUserCfg) ){
     require_once __DIR__ . '/classes/configserver.class.php';
     $oServers=new configServer();
     
-    $aServergroups=$oCfg->get("config_servers");
+    $aServergroups=$oCfg->getFullConfig("config_servers");
     if ($aServergroups && count($aServergroups)){
         $oMsg->add($aLangTxt['AdminMessageServer-add-defaults-ok'], 'success');
     } else {

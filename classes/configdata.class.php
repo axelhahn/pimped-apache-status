@@ -61,9 +61,9 @@ class configData {
      * @return type
      */
     private function _load() {
-        $this->_aUser     = $this->_oCfg->get($this->_sIdUser);
-        $this->_aDefaults = $this->_oCfg->get($this->_sIdDefaults);
-        $this->_aForm     = $this->_oCfg->get($this->_sIdForm);
+        $this->_aUser     = $this->_oCfg->getFullConfig($this->_sIdUser);
+        $this->_aDefaults = $this->_oCfg->getFullConfig($this->_sIdDefaults);
+        $this->_aForm     = $this->_oCfg->getFullConfig($this->_sIdForm);
         return true;
     }
     
@@ -74,7 +74,7 @@ class configData {
     private function _save() {
         $this->_sort();
         
-        $this->_oCfg->setCfgId($this->_sIdUser);
+        $this->_oCfg->configSet($this->_sIdUser);
         return $this->_oCfg->set($this->_aUser);
     }
     
@@ -171,7 +171,7 @@ class configData {
         if(!$sKey){
             return $aArray;
         }
-        return $this->_oCfg->getValue($sKey, $aArray);
+        return $this->_oCfg->get($sKey, $aArray);
     }
 
     // ----------------------------------------------------------------------

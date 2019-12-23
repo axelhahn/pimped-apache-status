@@ -268,7 +268,9 @@ $aLangTxt = array(
             <br>
             If a server-status page is available in the public internet you can
             use a bookmarklet to view it here. Without any configuration.<br>
-            Drag and drop the following link to your bookmarks: ',
+            Drag and drop the following button to your bookmarks: ',
+        'lblHelpBookmarkletLabel'=>'Pimped Apache Status <strong>Bookmarklet</strong>',
+        'lblHelpBookmarkletTitle'=>'Drag and drop me into the browsers bookmarks.',
         
         'lblHelpColors'=>'Colors of the request rows',
         'lblHintHelpColors'=>'

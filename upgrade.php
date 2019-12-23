@@ -65,10 +65,10 @@ function renameOld($filename){
 
             // ---------- write
             echo "<h2>Writing new config</h2>";
-            $oCfg->setCfgId("config_servers");
+            $oCfg->configSet("config_servers");
             $oCfg->set($aServergroups);
             echo "OK, <span class=\"file\">config/config_servers.json</span> was written.<br>";
-            $oCfg->setCfgId("config_user");
+            $oCfg->configSet("config_user");
             $oCfg->set($aCfg);
             echo "OK, <span class=\"file\">config/config_user.json</span> was written.<br>";
         }

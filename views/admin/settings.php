@@ -4,7 +4,7 @@ if (!isset($adminindex)) {
     die("Abort." . __FILE__);
 }
 
-$oCfg=new confighandler("config_user");
+$oCfg=new axelhahn\confighandler("config_user");
 // $aUserCfg=$oCfg->get();
 $aTC = array();
 
@@ -35,7 +35,7 @@ if($sAppAction){
 }
 
 // RESCAN CONFIG - repeated in inc_config.php
-$aUserCfg=$oCfg->get("config_user");
+$aUserCfg=$oCfg->getFullConfig("config_user");
 $aCfg = array_merge($aDefaultCfg, $aUserCfg);
 
 
@@ -87,7 +87,7 @@ foreach (array(
 // ----------------------------------------------------------------------
 // tab settings that shows overrides 
 // ----------------------------------------------------------------------
-$aCfgUser = $oCfg->get("config_user");
+$aCfgUser = $oCfg->getFullConfig("config_user");
 
 
 // $myvar = 'overrides';

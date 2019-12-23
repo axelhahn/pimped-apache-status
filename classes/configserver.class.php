@@ -36,7 +36,7 @@ class configServer {
      * init method; it loads the server config
      */
     public function __construct() {
-        $this->_oCfg = new confighandler($this->_sIdCfg);
+        $this->_oCfg = new axelhahn\confighandler($this->_sIdCfg);
         $this->_load();
     }
 
@@ -69,7 +69,7 @@ class configServer {
      * @return type
      */
     private function _load() {
-        $this->_aServer = $this->_oCfg->get();
+        $this->_aServer = $this->_oCfg->getFullConfig();
         if (!$this->_aServer || !count($this->_aServer)){
             $this->_initMinimalConfig();
             $this->_save();
@@ -282,7 +282,11 @@ class configServer {
     /**
      * add a new server; it returns an array with the keys
      * return (true/ false) and error (error message)
-     * @param array $aItem
+     * @param array $aItem  array with server data; keys are
+     *                      - group         server group
+     *                      - label         hostname
+     *                      - status-url    server status url
+     *                      - userpwd       optional basic authentication in syntax "user:password"
      * @return array
      */
     public function addServer($aItem){
@@ -310,7 +314,8 @@ class configServer {
     /**
      * delete a server entry of a group; it returns an array with the keys
      * return (true/ false) and error (error message)
-     * @param array $aItem
+     * @param array $aItem  server item to delete; the key to be deleted must be
+     *                      "oldlabel"
      * @return array
      */
     public function deleteServer($aItem){

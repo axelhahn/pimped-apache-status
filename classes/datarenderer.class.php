@@ -470,7 +470,7 @@ class Datarenderer {
      * create bookmarklet with the current installation of pimped apachestatus
      * @return string
      */
-    public function genBookmarklet($sLabel = 'Pimped Apache Status') {
+    public function genBookmarklet($sLabel = 'Pimped Apache Status', $sTitle='') {
         $sMyUrl = $_SERVER["REQUEST_SCHEME"]
                 . "://"
                 . $_SERVER["HTTP_HOST"]
@@ -480,7 +480,7 @@ class Datarenderer {
 
         $sHref = "javascript:document.location.href='$sMyUrl'+encodeURI(document.location.href);";
 
-        return '<a href="' . $sHref . '">' . $sLabel . '</a>';
+        return '<a href="' . $sHref . '" class="btn btn-default" onclick="alert(\''.$sTitle.'\'); return false;">' . $sLabel . '</a>';
     }
 
     /**

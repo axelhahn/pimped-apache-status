@@ -74,7 +74,7 @@ if(is_array($_POST) && count($_POST)){
             || ($_POST['username']===$sDummyUser && !$_POST['pw1'] && !$_POST['pw2'])
         )
     ){
-        $dummy=$oCfg->get("config_user");
+        $dummy=$oCfg->getFullConfig("config_user");
         $aUsersetup=array(
             'auth'=>array(
                 'user'=>$_POST['username']

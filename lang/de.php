@@ -273,7 +273,9 @@ $aLangTxt = array(
             <br>
             Eine Server-Status-Seite per Klick und ohne Konfiguration
             anschauen - das geht, wenn diese im Internet sichtbar ist.<br>
-            Ziehe den nachfolgenden Link in deine Bookmarks: ',
+            Ziehe den nachfolgenden Button in deine Bookmarks: ',
+        'lblHelpBookmarkletLabel'=>'Pimped Apache Status <strong>Bookmarklet</strong>',
+        'lblHelpBookmarkletTitle'=>'Bitte in den Button in deine Bookmarks ziehen.',
     
         'lblHelpColors'=>'Einf&auml;rbung der Requests',
         'lblHintHelpColors'=>'

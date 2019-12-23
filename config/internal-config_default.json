@@ -65,6 +65,7 @@
         "utilization.php": "<i class=\"fas fa-tachometer-alt\"><\/i>",
         "help.php": "<i class=\"fas fa-question-circle\"><\/i>",
         "help-doc": "<i class=\"fas fa-book\"><\/i>",
+        "help-draganddrop": "<i class=\"fas fa-arrows-alt\"><\/i>",
         "help-color": "<i class=\"fas fa-tint\"><\/i>",
         "help-thanks": "<i class=\"far fa-comment\"><\/i>",
         "update.php": "<i class=\"fas fa-rocket\"><\/i>",

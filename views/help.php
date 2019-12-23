@@ -38,7 +38,7 @@ $content=
                 '<ul>' . $oDatarenderer->renderLI($aEnv["links"]["project"]) . '</ul>'
                 .'<p>'.
                     $aLangTxt['lblHelpBookmarklet'].
-                    $oDatarenderer->genBookmarklet().'
+                    $oDatarenderer->genBookmarklet($aCfg['icons']['help-draganddrop'].' '.$aLangTxt['lblHelpBookmarkletLabel'], $aLangTxt['lblHelpBookmarkletTitle']).'
                 </p>',
                 $aLangTxt['lblHintHelpDoc']
         )
