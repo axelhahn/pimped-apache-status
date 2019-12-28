@@ -233,8 +233,11 @@ class configServer {
      * @return array
      */
     public function setGroup($aItem){
-        if(!array_key_exists('oldlabel', $aItem)){
+        if(!isset($aItem['oldlabel'])){
             return array('result'=>false, 'error'=>'old label is required');
+        }
+        if(!isset($this->_aServer[$aItem['oldlabel']])){
+            return array('result'=>false, 'error'=>'server '.$aItem['oldlabel'].' does not exist');
         }
         
         $aTmp=$this->_aServer[$aItem['oldlabel']];

@@ -90,6 +90,13 @@ $aParamDefs=array(
             'shortinfo' => 'user:password',
             'description' => 'User and password in syntax [username]:[password]; for actions create and update.',
         ),
+        'newname'=>array(
+            'short' => 'n',
+            'value'=> CLIVALUE_REQUIRED,
+            // 'pattern'=>'/.*/',
+            'shortinfo' => 'new name for group or server',
+            'description' => 'For action update only. Rename a given group or server.',
+        ),
         'help'=>array(
             'short' => 'h',
             'value'=> CLIVALUE_NONE,
@@ -452,26 +459,64 @@ elseif ($oCli->getvalue("defaults")){
             }
             break;
         case 'update':
+            $sNewName=$oCli->getvalue("newname");
             if($sServer){
-                // --------------------------------------------------
-                // @example --action update --group=[name] --server [hostname] --status-url 'https://...' --userpwd [user:password]
-                // --------------------------------------------------
-                $sUrl=$oCli->getvalue("status-url");
-                $sUserPwd=$oCli->getvalue("userpwd");
-                $aItem=array(
-                    'group'=>$sGroup,
-                    'oldlabel'=>$sServer,
-                    'label'=>$sServer,
-                    'status-url'=>$sUrl,
-                    'userpwd'=>$sUserPwd,
-                );
-                echo "; update server [$sGroup] -> [$sServer]:\n"
-                    ."; host data: ".json_encode($aItem)."\n"
-                    ;
-                $oCli->color('cli');
-                echo json_encode($oServer->setServer($aItem), JSON_PRETTY_PRINT)."\n";
+                if (!$sNewName){
+                    // --------------------------------------------------
+                    // @example --action update --group=[name] --server [hostname] --status-url 'https://...' --userpwd [user:password]
+                    // --------------------------------------------------
+                    $sUrl=$oCli->getvalue("status-url");
+                    $sUserPwd=$oCli->getvalue("userpwd");
+                    $aItem=array(
+                        'group'=>$sGroup,
+                        'oldlabel'=>$sServer,
+                        'label'=>$sServer,
+                        'status-url'=>$sUrl,
+                        'userpwd'=>$sUserPwd,
+                    );
+                    echo "; update server [$sGroup] -> [$sServer]:\n"
+                        ."; host data: ".json_encode($aItem)."\n"
+                        ;
+                    $oCli->color('cli');
+                    echo json_encode($oServer->setServer($aItem), JSON_PRETTY_PRINT)."\n";
+                } else {
+                    // --------------------------------------------------
+                    // @example --action update --group=[name] --server [hostname] --newname [new-hostname]
+                    // --------------------------------------------------
+                    echo "; rename server [$sGroup] -> [$sServer]:\n"
+                        ."; new hostname: ${sNewName}\n"
+                        ;
+                    $aItem=$oServer->getServerDetails($sGroup, $sServer);
+                    if(!count($aItem)){
+                        quit("A server [$sGroup] -> [$sServer] does not exist.\n");
+                    }
+                    $aItemNew=$oServer->getServerDetails($sGroup, $sNewName);
+                    if(count($aItemNew)){
+                        quit("A server [$sGroup] -> [$sNewName] already exists. Use a non existing server name.\n");
+                    }
+                    $aItem['oldlabel']=$sServer;
+                    $aItem['label']=$sNewName;
+                    $aItem['group']=$sGroup;
+                    $oCli->color('cli');
+                    echo json_encode($oServer->setServer($aItem), JSON_PRETTY_PRINT)."\n";
+                }
             } elseif($sGroup && $sGroup!==true){
-                quit("Renaming a group is not supported on CLI. Sorry :-/\n");
+                if (!$sNewName){
+                    quit("Missing parameter --newname\n");
+                }
+                // --------------------------------------------------
+                // @example --action update --group=[name] --newname [new-groupname]
+                // --------------------------------------------------
+                echo "; rename group [$sGroup]:\n"
+                    ."; new groupname: ${sNewName}\n"
+                    ;
+                if(array_search($sNewName, $oServer->getGroups())!==false){
+                    quit("The group ${sNewName} exists already. Use a non existing group name.\n");
+                }
+                $aItem['oldlabel']=$sGroup;
+                $aItem['label']=$sNewName;
+                $oCli->color('cli');
+                echo json_encode($oServer->setGroup($aItem), JSON_PRETTY_PRINT)."\n";
             } else {
                 quit("A group name and a server is required. use --group='[name]' --server='[hostname]'\n");
             }
