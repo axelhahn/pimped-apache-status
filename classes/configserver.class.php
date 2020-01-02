@@ -140,7 +140,10 @@ class configServer {
      * @return array
      */
     public function getServers($sGroup) {
-        if (!array_key_exists($sGroup, $this->_aServer) || !array_key_exists('servers', $this->_aServer[$sGroup])
+        if (!array_key_exists($sGroup, $this->_aServer) ) {            
+            return array('result'=>false,'error'=>'group '.$sGroup.' does not exist.');
+        }
+        if (!array_key_exists('servers', $this->_aServer[$sGroup])
         ) {
             return array();
         }
@@ -157,12 +160,15 @@ class configServer {
      * @return type
      */
     public function getServerDetails($sGroup,$sId) {
-        if (!array_key_exists($sGroup, $this->_aServer) 
-                || !array_key_exists('servers', $this->_aServer[$sGroup])
+        if (!array_key_exists($sGroup, $this->_aServer) ) {            
+            return array('result'=>false,'error'=>'group '.$sGroup.' does not exist.');
+        }
+        if (!array_key_exists('servers', $this->_aServer[$sGroup])
                 || !array_key_exists($sId, $this->_aServer[$sGroup]['servers'])
         ) {
-            return array();
+            return array('result'=>false,'error'=>'server '.$sId.' does not exist.');
         }
+
         $aReturn=$this->_aServer[$sGroup]['servers'][$sId];
         
         if (!array_key_exists('label', $aReturn)){
@@ -213,7 +219,7 @@ class configServer {
             return array('result'=>false, 'error'=>'old label is required');
         }
         if(!array_key_exists($aItem['oldlabel'], $this->_aServer)){
-            return array('result'=>false, 'error'=>'old label does not exist');
+            return array('result'=>false, 'error'=>'group ['.$aItem['oldlabel'].'] does not exist');
         }
         
         // remove key

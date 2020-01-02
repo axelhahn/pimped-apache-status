@@ -10,7 +10,7 @@
 
 ----------------------------------------------------------------------
 
-2019-12-30: v2.04.00
+2020-01-02: v2.04.00
   * ADDED: new CLI tool to configure program and setup groups and servers
   * ADDED: cli class
   * UPDATE: php docs in class configserver

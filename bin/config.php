@@ -38,21 +38,21 @@ $aParamDefs=array(
             'short' => 'a',
             'value'=> CLIVALUE_REQUIRED,
             'pattern'=>'/^(create|read|update|delete)$/',
-            'shortinfo' => 'name of action',
+            'shortinfo' => 'Name of action',
             'description' => 'The action value is one of create|read|update|delete',
         ),
         'config'=>array(
             'short' => 'c',
             'value'=> CLIVALUE_OPTIONAL,
             // 'pattern'=>'/^...$/',
-            'shortinfo' => 'Name of config variable',
+            'shortinfo' => 'The value is the name of config variable',
             'description' => 'It can be empty to show the complete config',
         ),
         'defaults'=>array(
             'short' => 'd',
             'value'=> CLIVALUE_OPTIONAL,
             // 'pattern'=>'/^...$/',
-            'shortinfo' => 'Name of config variable',
+            'shortinfo' => 'The value is the name of config variable',
             'description' => 'It can be empty to show the complete config',
         ),
         'value'=>array(
@@ -60,20 +60,20 @@ $aParamDefs=array(
             'value'=> CLIVALUE_REQUIRED,
             // 'pattern'=>'/^...$/',
             'shortinfo' => 'config value',
-            'description' => '',
+            'description' => 'Set a custum config value; for parameters --action create|update --config=VARNAME ',
         ),
         'group'=>array(
             'short' => 'g',
             'value'=> CLIVALUE_OPTIONAL,
             // 'pattern'=>'/.*/',
-            'shortinfo' => 'name of group',
+            'shortinfo' => 'The value is the name of group',
             'description' => 'The group is a name {string} to identify a set of servers. It can be empty to show all groups',
         ),
         'server'=>array(
             'short' => 's',
             'value'=> CLIVALUE_REQUIRED,
             'pattern'=>'/.*/',
-            'shortinfo' => 'name of server',
+            'shortinfo' => 'The value is the name of server',
             'description' => 'The server is a hostname {string}.',
         ),
         'status-url'=>array(
@@ -144,6 +144,20 @@ function getCfgDescription($sVarname){
     return false;
 }
 /**
+ * handle JSON response for groups and servers 
+ * @param array   $aJson   result array of an action
+ */
+function handleJsonResult($aJson){
+    global $oCli;
+    if (isset($aJson['result']) && $aJson['result']===false) {
+        quit($aJson['error']);
+    }
+    $oCli->color('cli');
+    echo json_encode($aJson, JSON_PRETTY_PRINT)."\n";
+    return true;
+}
+
+/**
  * quit with error message and exitcode <> 0
  * @param string  $sMessage  text to show
  * @param integer $iExit     optional: exitcode; default=1
@@ -174,7 +188,6 @@ if ($oCli->getvalue("help") ||!count($oCli->getopt())){
 ;
 ;
 ;    '.$aParamDefs['label'].'
-;    '.$aParamDefs['description'].'
 ;
 ; _________________________________________________________________________________________
 ;
@@ -202,7 +215,7 @@ SYNTAX:
     CREATE
       create item:
       '.$sBase.' --action create --config=VARNAME --value [your value]
-      REMARK: VARNAME must be a valid key in default data (see --action read --defaults)
+      REMARK: VARNAME must be a valid key in default data (see '.$sBase.' --action read --defaults)
 
     READ
       show all:
@@ -243,6 +256,13 @@ SYNTAX:
       '.$sBase.' --action read --group=NAME --server=HOSTNAME
 
     UPDATE
+      rename group:
+      '.$sBase.' --action update --group=NAME --newname=NEW_NAME
+
+      rename server name of a group:
+      '.$sBase.' --action update --group=NAME --server=HOSTNAME \
+        --newname=NEW_NAME
+
       update server settings:
       '.$sBase.' --action update --group=NAME --server=HOSTNAME \
         --status-url [new url] [--userpwd [new user:password]]
@@ -417,8 +437,7 @@ elseif ($oCli->getvalue("defaults")){
                 echo "; create server [$sGroup] -> [$sServer]:\n"
                     ."; host data: ".json_encode($aItem)."\n"
                     ;
-                $oCli->color('cli');
-                echo json_encode($oServer->addServer($aItem), JSON_PRETTY_PRINT)."\n";
+                handleJsonResult($oServer->addServer($aItem));
             } elseif($sGroup && $sGroup!==true){
                 // --------------------------------------------------
                 // @example --action create --group=[name]
@@ -427,8 +446,7 @@ elseif ($oCli->getvalue("defaults")){
                     'label'=>$sGroup,
                 );
                 echo "; create group [$sGroup]:\n";
-                $oCli->color('cli');
-                echo json_encode($oServer->addGroup($aItem), JSON_PRETTY_PRINT)."\n";
+                handleJsonResult($oServer->addGroup($aItem));
             } else {
                 quit("A group name is required. use --group='[Name]'\n");
             }
@@ -439,21 +457,19 @@ elseif ($oCli->getvalue("defaults")){
                 // @example --action read --group=[name] --server [hostname]
                 // --------------------------------------------------
                 echo "; read server [$sGroup] -> [$sServer]:\n";
-                $oCli->color('cli');
-                echo json_encode($oServer->getServerDetails($sGroup, $sServer), JSON_PRETTY_PRINT)."\n";
+                handleJsonResult($oServer->getServerDetails($sGroup, $sServer));
             } elseif($sGroup && $sGroup!==true){
                 // --------------------------------------------------
                 // @example --action read --group=[name]
                 // --------------------------------------------------
                 echo "; read servernames of group [$sGroup]:\n";
-                $oCli->color('cli');
-                echo json_encode($oServer->getServers($sGroup), JSON_PRETTY_PRINT)."\n";
+                handleJsonResult($oServer->getServers($sGroup));
                 $oCli->color('info');
                 echo "; Hint: use as additional param --server '[NAME]' to show its settings.\n";
             } else {
                 echo "; read existing groups:\n";
                 $oCli->color('cli');
-                echo json_encode($oServer->getGroups(), JSON_PRETTY_PRINT)."\n";
+                handleJsonResult($oServer->getGroups());
                 $oCli->color('info');
                 echo "; Hint: use as additional param --group='[NAME]' to list its servers.\n";
             }
@@ -477,8 +493,7 @@ elseif ($oCli->getvalue("defaults")){
                     echo "; update server [$sGroup] -> [$sServer]:\n"
                         ."; host data: ".json_encode($aItem)."\n"
                         ;
-                    $oCli->color('cli');
-                    echo json_encode($oServer->setServer($aItem), JSON_PRETTY_PRINT)."\n";
+                    handleJsonResult($oServer->setServer($aItem), JSON_PRETTY_PRINT);
                 } else {
                     // --------------------------------------------------
                     // @example --action update --group=[name] --server [hostname] --newname [new-hostname]
@@ -497,8 +512,7 @@ elseif ($oCli->getvalue("defaults")){
                     $aItem['oldlabel']=$sServer;
                     $aItem['label']=$sNewName;
                     $aItem['group']=$sGroup;
-                    $oCli->color('cli');
-                    echo json_encode($oServer->setServer($aItem), JSON_PRETTY_PRINT)."\n";
+                    handleJsonResult($oServer->setServer($aItem));
                 }
             } elseif($sGroup && $sGroup!==true){
                 if (!$sNewName){
@@ -515,15 +529,13 @@ elseif ($oCli->getvalue("defaults")){
                 }
                 $aItem['oldlabel']=$sGroup;
                 $aItem['label']=$sNewName;
-                $oCli->color('cli');
-                echo json_encode($oServer->setGroup($aItem), JSON_PRETTY_PRINT)."\n";
+                handleJsonResult($oServer->setGroup($aItem));
             } else {
                 quit("A group name and a server is required. use --group='[name]' --server='[hostname]'\n");
             }
             break;
         case 'delete':
             if($sServer){
-                
                 // --------------------------------------------------
                 // @example --action delete --group=[name] --server [hostname]
                 // --------------------------------------------------
@@ -532,8 +544,7 @@ elseif ($oCli->getvalue("defaults")){
                     'oldlabel'=>$sServer,
                 );
                 echo "; delete server [$sGroup] -> [$sServer]:\n";
-                $oCli->color('cli');
-                echo json_encode($oServer->deleteServer($aItem), JSON_PRETTY_PRINT)."\n";
+                handleJsonResult($oServer->deleteServer($aItem));
             } elseif($sGroup && $sGroup!==true){
                 // --------------------------------------------------
                 // @example --action delete --group=[name]
@@ -542,8 +553,7 @@ elseif ($oCli->getvalue("defaults")){
                     'oldlabel'=>$sGroup,
                 );
                 echo "; delete group [$sGroup]:\n";
-                $oCli->color('cli');
-                echo json_encode($oServer->deleteGroup($aItem), JSON_PRETTY_PRINT)."\n";
+                handleJsonResult($oServer->deleteGroup($aItem));
             } else {
                 quit("A group name and optional servername is required. use --group='[name]' --server '[hostname]'\n");
             }
