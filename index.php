@@ -90,7 +90,9 @@ include ('./inc_pagetemplate.php');
 $oLog->add(__FILE__ . ' inc_pagetemplate.php done');
 
 $oLog->add('sending page');
-if($aCfg["debug"]){
+
+// v 2.04.01 - no debug code on data output
+if($aCfg["debug"] && $aEnv["active"]["skin"]!=='data'){
     $oPage->addContent($oLog->render());
 }
 echo $oPage->render();
