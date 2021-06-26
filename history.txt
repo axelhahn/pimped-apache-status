@@ -10,6 +10,15 @@
 
 ----------------------------------------------------------------------
 
+2021-06-27: v2.04.02
+  * UPDATE: utilization page
+  * UPDATE: datatables to 1.10.21
+  * UPDATE: font-awesome to 5.15.3
+  * UPDATE: jQuery to 3.6.0
+  * UPDATE: twitter-bootstrap to 3.4.1
+  * UPDATE: Chart.js to 2.9.4
+  * UPDATE: logger class
+
 2020-05-18: v2.04.01
   * FIX: if debug is enabled then suppress it on data output (API) Thanks to Kai
   * UPDATE: datatables to 1.10.20
