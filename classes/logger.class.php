@@ -24,7 +24,7 @@ class logger {
      * @return boolean
      */
     public function __construct($sInitMessage = "Logger was initialized.") {
-		$this->_iMemStart=memory_get_usage();
+        $this->_iMemStart=memory_get_usage();
         $this->add($sInitMessage);
         return true;
     }
@@ -39,7 +39,7 @@ class logger {
         $this->aMessages[] = array(
             'time' => microtime(true),
             'message' => $sMessage,
-            'level' => $sLevel
+            'level' => preg_replace('/[^a-z0-9\-\_]/', '', $sLevel)
         );
 
         return true;
@@ -51,6 +51,7 @@ class logger {
     public function render() {
         $sOut = '';
         $iMem=memory_get_usage();
+        $this->add('<hr>');
         $this->add('Memory on start: ' . number_format($this->_iMemStart, 0, '.', ',') . " bytes");
         $this->add('Memory on end: '   . number_format($iMem, 0, '.', ',') . " bytes");
         $this->add('Memory peak: '  . number_format(memory_get_peak_usage(), 0, '.', ',') . " bytes");
@@ -83,7 +84,7 @@ class logger {
                     '<td>' . sprintf("%01.3f", $aLogentry["time"] - $sStarttime) . '</td>' .
                     '<td>' . sprintf("%01.3f", $iDelta) . '</td>' .
                     '<td>' . $aLogentry["level"] . '</td>' .
-                    '<td>' . $aLogentry["message"] . '</td>' .
+                    '<td>' . htmlentities($aLogentry["message"]) . '</td>' .
                     '</tr>';
             $iLasttime = $aLogentry["time"];
         }
@@ -108,7 +109,7 @@ class logger {
             <table class="datatable table table-striped debugtable">
             <thead>
             <tr>
-                <th>#</th>
+                <th>number</th>
                 <th>delta to start time</th>
                 <th>delta to previuos</th>
                 <th>level</th>
