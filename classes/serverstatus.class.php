@@ -65,10 +65,12 @@ class ServerStatus {
                 return false;
             }
             $iReturn=($iReturn[0]==='.' ? '0'.$iReturn : $iReturn);
+            // echo "DEBUG: __METHOD__($value) value: $iReturn .. unit ".$aTmp[1]."<br>";
             
             if (isset($aTmp[1])){
                 switch ($aTmp[1]) {
                     case "B":
+                    case "ms/request":
                         // byte ... no multiplicator
                         break;
                     case "kB":
@@ -147,13 +149,19 @@ class ServerStatus {
                                 $aReturn[$sHostname]['status']['size/sec'] = $value;
                                 $aReturn[$sHostname]['counter']['size/sec'] = $this->_getCountervalue($value);
                             }
+                            if (strpos($sLine, "ms/request") > 0) {
+                                $value=str_replace("/second", "", $sLine);
+                                $aReturn[$sHostname]['status']['ms/request'] = $value;
+                                $aReturn[$sHostname]['counter']['ms/request'] = $this->_getCountervalue($value);
+                            }
                             // TODO: this line is left - what are u, s, cu, cs?
                             // CPU Usage: u1548.32 s194.7 cu.15 cs0 - 3.9% CPU load
                             // CPU Usage: u380.625 s1014.43 cu0 cs0 - 2.67% CPU load
                         }
-                        // print_r($aStatusinfos3);
+                        // echo '<pre>'.print_r($aStatusinfos3,1).'</pre>';
                     }
                 }
+                // echo '<hr><pre>'.print_r($aReturn[$sHostname],1).'</pre>';
             }
         }
 

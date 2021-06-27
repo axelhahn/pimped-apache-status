@@ -1015,17 +1015,21 @@ class Datarenderer {
         }
         $sTabs='';
         $sContent='';
-        foreach($aTabbedData as $aTabdata){
-            $iTabid++;
-            $sTabid='tab_'.$iTabid;
-            
-            $sTabs.='<li class="tab '.($sTabs ? '' : 'active').'"><a href="#'.$sTabid.'" data-toggle="tab" aria-expanded="false">'.$aTabdata['tab'].'</a></li>';
-            $sContent.='<div class="tab-pane'.($sContent ? '' : ' active').'" id="'.$sTabid.'">'.$aTabdata['content'].'</div>';
+        if(count($aTabbedData)==1){
+            return $aTabbedData[0]['content'];
+        } else {
+            foreach($aTabbedData as $aTabdata){
+                $iTabid++;
+                $sTabid='tab_'.$iTabid;
+
+                $sTabs.='<li class="tab '.($sTabs ? '' : 'active').'"><a href="#'.$sTabid.'" data-toggle="tab" aria-expanded="false">'.$aTabdata['tab'].'</a></li>';
+                $sContent.='<div class="tab-pane'.($sContent ? '' : ' active').'" id="'.$sTabid.'">'.$aTabdata['content'].'</div>';
+            }
+            return '<div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">'.$sTabs.'</ul>
+                <div class="tab-content">'.$sContent.'</div>
+             </div>';
         }
-        return '<div class="nav-tabs-custom">
-            <ul class="nav nav-tabs">'.$sTabs.'</ul>
-            <div class="tab-content">'.$sContent.'</div>
-         </div>';
     }
     /**
      * generate a menu with li elements - surrounded with ul class"tabs"
@@ -1330,7 +1334,7 @@ class Datarenderer {
         $sHtmlServer.=''
             . ($bHasServerfilter
                 ? $this->renderA(array(
-                    'class'=>'btn btn-default',
+                    'class'=>'btn btn-default btn-danger',
                     'url'=>getNewQs(array('servers'=>'')), // removes param "servers=..."
                     // 'title'=>$aCfg['icons']['actionDelete'] . ' '.$aEnv["active"]["servers"],
                     'label'=> $aCfg['icons']['actionDelete'] . ' ' . sprintf($aLangTxt['lblServerInfosRemove'], $aEnv["active"]["servers"]),
