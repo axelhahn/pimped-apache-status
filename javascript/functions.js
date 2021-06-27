@@ -237,11 +237,17 @@ function stickyGraph(sSrv, sVarname, sTitle) {
  * @param {string}  sVarname
  * @param {integer} iCount
  * @param {strng}   sTitle
+ * @param {float}   iMax        optional: force a max value for x axis
  * @returns {Boolean}
  */
-function showGraphInline(sDivPlotter, sSrv, sVarname, iCount, sTitle, iMax) {
+function showGraphInline(sDivPlotter, sSrv, sVarname, iCount, sTitle, iMax, sVarname2) {
     var oCounter = new counterhistory(sSrv, sVarname);
     var aData = oCounter.getLast(iCount);
+
+    if(sVarname2){
+        var oCounter2 = new counterhistory(sSrv, sVarname2);
+        var aData2 = oCounter2.getLast(iCount);
+    }
 
     var idCanvas = sDivPlotter + '-chart';
     if (!aData || !aData.data || !aData.data.length || aData['min'] === false) {
@@ -253,7 +259,8 @@ function showGraphInline(sDivPlotter, sSrv, sVarname, iCount, sTitle, iMax) {
             sMax = '',
             sMin = '',
             aTimeAxis = [],
-            sInfo = ''
+            sInfo = '',
+            sData2 = ''
             ;
 
     // get last data and create value arrays for the chart
@@ -265,8 +272,13 @@ function showGraphInline(sDivPlotter, sSrv, sVarname, iCount, sTitle, iMax) {
         sAvg += (sAvg ? ', ' : '') + aData['avg'];
         sMax += (sMax ? ', ' : '') + (iMax ? iMax : aData['max']);
         sMin += (sMin ? ', ' : '') + aData['min'];
+        if(sVarname2){
+            var aItem2 = aData2.data[i];
+            sData2 += (sData2 ? ', ' : '') + (aItem2[1]/1 === aItem2[1] ? aItem2[1] : '"'+aItem2[1]+'"');
+        }
     }
-    // console.log(sData);
+    console.log("sData ("+sVarname+") = " + sData);
+    console.log("sData2 ("+sVarname2+")= " + sData2);
 
     // create info box
     if (aLang) {
@@ -311,6 +323,16 @@ function showGraphInline(sDivPlotter, sSrv, sVarname, iCount, sTitle, iMax) {
                     borderWidth: 1,
                     borderDash: [3, 3],
                     fill: false,
+                    radius: 0
+                },
+                {
+                    type: 'line',
+                    label: sVarname2,
+                    data: JSON.parse('[' + sData2 + ']'),
+                    borderColor: '#888888',
+                    backgroundColor: '#eeeeee',
+                    borderWidth: 1,
+                    borderDash: [3, 1],
                     radius: 0
                 },
                 {

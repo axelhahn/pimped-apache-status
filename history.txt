@@ -10,6 +10,13 @@
 
 ----------------------------------------------------------------------
 
+2021-06-27: v2.04.03
+  * ADDED: counter for ms/request since server start
+  * UPDATE: utilization page got tile for ms/request
+  * UPDATE: utilization was simplified: it has only 1 graph now
+  * UPDATE: tabbed data with single tab hide the tabs
+  * FIX: remove unused dummy lib "zzz__admin-lte"
+
 2021-06-27: v2.04.02
   * UPDATE: utilization page
   * UPDATE: datatables to 1.10.21

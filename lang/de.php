@@ -236,6 +236,7 @@ $aLangTxt = array(
     
         'lblUtilizationTraffic'=>'Durchsatz',
         'lblUtilizationTrafficVersion'=>'Version',
+        'lblUtilizationTrafficMPM'=>'Multi-processing Modul',
         'lblUtilizationTrafficUptime'=>'Gestartet seit',
         'lblUtilizationTrafficTotalAccesses'=>'Zugriffe ges.',
         'lblUtilizationTrafficTotalTraffic'=>'Datenmenge ges.',
