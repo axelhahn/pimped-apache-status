@@ -277,8 +277,8 @@ function showGraphInline(sDivPlotter, sSrv, sVarname, iCount, sTitle, iMax, sVar
             sData2 += (sData2 ? ', ' : '') + (aItem2[1]/1 === aItem2[1] ? aItem2[1] : '"'+aItem2[1]+'"');
         }
     }
-    console.log("sData ("+sVarname+") = " + sData);
-    console.log("sData2 ("+sVarname2+")= " + sData2);
+    // console.log("sData ("+sVarname+") = " + sData);
+    // console.log("sData2 ("+sVarname2+")= " + sData2);
 
     // create info box
     if (aLang) {
