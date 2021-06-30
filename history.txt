@@ -10,6 +10,9 @@
 
 ----------------------------------------------------------------------
 
+2021-06-30: v2.04.05
+  * ADDED: make a servertab sticky (maybe needs Shift reload once)
+
 2021-06-28: v2.04.04
   * FIX: remove unnecessairy console.log
   * FIX: multipe tabs on page utilization
