@@ -173,6 +173,31 @@ function initTileProgress() {
 }
 
 /**
+ * make a servertab sticky ... on reload or switching between original server
+ * status and utilisation
+ * 
+ * @returns {undefined}
+ */
+function initServertab(){
+    // append own onclick envent on server tabs to store its label
+    $('*[data-toggle="tab"]').each(function () {
+        $(this).click(function(){
+            var label=$($(this).contents()[1]).text();
+            localStorage.setItem('srvtab', label);
+        });
+    });
+    
+    // simulate a click on a last stored server tab
+    var srvTabLabel=localStorage.getItem('srvtab');
+    if(srvTabLabel){
+        $('*[data-toggle="tab"]').each(function () {
+            if($($(this).contents()[1]).text() == srvTabLabel){
+                $(this).click();
+            }
+        });
+    }
+}
+/**
  * init page
  * @returns {undefined}
  */
@@ -181,6 +206,8 @@ function initPage() {
     initSoftscroll();
     initServerFilter();
     initTileProgress();
+    initServertab();
+    
     $('body').append('<div id="' + sDivPlotter + '" class="plotter"></div>');
 }
 
