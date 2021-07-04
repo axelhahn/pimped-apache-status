@@ -326,73 +326,84 @@ function showGraphInline(sDivPlotter, sSrv, sVarname, iCount, sTitle, iMax, sVar
             labels: aTimeAxis,
             datasets: [
                 {
-                    type: 'line',
-                    data: JSON.parse('[' + sAvg + ']'),
-                    borderColor: '#e0a010',
-                    borderWidth: 1,
-                    borderDash: [3, 3],
-                    fill: false,
-                    radius: 0
-                },
-                {
-                    type: 'line',
-                    data: JSON.parse('[' + sMin + ']'),
-                    borderColor: '#008000',
-                    borderWidth: 1,
-                    borderDash: [3, 3],
-                    fill: false,
-                    radius: 0
-                },
-                {
-                    type: 'line',
-                    data: JSON.parse('[' + sMax + ']'),
-                    borderColor: '#ff0000',
-                    borderWidth: 1,
-                    borderDash: [3, 3],
-                    fill: false,
+                    type: 'bar',
+                    label: sTitle,
+                    data: JSON.parse('[' + sData + ']'),
+                    borderColor: '#80d0f4',
+                    backgroundColor: '#80d0f4',
+                    fill: true,
+                    lineTension: 0,
                     radius: 0
                 },
                 {
                     type: 'line',
                     label: sVarname2,
                     data: JSON.parse('[' + sData2 + ']'),
-                    borderColor: '#888888',
+                    borderColor: '#aaaaaa',
                     backgroundColor: '#eeeeee',
                     borderWidth: 1,
                     borderDash: [3, 1],
+                    fill: true,
                     radius: 0
                 },
                 {
-                    type: 'bar',
-                    label: sTitle,
-                    data: JSON.parse('[' + sData + ']'),
-                    backgroundColor: '#80d0f4',
-                    lineTension: 0,
+                    type: 'line',
+                    label: aLang['statsMax'],
+                    data: JSON.parse('[' + sMax + ']'),
+                    borderColor: '#ff0000',
+                    backgroundColor: '#ff0000',
+                    borderWidth: 1,
+                    borderDash: [3, 3],
+                    fill: false,
                     radius: 0
-                }
+                },
+                {
+                    type: 'line',
+                    label: aLang['statsAvg'],
+                    data: JSON.parse('[' + sAvg + ']'),
+                    borderColor: '#e0a010',
+                    backgroundColor: '#e0a010',
+                    borderWidth: 1,
+                    borderDash: [3, 3],
+                    fill: false,
+                    radius: 0
+                },
+                {
+                    type: 'line',
+                    label: aLang['statsMin'],
+                    data: JSON.parse('[' + sMin + ']'),
+                    borderColor: '#008000',
+                    backgroundColor: '#008000',
+                    borderWidth: 1,
+                    borderDash: [3, 3],
+                    fill: false,
+                    radius: 0
+                },
             ]
         },
         options: {
             animation: {
                 duration: 0
             },
-            legend: {
-                display: false
-            },
             scales: {
-                xAxes: [{
+                x: {
                         display: false
-                    }],
-                yAxes: [{
+                    },
+                y: {
                         ticks: {
                             beginAtZero: true,
                             max: (iMax ? iMax : aData['max'])
                         }
-                    }]
+                    }
             },
-            title: {
-                display: false,
-                text: sTitle
+            plugins: {
+                legend: {
+                    display: false
+                },
+                title: {
+                    display: false,
+                    text: sTitle
+                }
             }
         }
     });
