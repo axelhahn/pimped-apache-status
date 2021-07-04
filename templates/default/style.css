@@ -384,7 +384,7 @@ table.display tr.odd.row_selected td {
 
 /* charts  */
 
-.chartsfortable{border: 1px solid #eee; background: #f8f8f8; background: linear-gradient(-10deg,#eee,#fff,#f8f8f8); float: left; margin-left: 1em; max-width: 60%;}
+.chartsfortable{border: 3px solid #fff; border-radius: 0.5em; background: #f8f8f8; background: linear-gradient(-10deg,#eee,#fff,#f8f8f8); box-shadow: 0 0 2em #eee; float: left; margin-left: 1em; max-width: 60%;}
 .chartsfortable .divbars{width: auto; float: left; min-height: 30em;}
 .chartsfortable .divdonut{width: 20em; height:20em;float: right; border: 0px solid rgba(0,0,0,0.05); }
 
@@ -463,7 +463,7 @@ plotter
 .plottterinline{width: 500px; height: 300px;}
 */
 
-.plottterinlinewrapper{display: block; float: left; border: 1px solid #ddd; margin: 0 1em 1em 0; padding: 1em; width: 45%;}
+.plottterinlinewrapper{display: block; float: left; margin: 0 1em 1em 0; padding: 1em; width: 100%;}
 .plottterinlinewrapper .header{background: #ddd; font-weight: bold; padding: 0.5em;}
 .plottterinline .infos,
 .graph .infos

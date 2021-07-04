@@ -25,7 +25,7 @@ function showPlotter($sHost, $sCounterItem, $iPlotterValues, $sDescription, $sTi
     }
     $iPlotterCounter++;
     $sIdWorker='graphPlotter'.$iPlotterCounter;
-    $sReturn.='<div class="plottterinlinewrapper">'
+    $sReturn.='<div class="plottterinlinewrapper chartsfortable">'
             . '<div class="header '.$aCfg['skin-color2'].'">'.$sTitle.'</div>'
             . '<br><div id="'.$sIdWorker.'" class="plottterinline"></div>'
             . '</div>'

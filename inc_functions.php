@@ -322,7 +322,7 @@ function getHtmlHead($aLangTxt) {
         . '<link href="' . $oCdn->getFullUrl($oCdn->getLibRelpath('font-awesome').'/css/all.min.css') . '" rel="stylesheet">'
 
         // Chart.js
-        . '<script src="' . $oCdn->getFullUrl($oCdn->getLibRelpath('Chart.js').'/Chart.min.js') . '" type="text/javascript"></script>'
+        . '<script src="' . $oCdn->getFullUrl($oCdn->getLibRelpath('Chart.js').'/chart.min.js') . '" type="text/javascript"></script>'
     ;
     return $sHeader;
 }

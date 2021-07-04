@@ -748,22 +748,24 @@ class Datarenderer {
             animation: {
                 duration: 0
             },
-            legend: {
-                display: false
-            },
             scales: {
-                xAxes: [{
+                x: {
                         display: false
-                    }],
-                yAxes: [{
+                    },
+                y: {
                         ticks: {
                             beginAtZero: true
                         }
-                    }]
+                    }
             },
-            title: {
-                display: true,
-                text: \'\'
+            plugins: {
+                legend: {
+                    display: false
+                },
+                title: {
+                    display: true,
+                    text: \'\'
+                }
             }
         }
     });
