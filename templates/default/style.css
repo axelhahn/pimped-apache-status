@@ -191,6 +191,9 @@ div.servergroup strong span{
     font-size: 400%;
 }
 div.serveritem span.badge{font-size: 120%; background: #abc;color: #fff;}
+div.serveritem >strong,
+div.serveritem span.value{color:#468;}
+
 div.serveritem:hover{   
     background: #f0f0f4; 
 }
@@ -393,8 +396,17 @@ table.display tr.odd.row_selected td {
 .morris-hover.morris-default-style .morris-hover-row-label{font-weight:bold;margin:0.25em 0;}
 .morris-hover.morris-default-style .morris-hover-point{white-space:nowrap;margin:0.1em 0;}
 
+.divServerGroup{
+    border-top: 2px solid #eee;
+}
+.divServerGroup > button {float: left; margin-top: 10px;}
+
+.divServersOfGroup{display: none;}
+.ishidden{display: none !important;}
+
 
 /* go top div */
+
 
 #divgotop{
     background: #333;

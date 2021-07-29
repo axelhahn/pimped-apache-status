@@ -1366,10 +1366,10 @@ class Datarenderer {
                     . '<br>'
                     . $sServername
                 . '</strong><br>'
-                    . $aKeys[1].': '.$aSrvdata[$aKeys[1]].'; '
-                    . $aKeys[2].': '.$aSrvdata[$aKeys[2]].'<br>'
-                    . $aKeys[3].': '.$aSrvdata[$aKeys[3]].'; '
-                    . $aKeys[4].': '.$aSrvdata[$aKeys[4]]
+                    . $aKeys[1].': <span class="value">'.$aSrvdata[$aKeys[1]].'</span>; '
+                    . $aKeys[2].': <span class="value">'.$aSrvdata[$aKeys[2]].'</span><br>'
+                    . $aKeys[3].': <span class="value">'.$aSrvdata[$aKeys[3]].'</span>; '
+                    . $aKeys[4].': <span class="value">'.$aSrvdata[$aKeys[4]].'</span>'
                     . '<br>'
                     . $aSrvdata[$aKeys[5]].'<br>' // graph
                     . $aSrvdata[$aKeys[6]].'<br>' // buttons

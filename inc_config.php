@@ -52,8 +52,10 @@ if (!is_array($aUserCfg)|| !count($aUserCfg)) {
 }
 $aCfg = array_merge($aDefaultCfg, $aUserCfg);
 $oLog->add('<pre>'.print_r($aCfg, 1).'</pre>');
-$sSelfURL=$aCfg['selfurl'] ? $aCfg['selfurl'] : str_replace('\\','/',str_replace(realpath($_SERVER['DOCUMENT_ROOT']), '', __DIR__));
 
+// FIX for https://github.com/axelhahn/pimped-apache-status/issues/24
+// $sSelfURL=$aCfg['selfurl'] ? $aCfg['selfurl'] : str_replace('\\','/',str_replace(realpath($_SERVER['DOCUMENT_ROOT']), '', __DIR__));
+$sSelfURL=preg_replace('#\/admin$#', '', dirname($_SERVER['SCRIPT_NAME']));
 
 // ------------------------------------------------------------
 // check required features
