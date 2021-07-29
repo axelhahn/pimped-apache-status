@@ -10,6 +10,11 @@
 
 ----------------------------------------------------------------------
 
+2021-07-29: v2.04.07
+  * UPDATE: remove config var selfurl
+  * UPDATE: colors in utilization boxes
+  * UPDATE: page admin -> server setup
+
 2021-07-04: v2.04.06
   * UPDATE: chartJs upgrade v2 to v3 (using v3.4.1)
 

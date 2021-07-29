@@ -142,9 +142,13 @@ if (count($oCS->getGroups())) {
         
         // add a server
         $sDivNew = 'divAddServer' . md5($sGroup);
-        $sHtml.=''
+        $sIdButtonShow = 'btn-' . md5($sGroup).'-show';
+        $sIdButtonHide = 'btn-' . md5($sGroup).'-hide';
+        $sHtml.='<div class="divServerGroup">'
+                . '<button class="btn btn-default grouptoggle" id="'.$sIdButtonShow.'" onclick="$(\'#'.$sIdButtonShow.'\').addClass(\'ishidden\'); $(\'#'.$sIdButtonHide.'\').removeClass(\'ishidden\'); $(this).siblings(\'.divServersOfGroup\').show();"><i class="fas fa-caret-right"></i></button>'
+                . '<button class="btn btn-default grouptoggle ishidden" id="'.$sIdButtonHide.'" onclick="$(\'#'.$sIdButtonShow.'\').removeClass(\'ishidden\'); $(\'#'.$sIdButtonHide.'\').addClass(\'ishidden\'); $(this).siblings(\'.divServersOfGroup\').hide();"><i class="fas fa-caret-down"></i></button>'
                 . $oCS->renderFormGroup($sGroup) . '<br>'
-                . '<div style="margin-left: 3%" class="">'
+                . '<div style="margin-left: 3%" class="divServersOfGroup">'
                 // . '<div id="' . $sDivNew . '" class="divNew">'
                 . $oCS->renderFormServer($sGroup) . '<br>'
                 // . '</div><br>'
@@ -157,7 +161,7 @@ if (count($oCS->getGroups())) {
                 $sHtml.=$oCS->renderFormServer($sGroup, $sId);
             }
         }
-        $sHtml.='</div><br><br><br>';
+        $sHtml.='<br><br><br></div></div>';
     }
     
     // highlight saved items

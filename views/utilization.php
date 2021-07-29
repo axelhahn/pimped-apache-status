@@ -34,6 +34,16 @@ function showPlotter($sHost, $sCounterItem, $iPlotterValues, $sDescription, $sTi
     return $sReturn;
 }
 
+function showItem($sIconClass, $sVal='', $sMore=''){
+    return '<div class="serveritem">'
+        . '<strong>'
+            . '<span><i class="'.$sIconClass.'"></i></span><br>'
+            . ($sVal ? $sVal : ' ')
+        . '</strong><br>'
+        . $sMore
+    . '</div>';
+}
+
 // ----------------------------------------------------------------------
 // MAIN
 // ----------------------------------------------------------------------
@@ -49,64 +59,51 @@ if (count($aSrvStatus) > 0) {
             . '<h4>' .$aCfg['icons']['server'].' '. $sHost . '</h4>'
 
             // . '<pre>'.print_r($aSrvStatus[$sHost]['counter'], 1).'</pre>'
-            . '<div class="serveritem">'
-                . '<strong>'
-                    . '<span><i class="far fa-flag"></i></span><br>'
-                . '</strong><br>'
-                . $aLangTxt['lblUtilizationTrafficVersion'].':<br>'
-                . $aSrvStatus[$sHost]['status']['Server Version'].'<br><br>'
-                . $aLangTxt['lblUtilizationTrafficMPM'].':<br>'
-                . $aSrvStatus[$sHost]['status']['Server MPM'].'<br><br>'
-            . '</div>'
+            . showItem(
+                    'far fa-flag',
+                    '',
+                    $aLangTxt['lblUtilizationTrafficVersion'].':<br>'
+                    . '<span class="value">'.$aSrvStatus[$sHost]['status']['Server Version'].'</span><br><br>'
+                    . $aLangTxt['lblUtilizationTrafficMPM'].':<br>'
+                    . '<span class="value">'.$aSrvStatus[$sHost]['status']['Server MPM'].'</span><br><br>'
+                    )
 
-            . '<div class="serveritem">'
-                . '<strong>'
-                    . '<span><i class="far fa-calendar"></i></span><br>'
-                . '</strong><br>'
-                . $aLangTxt['lblUtilizationTrafficUptime'].':<br>'
-                . $aSrvStatus[$sHost]['status']['Server uptime']
-            . '</div>'
+            . showItem(
+                    'far fa-calendar',
+                    '',
+                    $aLangTxt['lblUtilizationTrafficUptime'].':<br>'
+                    . '<span class="value">'.$aSrvStatus[$sHost]['status']['Server uptime'].'</span>'
+                   )
+            . showItem(
+                    'fas fa-exchange-alt',
+                    $aSrvStatus[$sHost]['status']['Total accesses'],
+                    $aLangTxt['lblUtilizationTrafficTotalAccesses'].'<br><br>'
+                    . $aLangTxt['lblUtilizationTrafficAvgAccesses'].'<br>'
+                    . '<span class="value">'.$aSrvStatus[$sHost]['counter']['requests/sec'].'/ sec</span>'
+                   )
+            . showItem(
+                    'far fa-clock',
+                    (isset($aSrvStatus[$sHost]['counter']['ms/request']) && $aSrvStatus[$sHost]['counter']['ms/request']) ? $aSrvStatus[$sHost]['counter']['ms/request'] : '-',
+                    'ms/ request'
+                   )
+            . showItem(
+                    'fas fa-cloud-upload-alt',
+                    $aSrvStatus[$sHost]['status']['Total Traffic'],
+                    $aLangTxt['lblUtilizationTrafficTotalTraffic'].'<br><br>'
+                    . $aLangTxt['lblUtilizationTrafficAvgTraffic'].'<br>'
+                    . '<span class="value">'.$aSrvStatus[$sHost]['status']['size/sec'].'/ sec</span>'
+                   )
+            . showItem(
+                    'fas fa-grip-horizontal',
+                    $aSrvStatus[$sHost]['counter']['slots_total'],
+                    $aLangTxt['thWorkerTotal'].'<br><br>'
+                    . $aLangTxt['thWorkerActive'].': <span class="value"><strong>'.$aSrvStatus[$sHost]['counter']['requests_active'].'</strong></span><br>'
+                    . $aLangTxt['thWorkerWait']  .': <span class="value">'.$aSrvStatus[$sHost]['counter']['requests_waiting'].'</span><br>'
+                    . $aLangTxt['thWorkerUnused'].': <span class="value">'.$aSrvStatus[$sHost]['counter']['slots_unused'].'</span><br>'
+                    . '<br>'
+                    .  $oDatarenderer->renderWorkersBar($aSrvStatus, $sHost, '100%', '2em')
+                    )
 
-            . '<div class="serveritem">'
-                . '<strong>'
-                    . '<span><i class="fas fa-exchange-alt"></i></span><br>'
-                    . $aSrvStatus[$sHost]['status']['Total accesses']
-                . '</strong><br>'
-                . $aLangTxt['lblUtilizationTrafficTotalAccesses'].'<br><br>'
-                . $aLangTxt['lblUtilizationTrafficAvgAccesses'].'<br>'
-                . $aSrvStatus[$sHost]['counter']['requests/sec'].'/ sec'
-            . '</div>'
-
-            . '<div class="serveritem">'
-                . '<strong>'
-                    . '<span><i class="far fa-clock"></i></span><br>'
-                    . $aSrvStatus[$sHost]['counter']['ms/request']
-                . '</strong><br>'
-                . 'ms/ request'
-            . '</div>'
-
-            . '<div class="serveritem">'
-                . '<strong>'
-                    . '<span><i class="fas fa-cloud-upload-alt"></i></span><br>'
-                    . $aSrvStatus[$sHost]['status']['Total Traffic']
-                . '</strong><br>'
-                . $aLangTxt['lblUtilizationTrafficTotalTraffic'].'<br><br>'
-                . $aLangTxt['lblUtilizationTrafficAvgTraffic'].'<br>'
-                . $aSrvStatus[$sHost]['status']['size/sec'].'/ sec'
-            . '</div>'
-
-            . '<div class="serveritem">'
-                . '<strong>'
-                    . '<span><i class="fas fa-grip-horizontal"></i></span><br>'
-                    . $aSrvStatus[$sHost]['counter']['slots_total']
-                . '</strong><br>'
-                . $aLangTxt['thWorkerTotal'].'<br><br>'
-                . $aLangTxt['thWorkerActive'].': <strong>'.$aSrvStatus[$sHost]['counter']['requests_active'].'</strong><br>'
-                . $aLangTxt['thWorkerWait']  .': '.$aSrvStatus[$sHost]['counter']['requests_waiting'].'<br>'
-                . $aLangTxt['thWorkerUnused'].': '.$aSrvStatus[$sHost]['counter']['slots_unused'].'<br>'
-                . '<br>'
-                .  $oDatarenderer->renderWorkersBar($aSrvStatus, $sHost, '100%', '2em')
-            . '</div>'
 
             . '<div style="clear: both;"></div>'
             ;

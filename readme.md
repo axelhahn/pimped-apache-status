@@ -36,7 +36,7 @@ Ressources:
 
 ## REQUIREMENTS
   * On the system you want to install the pimped Apache status:
-    - any webserver with php 5 (with curl; no database is needed)
+    - any webserver with php 5+ (PHP 8 is recommended; with php_curl; no database is needed)
   * On all webservers you want to monitor:
     - apache 2.x
     - installed module mod_status and ExtendedStatus On

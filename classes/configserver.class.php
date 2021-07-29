@@ -402,39 +402,39 @@ class configServer {
         
         if($sGroup){
             $sHtml.='<div class="divGroup" id="'.$this->getDivId($sGroup).'">'
-                    . '<h4>'
-                    . '<button class="btn btn-default" onclick="$(\'.divFrm\').hide();$(\'#'.$sFormId.'\').slideToggle();">'
-                    . '<i class="fas fa-pencil-alt"></i> ' . $aLangTxt['ActionEdit']
-                    . '</button> '
+                    . '<h4 style="float: left;">'
+                    . '&nbsp; '
                     . '<i class="fas fa-cubes"></i> '
                     . $sGroup .' <span class="badge">'.count($this->getServers($sGroup)).'</span>'
+                    . '&nbsp;<button class="btn btn-default" onclick="$(\'.divFrm\').hide();$(\'#'.$sFormId.'\').slideToggle();">'
+                    . '<i class="fas fa-pencil-alt"></i> ' . $aLangTxt['ActionEdit']
+                    . '</button> '
                     . '</h4>'
                     ;
         } else {
             $sHtml.='<button class="btn btn-success" onclick="$(\'.divFrm\').hide();$(\'#' . $sFormId . '\').slideToggle();">'
                 . $aCfg['icons']['actionAdd'].  $aLangTxt['ActionAddServergroup']
-            . '</button>'
+            . '</button><br>'
            ;
         }
+
+        $sKey='label';
+        $sFieldId='group-'.md5($sGroup );
         $sHtml.='<div id="'.$sFormId.'" class="divFrm'.($sGroup ? '' : ' divNew').'"'. '>'
                 .($sGroup ? '' : '<p>' . $aLangTxt['AdminServersLblAddGroup'] . '</p>')
             // . '<br>'
             . '<form action="'.getNewQs(array()).'" class="form-inline" method="POST" style="float: left;">'
             . '<input type="hidden" name="appaction" value="'.$sAppAction.'"/>'
             . ($sGroup ? '<input type="hidden" name="oldlabel" value="'.$sGroup.'"/>' : '')
-            ;
-
-        $sKey='label';
-        $sFieldId='group-'.md5($sGroup );
-        $sHtml.='<div class="form-group">'
+            . '<div class="form-group">'
                 . '<label for="'.$sFieldId.'" >'.$aLangTxt['AdminLblGroup-'.$sKey].'</label> '
                 . '<input type="text" class="form-control" id="'.$sFieldId.'" name="label" size="40" value="'.$sGroup.'" placeholder="" />'
-                . '</div>';
+            . '</div>'
         
-        $sHtml.='<button type="submit" class="btn '.$sSubmitClass.'" title="'.$aLangTxt['ActionOKHint'].'"'
+            . '<button type="submit" class="btn '.$sSubmitClass.'" title="'.$aLangTxt['ActionOKHint'].'"'
                 . '><i class="fas fa-check"></i> '.$aLangTxt['ActionOK'].'</button>'
                 . '</form>'
-                ;
+            ;
         
         // delete button for a group: only if the group has no servers below
         if($sGroup && !count($this->getServers($sGroup))){
@@ -447,7 +447,7 @@ class configServer {
             ;            
         } 
         if($sGroup){
-            $sHtml.='<br><br></div>';
+            $sHtml.='</div><div style="clear: both;"></div>';
         }
         else {
             $sHtml.='<div style="clear: both;"></div>';
