@@ -96,12 +96,9 @@ class ServerStatus {
      */
     private function _getServerData($sStatus, $sHostname = '') {
         $this->log('start '. __FUNCTION__ ."([sStatus], $sHostname)");
-        if (!$sStatus)
+        if (!$sStatus || !$sHostname || strpos($sStatus, "Apache Server Status for")<0){
             return false;
-        if (!$sHostname)
-            return false;
-        if (!strpos($sStatus, "Apache Server Status for"))
-            return false;
+        }
 
         $sStatusNobr = str_replace("\n", "", $sStatus);
         $aReturn = array();
