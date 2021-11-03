@@ -55,7 +55,12 @@ $oLog->add('<pre>'.print_r($aCfg, 1).'</pre>');
 
 // FIX for https://github.com/axelhahn/pimped-apache-status/issues/24
 // $sSelfURL=$aCfg['selfurl'] ? $aCfg['selfurl'] : str_replace('\\','/',str_replace(realpath($_SERVER['DOCUMENT_ROOT']), '', __DIR__));
-$sSelfURL=preg_replace('#\/admin$#', '', dirname($_SERVER['SCRIPT_NAME']));
+// $sSelfURL=preg_replace('#\/admin$#', '', dirname($_SERVER['SCRIPT_NAME']));
+
+$sScriptDir=preg_replace('#^\\'.DIRECTORY_SEPARATOR.'#', '/', dirname($_SERVER['SCRIPT_NAME']));
+$sSelfURL=preg_match('#\/admin$#', $sScriptDir) 
+	? preg_replace('#\/admin$#', '', $sScriptDir) 
+	: preg_replace('#^\/$#', '.', $sScriptDir) ;
 
 // ------------------------------------------------------------
 // check required features
