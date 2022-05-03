@@ -639,7 +639,7 @@ class ServerStatus {
                 }
             } else {
                 $aServerdata = $this->_getServerData($sResponseBody, $sServer);
-                if ($aServerdata && is_array($aServerdata)) {
+                if (isset($aServerdata[$sServer]['requests']) &&$aServerdata[$sServer]['requests']) {
                     $aServerdata[$sServer]['header']=$sResponseHeader;
                     // echo "<pre>" . print_r($aServerdata[$sServer], 1).'</pre>';
                     if (array_key_exists("requests", $aServerdata[$sServer])) {
