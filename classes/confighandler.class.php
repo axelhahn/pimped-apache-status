@@ -193,7 +193,7 @@ class confighandler {
      * @see setCfgId()
      * 
      * @param string  $sId  optional: id of config (without extension)
-     * @return type
+     * @return array
      */
     public function getFullConfig($sId=false) {
         if ($sId){
