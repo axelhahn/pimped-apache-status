@@ -10,6 +10,17 @@
 
 ----------------------------------------------------------------------
 
+2023-05-18: v2.04.11
+  * INFO: this version is compatible to PHP 8.1
+  * FIX: counters for waiting/ buzy/ free slots
+  * UPDATE: cdnorlocal class (because of change of the response in the api of cdnjs)
+  * UPDATE: ahlogger class
+  * UPDATE: remove a few php warnings
+  * UPDATE: more output without ExtendedStatus=On
+  * UPDATE: fix php docs to remove warnings of the linter
+  * UPDATE: jquery 3.6.0 --> 3.6.4
+  * UPDATE: font-awesome 5.15.4 --> 6.4.0
+
 2022-05-03: v2.04.10
   * FIX: show right message if a non server-status page was added
   * UPDATE: Chart.js to 3.7.1
