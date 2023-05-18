@@ -219,29 +219,29 @@ class ServerStatus {
             $sScoreString=$aTmpTable[1][0];
             $iActive=0;
 
-            for ($i=0; $i<strlen($sScoreString);$i++){
-                $sChar=$sScoreString[$i];
-                if(!isset($aScore[$sChar])){
-                    $aScore['keys'][$sChar]=array(
-                        'label'=>isset($aScoreKeys[$sChar]) ? $aScoreKeys[$sChar]['label'] : 'value ['.$sChar.']', 
-                        'count'=>0
-                    );
-                }
-                $aScore['keys'][$sChar]['count']++;
-                if ($sChar != "." && $sChar != "_"){
-                    $iActive++;
-                }
+            foreach(count_chars($sScoreString,1) as $iChar=>$iCharcount){
+                $sChar=chr($iChar);
+                $aScore['keys'][$sChar]=array(
+                    'label'=> isset($aScoreKeys[$sChar]['label']) ? $aScoreKeys[$sChar]['label'] : 'char '.$sChar.' (unknown)', 
+                    'count'=>$iCharcount
+                );
             }
-            $aScore['value']=$sScoreString;
-            $aScore['slots_total']=strlen($sScoreString);
-            $aScore['slots_busy']=isset($aReturn[$sHostname]['requests']) ? count($aReturn[$sHostname]['requests']) : 0;
-            $aScore['slots_free']=$aScore['slots_total'] - $aScore['slots_busy'];
             
-            $aReturn[$sHostname]['counter']['slots_total']=strlen($sScoreString);
-            $aReturn[$sHostname]['counter']['slots_busy']=isset($aReturn[$sHostname]['requests']) ? count($aReturn[$sHostname]['requests']) : 0;
+            $iSlotsWaiting=isset($aScore['keys']['_']['count']) ? $aScore['keys']['_']['count'] : 0;
+            $iSlotsFree= isset($aScore['keys']['.']['count']) ? $aScore['keys']['.']['count'] : 0;
+
+            $aScore['value']=$sScoreString;
+
+            $aScore['slots_total']=strlen($sScoreString);
+            $aScore['slots_busy']=$aScore['slots_total'] - $iSlotsWaiting - $iSlotsFree;
+            $aScore['slots_waiting']=$iSlotsWaiting;
+            $aScore['slots_free']=$iSlotsFree;
+            
+            $aReturn[$sHostname]['counter']['slots_total']=$aScore['slots_total'];
+            // $aReturn[$sHostname]['counter']['slots_busy']=$aScore['slots_busy'];
             $aReturn[$sHostname]['counter']['slots_unused']=$aScore['slots_total'] - $aScore['slots_busy'];
-            $aReturn[$sHostname]['counter']['requests_active']=$iActive;
-            $aReturn[$sHostname]['counter']['requests_waiting']=$aScore['slots_busy'] - $iActive;
+            $aReturn[$sHostname]['counter']['requests_active']=$aScore['slots_busy'];
+            $aReturn[$sHostname]['counter']['requests_waiting']=$aScore['slots_waiting'];
         }
         // die('<pre>'.print_r($aReturn[$sHostname]['counter'], 1));
         $aReturn[$sHostname]['counter']['scoreboard'] = $aScore;
@@ -639,7 +639,9 @@ class ServerStatus {
                 }
             } else {
                 $aServerdata = $this->_getServerData($sResponseBody, $sServer);
-                if (isset($aServerdata[$sServer]['requests']) &&$aServerdata[$sServer]['requests']) {
+                // echo '<pre>'.print_r($aServerdata, 1).'</pre>';
+                // if (isset($aServerdata[$sServer]['requests']) &&$aServerdata[$sServer]['requests']) {
+                if (isset($aServerdata[$sServer]['counter'])) {
                     $aServerdata[$sServer]['header']=$sResponseHeader;
                     // echo "<pre>" . print_r($aServerdata[$sServer], 1).'</pre>';
                     if (array_key_exists("requests", $aServerdata[$sServer])) {

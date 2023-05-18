@@ -59,7 +59,7 @@ $oCdn->setLibs($aEnv['vendor']);
     </head>
     <body>
         <div>
-            <h1><i class="fas fa-magic" aria-hidden="true"></i> Pimped Apache Status :: Converter for config files</h1>
+            <h1><i class="fa-solid fa-magic" aria-hidden="true"></i> Pimped Apache Status :: Converter for config files</h1>
              This converter upgrades the config files from version 1.x to 2.x<br>
              It creates JSON files in config directory and renames the old configs.
 
@@ -97,8 +97,8 @@ $oCdn->setLibs($aEnv['vendor']);
 
             <h2>Done</h2>
             go to Pimped Apache Status
-                <a href="./"><i class="fas fa-tachometer-alt" aria-hidden="true"></i> Monitoring</a>
-                <a href="./admin/?&action=settings"><i class="fas fa-cog"></i> Admin .. Settings</a><br>
+                <a href="./"><i class="fa-solid fa-tachometer-alt" aria-hidden="true"></i> Monitoring</a>
+                <a href="./admin/?&action=settings"><i class="fa-solid fa-cog"></i> Admin .. Settings</a><br>
         </div>
     </body>
 </html>

@@ -22,7 +22,7 @@ function initDrawH3list() {
             this.id = sH3id;
         if (this.id !== "h3menu") {
             i++;
-            sHtml += '<li><a href="#' + sH3id + '" class="scroll-link"><i class="fas fa-angle-right"></i>&nbsp;' + this.innerHTML.replace(/(<([^>]+)>)/ig, "") + '</a></li>';
+            sHtml += '<li><a href="#' + sH3id + '" class="scroll-link"><i class="fa-solid fa-angle-right"></i>&nbsp;' + this.innerHTML.replace(/(<([^>]+)>)/ig, "") + '</a></li>';
         }
 
     });

@@ -145,8 +145,8 @@ if (count($oCS->getGroups())) {
         $sIdButtonShow = 'btn-' . md5($sGroup).'-show';
         $sIdButtonHide = 'btn-' . md5($sGroup).'-hide';
         $sHtml.='<div class="divServerGroup">'
-                . '<button class="btn btn-default grouptoggle" id="'.$sIdButtonShow.'" onclick="$(\'#'.$sIdButtonShow.'\').addClass(\'ishidden\'); $(\'#'.$sIdButtonHide.'\').removeClass(\'ishidden\'); $(this).siblings(\'.divServersOfGroup\').show();"><i class="fas fa-caret-right"></i></button>'
-                . '<button class="btn btn-default grouptoggle ishidden" id="'.$sIdButtonHide.'" onclick="$(\'#'.$sIdButtonShow.'\').removeClass(\'ishidden\'); $(\'#'.$sIdButtonHide.'\').addClass(\'ishidden\'); $(this).siblings(\'.divServersOfGroup\').hide();"><i class="fas fa-caret-down"></i></button>'
+                . '<button class="btn btn-default grouptoggle" id="'.$sIdButtonShow.'" onclick="$(\'#'.$sIdButtonShow.'\').addClass(\'ishidden\'); $(\'#'.$sIdButtonHide.'\').removeClass(\'ishidden\'); $(this).siblings(\'.divServersOfGroup\').show();"><i class="fa-solid fa-caret-right"></i></button>'
+                . '<button class="btn btn-default grouptoggle ishidden" id="'.$sIdButtonHide.'" onclick="$(\'#'.$sIdButtonShow.'\').removeClass(\'ishidden\'); $(\'#'.$sIdButtonHide.'\').addClass(\'ishidden\'); $(this).siblings(\'.divServersOfGroup\').hide();"><i class="fa-solid fa-caret-down"></i></button>'
                 . $oCS->renderFormGroup($sGroup) . '<br>'
                 . '<div style="margin-left: 3%" class="divServersOfGroup">'
                 // . '<div id="' . $sDivNew . '" class="divNew">'

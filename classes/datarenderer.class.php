@@ -1493,9 +1493,9 @@ class Datarenderer {
           <!--
           <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
-              <i class="fas fa-minus"></i></button>
+              <i class="fa-solid fa-minus"></i></button>
             <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
-              <i class="fas fa-times"></i></button>
+              <i class="fa-solid fa-times"></i></button>
           </div>
           -->
         </div>
