@@ -395,7 +395,7 @@ class ServerStatus {
      *         'iLimit'       integer  max count of returned rows
      * @return array
      */
-    function dataFilter($a = false, $aFilter) {
+    function dataFilter($a = false, $aFilter = []) {
         // $this->log(__FUNCTION__ . "([data], <pre>".print_r($aFilter,1).")</pre> - start");
 
         global $aLangTxt;
@@ -434,27 +434,27 @@ class ServerStatus {
                     (array_key_exists('sServer', $aFilter) && $aFilter['sServer'] == $sHost) ||
                     (!array_key_exists('sServer', $aFilter))
             ) {
-                $aSingleRow = array();
                 if ($aFilter['sType'] == "status") {
-                    $aSingleRow['Webserver'] = $sHost;
+                    $aSingleRow = ['Webserver' => $sHost ];
                     foreach ($aFilter['aRows'] as $key) {
                         $aSingleRow[$key] = array_key_exists($key, $aData[$aFilter['sType']]) ? $aData[$aFilter['sType']][$key] : false;
                     }
-                    $aSingleRow = $this->_dataFilterCheckRow($aSingleRow, array_key_exists('aRules', $aFilter) ? $aFilter['aRules'] : false);
-                    if ($aSingleRow) {
-                        $aReturn[] = $aSingleRow;
+                    $aFilteredRow = $this->_dataFilterCheckRow($aSingleRow, array_key_exists('aRules', $aFilter) ? $aFilter['aRules'] : false);
+                    if ($aFilteredRow) {
+                        $aReturn[] = $aFilteredRow;
                     }
                 }
                 if ($aFilter['sType'] == "requests" && array_key_exists("requests", $aData)
                 ) {
                     foreach ($aData[$aFilter['sType']] as $aRequest) {
+                        $aSingleRow = ['Webserver' => $sHost ];
                         $aSingleRow['Webserver'] = $sHost;
                         foreach ($aFilter['aRows'] as $key) {
                             $aSingleRow[$key] = array_key_exists($key, $aRequest) ? $aRequest[$key] : '';
                         }
-                        $aSingleRow = $this->_dataFilterCheckRow($aSingleRow, array_key_exists('aRules', $aFilter) ? $aFilter['aRules'] : false);
-                        if ($aSingleRow) {
-                            $aReturn[] = $aSingleRow;
+                        $aFilteredRow = $this->_dataFilterCheckRow($aSingleRow, array_key_exists('aRules', $aFilter) ? $aFilter['aRules'] : false);
+                        if ($aFilteredRow) {
+                            $aReturn[] = $aFilteredRow;
                         }
                     }
                 }
