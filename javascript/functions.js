@@ -301,7 +301,9 @@ function showGraphInline(sDivPlotter, sSrv, sVarname, iCount, sTitle, iMax, sVar
         sMin += (sMin ? ', ' : '') + aData['min'];
         if(sVarname2){
             var aItem2 = aData2.data[i];
-            sData2 += (sData2 ? ', ' : '') + (aItem2[1]/1 === aItem2[1] ? aItem2[1] : '"'+aItem2[1]+'"');
+            if(aItem2){
+                sData2 += (sData2 ? ', ' : '') + (aItem2[1]/1 === aItem2[1] ? aItem2[1] : '"'+aItem2[1]+'"');
+            }
         }
     }
     // console.log("sData ("+sVarname+") = " + sData);
