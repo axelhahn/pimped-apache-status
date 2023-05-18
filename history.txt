@@ -11,7 +11,7 @@
 ----------------------------------------------------------------------
 
 2023-05-18: v2.04.11
-  * INFO: this version is compatible to PHP 8.1
+  * INFO: this version is compatible to PHP 8.2
   * FIX: counters for waiting/ buzy/ free slots
   * UPDATE: cdnorlocal class (because of change of the response in the api of cdnjs)
   * UPDATE: ahlogger class
