@@ -317,8 +317,8 @@ class ServerStatus {
 
     /**
      * filter regex - returns bool regex $b matches $a
-     * @param type $a
-     * @param type $b
+     * @param string $a
+     * @param string $b
      * @return boolean
      */
     private function _filter_regex($a, $b) {
@@ -558,8 +558,8 @@ class ServerStatus {
      * hint from kempo19b
      * http://php.net/manual/en/function.curl-multi-select.php
      * 
-     * @param handle  $mh             multicurl master handle
-     * @param boolean $still_running  
+     * @param CurlMultiHandle  $mh             multicurl master handle
+     * @param boolean          $still_running  flag: is curl is still running
      * @return type
      */
     private function full_curl_multi_exec($mh, &$still_running) {
