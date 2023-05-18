@@ -35,7 +35,7 @@ class confighandler {
     
     /**
      * divider for array subkeys in string parameters
-     * @var type 
+     * @var string
      */
     protected $_sDivider='.';
     
