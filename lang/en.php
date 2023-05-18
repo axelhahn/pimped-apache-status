@@ -127,6 +127,9 @@ $aLangTxt = array(
         'lblTable_requests_running'=>'Active requests',
         'lblTableHint_requests_running'=>'The table shows requests that are currently processed on the selected webserver(s).',
 
+        'errorTitle'=>'Ooops.',
+        'errorNoData_requests_running'=>'No data for running requests :-/ ',
+
         // ............................................................
         'lblTile_requests_mostrequested'=>'Most requested',
         'lblTileHint_requests_mostrequested'=>'Most often requested query',

@@ -950,6 +950,14 @@ class Datarenderer {
         $this->log(__FUNCTION__ . " done oServerStatus->dataFilter");
         if (!count($aTData)) {
             // $oLog->add('Table <em>'.$sKey.'</em> was not rendered. No data.', 'error');
+            return
+                ($sKey=='requests_running' || $sKey=='requests_all' )
+                ? $this->themeBox(
+                    $aLangTxt['errorTitle'], 
+                    '<div class="error">'.$aLangTxt['errorNoData_requests_running'] .'</div>'
+                    )
+                : false
+                ;
             return false;
         }
 

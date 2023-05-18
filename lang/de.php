@@ -128,6 +128,9 @@ $aLangTxt = array(
         'lblTable_requests_running'=>'Aktive Requests',
         'lblTableHint_requests_running'=>'Die Tabelle zeigt die Requests, die derzeit auf den gew&auml;hlten Servern verarbeitet werden.',
 
+        'errorTitle'=>'Hoppla.',
+        'errorNoData_requests_running'=>'Es sind keine Daten zu verarbeiteten Requests vorhanden :-/ ',
+
         // ............................................................
         'lblTile_requests_mostrequested'=>'H&auml;ufigste Anfrage',
         'lblTileHint_requests_mostrequested'=>'H&auml;ufigste Http-Anfrage',
