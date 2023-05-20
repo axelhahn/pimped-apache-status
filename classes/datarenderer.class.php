@@ -950,6 +950,14 @@ class Datarenderer {
         $this->log(__FUNCTION__ . " done oServerStatus->dataFilter");
         if (!count($aTData)) {
             // $oLog->add('Table <em>'.$sKey.'</em> was not rendered. No data.', 'error');
+            return
+                ($sKey=='requests_running' || $sKey=='requests_all' )
+                ? $this->themeBox(
+                    $aLangTxt['errorTitle'], 
+                    '<div class="error">'.$aLangTxt['errorNoData_requests_running'] .'</div>'
+                    )
+                : false
+                ;
             return false;
         }
 
@@ -1218,7 +1226,7 @@ class Datarenderer {
      * @param array   $aSrvStatus   server status array
      * @param bool    $bGenerateBar flag: get html code for a bar for active workers
      * @param integer $iMaxWith     width of status bar in px; default: 600
-     * @return string
+     * @return array
      */
     public function _getWorkersData($aSrvStatus, $bGenerateBar = false, $iMaxWith=600) {
         global $aLangTxt, $aEnv;
@@ -1312,9 +1320,9 @@ class Datarenderer {
     
     /**
      * render table with worker status: total/ active/ waiting workers
-     * @global type $aLangTxt   language dependend texts
+     * @global array $aLangTxt   language dependend texts
      * @global array $aCfg  user configuration
-     * @param type $aSrvStatus data array of apache status
+     * @param  array $aSrvStatus data array of apache status
      * @return string html code
      */
     public function renderGroupAndServers($aSrvStatus) {
@@ -1449,9 +1457,9 @@ class Datarenderer {
         
     }    /**
      * render table with worker status: total/ active/ waiting workers
-     * @global type $aLangTxt   language dependend texts
+     * @global array $aLangTxt   language dependend texts
      * @global array $aCfg  user configuration
-     * @param type $aSrvStatus data array of apache status
+     * @param  array $aSrvStatus data array of apache status
      * @return string html code
      */
     public function renderWorkersTable($aSrvStatus) {
@@ -1493,9 +1501,9 @@ class Datarenderer {
           <!--
           <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
-              <i class="fas fa-minus"></i></button>
+              <i class="fa-solid fa-minus"></i></button>
             <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
-              <i class="fas fa-times"></i></button>
+              <i class="fa-solid fa-times"></i></button>
           </div>
           -->
         </div>

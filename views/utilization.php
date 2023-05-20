@@ -60,7 +60,7 @@ if (count($aSrvStatus) > 0) {
 
             // . '<pre>'.print_r($aSrvStatus[$sHost]['counter'], 1).'</pre>'
             . showItem(
-                    'far fa-flag',
+                    'fa-regular fa-flag',
                     '',
                     $aLangTxt['lblUtilizationTrafficVersion'].':<br>'
                     . '<span class="value">'.$aSrvStatus[$sHost]['status']['Server Version'].'</span><br><br>'
@@ -69,32 +69,32 @@ if (count($aSrvStatus) > 0) {
                     )
 
             . showItem(
-                    'far fa-calendar',
+                    'fa-regular fa-calendar',
                     '',
                     $aLangTxt['lblUtilizationTrafficUptime'].':<br>'
                     . '<span class="value">'.$aSrvStatus[$sHost]['status']['Server uptime'].'</span>'
                    )
             . showItem(
-                    'fas fa-exchange-alt',
+                    'fa-solid fa-exchange-alt',
                     $aSrvStatus[$sHost]['status']['Total accesses'],
                     $aLangTxt['lblUtilizationTrafficTotalAccesses'].'<br><br>'
                     . $aLangTxt['lblUtilizationTrafficAvgAccesses'].'<br>'
                     . '<span class="value">'.$aSrvStatus[$sHost]['counter']['requests/sec'].'/ sec</span>'
                    )
             . showItem(
-                    'far fa-clock',
+                    'fa-regular fa-clock',
                     (isset($aSrvStatus[$sHost]['counter']['ms/request']) && $aSrvStatus[$sHost]['counter']['ms/request']) ? $aSrvStatus[$sHost]['counter']['ms/request'] : '-',
                     'ms/ request'
                    )
             . showItem(
-                    'fas fa-cloud-upload-alt',
+                    'fa-solid fa-cloud-upload-alt',
                     $aSrvStatus[$sHost]['status']['Total Traffic'],
                     $aLangTxt['lblUtilizationTrafficTotalTraffic'].'<br><br>'
                     . $aLangTxt['lblUtilizationTrafficAvgTraffic'].'<br>'
                     . '<span class="value">'.$aSrvStatus[$sHost]['status']['size/sec'].'/ sec</span>'
                    )
             . showItem(
-                    'fas fa-grip-horizontal',
+                    'fa-solid fa-grip-horizontal',
                     $aSrvStatus[$sHost]['counter']['slots_total'],
                     $aLangTxt['thWorkerTotal'].'<br><br>'
                     . $aLangTxt['thWorkerActive'].': <span class="value"><strong>'.$aSrvStatus[$sHost]['counter']['requests_active'].'</strong></span><br>'
@@ -130,11 +130,12 @@ if (count($aSrvStatus) > 0) {
             }
         }
         
+        // echo '<pre>'.print_r($aSrvStatus[$sHost]['counter'], 1).'</pre>';
         $sWorker.= ''
                 . showPlotter($sHost, 'requests_active', $iPlotterValues, $aLangTxt['lblUtilizationWorkerProcessesActive'],  
                         sprintf($aLangTxt['lblUtilizationWorkerProcessesActiveTitleTotal'], $aSrvStatus[$sHost]['counter']['slots_total']),
                         $aSrvStatus[$sHost]['counter']['slots_total'],
-                        'slots_busy'
+                        'requests_active'
                         )
                 . '<div style="clear:both"></div>'
                 ;

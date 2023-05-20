@@ -283,7 +283,7 @@ function getHtmlHead($aLangTxt) {
     
     require_once(__DIR__ . '/classes/cdnorlocal.class.php');
     
-    $sVendorUrl=(strpos($_SERVER['REQUEST_URI'], '/admin/') ? '.' : '') . './vendor/';
+    $sVendorUrl=(strstr($_SERVER['REQUEST_URI'], '/admin/') ? '.' : '') . './vendor';
     $oCdn = new axelhahn\cdnorlocal(array(
         'vendordir'=>__DIR__ . '/vendor', 
         'vendorurl'=>$sVendorUrl, 
@@ -300,29 +300,26 @@ function getHtmlHead($aLangTxt) {
     $sHeader = '<script>var aLang=' . json_encode($aLangJs) . ';</script>' . "\n"
 
         // jQuery
-        . '<script src="' . $oCdn->getFullUrl($oCdn->getLibRelpath('jquery')."/jquery.min.js") . '"></script>' . "\n"
+        . $oCdn->getHtmlInclude($oCdn->getLibRelpath('jquery')."/jquery.min.js") . "\n"
 
         // datatables
-        . '<script src="' . $oCdn->getFullUrl($oCdn->getLibRelpath('datatables')."/js/jquery.dataTables.min.js") . '"></script>' . "\n"
-        . '<link rel="stylesheet" href="' . $oCdn->getFullUrl($oCdn->getLibRelpath('datatables')."/css/jquery.dataTables.min.css") . '">' . "\n"
+        . $oCdn->getHtmlInclude($oCdn->getLibRelpath('datatables')."/js/jquery.dataTables.min.js") . "\n"
+        . $oCdn->getHtmlInclude($oCdn->getLibRelpath('datatables')."/css/jquery.dataTables.min.css") . "\n"
 
         // Admin LTE
-	// https://adminlte.io/docs/3.0/upgrade-guide.html
-        // . '<script src="' . $oCdn->getFullUrl($oCdn->getLibRelpath('admin-lte')."/js/adminlte.min.js") . '" type="text/javascript"></script>' . "\n"
-        // . '<link rel="stylesheet" href="' . $oCdn->getFullUrl($oCdn->getLibRelpath('admin-lte')."/css/adminlte.min.css") . '">' . "\n"
-        . '<link rel="stylesheet" href="' . $oCdn->getFullUrl($oCdn->getLibRelpath('admin-lte')."/css/AdminLTE.min.css") . '">' . "\n"
-        . '<link rel="stylesheet" href="' . $oCdn->getFullUrl($oCdn->getLibRelpath('admin-lte')."/css/skins/_all-skins.min.css") . '">' . "\n"
+        . $oCdn->getHtmlInclude($oCdn->getLibRelpath('admin-lte')."/css/AdminLTE.min.css") . "\n"
+        . $oCdn->getHtmlInclude($oCdn->getLibRelpath('admin-lte')."/css/skins/_all-skins.min.css") . "\n"
 
         // Bootstrap    
-        . '<link href="' . $oCdn->getFullUrl($oCdn->getLibRelpath('twitter-bootstrap').'/css/bootstrap.min.css') . '" rel="stylesheet">'
-        . '<link href="' . $oCdn->getFullUrl($oCdn->getLibRelpath('twitter-bootstrap').'/css/bootstrap-theme.min.css') . '" rel="stylesheet">'
-        . '<script src="' . $oCdn->getFullUrl($oCdn->getLibRelpath('twitter-bootstrap').'/js/bootstrap.min.js') . '" type="text/javascript"></script>'
+        . $oCdn->getHtmlInclude($oCdn->getLibRelpath('twitter-bootstrap')."/css/bootstrap.min.css") . "\n"
+        . $oCdn->getHtmlInclude($oCdn->getLibRelpath('twitter-bootstrap')."/css/bootstrap-theme.min.css") . "\n"
+        . $oCdn->getHtmlInclude($oCdn->getLibRelpath('twitter-bootstrap')."/js/bootstrap.min.js") . "\n"
 
         // Font awesome
-        . '<link href="' . $oCdn->getFullUrl($oCdn->getLibRelpath('font-awesome').'/css/all.min.css') . '" rel="stylesheet">'
+        . $oCdn->getHtmlInclude($oCdn->getLibRelpath('font-awesome')."/css/all.min.css") . "\n"
 
         // Chart.js
-        . '<script src="' . $oCdn->getFullUrl($oCdn->getLibRelpath('Chart.js').'/chart.min.js') . '" type="text/javascript"></script>'
+        . $oCdn->getHtmlInclude($oCdn->getLibRelpath('Chart.js')."/chart.min.js") . "\n"
     ;
     return $sHeader;
 }

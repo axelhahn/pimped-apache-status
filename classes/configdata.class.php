@@ -447,9 +447,9 @@ class configData {
             $sHtml.='<div class="divGroup" id="'.$this->getDivId($sGroup).'">'
                     . '<h3>'
                     . '<button class="btn btn-default" onclick="$(\'#'.$sFormId.'\').slideToggle();">'
-                    . '<i class="fas fa-pencil-alt"></i> ' . $aLangTxt['ActionEdit']
+                    . '<i class="fa-solid fa-pencil-alt"></i> ' . $aLangTxt['ActionEdit']
                     . '</button> '
-                    . '<i class="fas fa-cubes"></i> '
+                    . '<i class="fa-solid fa-cubes"></i> '
                     . $sGroup .' <span class="badge">'.count($this->getServers($sGroup)).'</span>'
                     . '</h3>'
                     ;
@@ -471,7 +471,7 @@ class configData {
                 . '</div>';
         
         $sHtml.='<button type="submit" class="btn '.$sSubmitClass.'" title="'.$aLangTxt['ActionOKHint'].'"'
-                . '><i class="fas fa-check"></i> '.$aLangTxt['ActionOK'].'</button>'
+                . '><i class="fa-solid fa-check"></i> '.$aLangTxt['ActionOK'].'</button>'
                 . '</form>'
                 ;
         
@@ -481,7 +481,7 @@ class configData {
             . '<input type="hidden" name="appaction" value="deletegroup"/>'
             . '<input type="hidden" name="oldlabel" value="'.$sGroup.'"/>'
             . '<button type="submit" class="btn btn-danger" title="'.$aLangTxt['ActionDeleteHint'].'"'
-            . '><i class="fas fa-trash"></i> '.$aLangTxt['ActionDelete'].'</button>'
+            . '><i class="fa-solid fa-trash"></i> '.$aLangTxt['ActionDelete'].'</button>'
             . '</form>'
             ;            
         } 
@@ -531,14 +531,14 @@ class configData {
                     . '<input type="hidden" name="oldlabel" value="'.$sId.'"/>'
                     . '<button type="submit" class="btn btn-danger" title="'.$aLangTxt['ActionDeleteHint'].'" '
                         . 'onclick="return confirm(\''.sprintf($aLangTxt['AdminLblServers-ConfirmDelete'], $aSrv['label'].'; '. $aSrv['status-url']) .'\');"'
-                        . '><i class="fas fa-trash"></i> '.$aLangTxt['ActionDelete']
+                        . '><i class="fa-solid fa-trash"></i> '.$aLangTxt['ActionDelete']
                     . '</button>'
                     . '</form>'
                     
                     . '<button class="btn btn-default" onclick="$(\'#'.$sFormId.'\').slideToggle();">'
-                    . '<i class="fas fa-pencil-alt"></i> ' . $aLangTxt['ActionEdit']
+                    . '<i class="fa-solid fa-pencil-alt"></i> ' . $aLangTxt['ActionEdit']
                     . '</button>'
-                    . ' <strong><i class="far fa-hdd"></i> '.$aSrv['label'].'</strong>'
+                    . ' <strong><i class="fa-regular fa-hdd"></i> '.$aSrv['label'].'</strong>'
                     . ' ('.$aSrv['status-url'].')'
                     . ''
                     ;
@@ -569,7 +569,7 @@ class configData {
         }
         
         $sHtml.='<button type="submit" class="btn '.$sSubmitClass.'" title="'.$aLangTxt['ActionOKHint'].'"'
-                . '><i class="fas fa-check"></i> '.$aLangTxt['ActionOK'].'</button>'
+                . '><i class="fa-solid fa-check"></i> '.$aLangTxt['ActionOK'].'</button>'
                 . '</form>'
                 ;
         
@@ -580,7 +580,7 @@ class configData {
             . '<input type="hidden" name="group" value="'.$sGroup.'"/>'
             . '<input type="hidden" name="oldlabel" value="'.$sId.'"/>'
             . '<button type="submit" class="btn btn-danger" title="'.$aLangTxt['ActionDeleteHint'].'"'
-            . '><i class="fas fa-trash"></i> '.$aLangTxt['ActionDelete'].'</button>'
+            . '><i class="fa-solid fa-trash"></i> '.$aLangTxt['ActionDelete'].'</button>'
             . '</form></div>'
             ; 
              * 

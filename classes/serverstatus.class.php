@@ -219,29 +219,29 @@ class ServerStatus {
             $sScoreString=$aTmpTable[1][0];
             $iActive=0;
 
-            for ($i=0; $i<strlen($sScoreString);$i++){
-                $sChar=$sScoreString[$i];
-                if(!isset($aScore[$sChar])){
-                    $aScore['keys'][$sChar]=array(
-                        'label'=>isset($aScoreKeys[$sChar]) ? $aScoreKeys[$sChar]['label'] : 'value ['.$sChar.']', 
-                        'count'=>0
-                    );
-                }
-                $aScore['keys'][$sChar]['count']++;
-                if ($sChar != "." && $sChar != "_"){
-                    $iActive++;
-                }
+            foreach(count_chars($sScoreString,1) as $iChar=>$iCharcount){
+                $sChar=chr($iChar);
+                $aScore['keys'][$sChar]=array(
+                    'label'=> isset($aScoreKeys[$sChar]['label']) ? $aScoreKeys[$sChar]['label'] : 'char '.$sChar.' (unknown)', 
+                    'count'=>$iCharcount
+                );
             }
-            $aScore['value']=$sScoreString;
-            $aScore['slots_total']=strlen($sScoreString);
-            $aScore['slots_busy']=isset($aReturn[$sHostname]['requests']) ? count($aReturn[$sHostname]['requests']) : 0;
-            $aScore['slots_free']=$aScore['slots_total'] - $aScore['slots_busy'];
             
-            $aReturn[$sHostname]['counter']['slots_total']=strlen($sScoreString);
-            $aReturn[$sHostname]['counter']['slots_busy']=isset($aReturn[$sHostname]['requests']) ? count($aReturn[$sHostname]['requests']) : 0;
+            $iSlotsWaiting=isset($aScore['keys']['_']['count']) ? $aScore['keys']['_']['count'] : 0;
+            $iSlotsFree= isset($aScore['keys']['.']['count']) ? $aScore['keys']['.']['count'] : 0;
+
+            $aScore['value']=$sScoreString;
+
+            $aScore['slots_total']=strlen($sScoreString);
+            $aScore['slots_busy']=$aScore['slots_total'] - $iSlotsWaiting - $iSlotsFree;
+            $aScore['slots_waiting']=$iSlotsWaiting;
+            $aScore['slots_free']=$iSlotsFree;
+            
+            $aReturn[$sHostname]['counter']['slots_total']=$aScore['slots_total'];
+            // $aReturn[$sHostname]['counter']['slots_busy']=$aScore['slots_busy'];
             $aReturn[$sHostname]['counter']['slots_unused']=$aScore['slots_total'] - $aScore['slots_busy'];
-            $aReturn[$sHostname]['counter']['requests_active']=$iActive;
-            $aReturn[$sHostname]['counter']['requests_waiting']=$aScore['slots_busy'] - $iActive;
+            $aReturn[$sHostname]['counter']['requests_active']=$aScore['slots_busy'];
+            $aReturn[$sHostname]['counter']['requests_waiting']=$aScore['slots_waiting'];
         }
         // die('<pre>'.print_r($aReturn[$sHostname]['counter'], 1));
         $aReturn[$sHostname]['counter']['scoreboard'] = $aScore;
@@ -317,8 +317,8 @@ class ServerStatus {
 
     /**
      * filter regex - returns bool regex $b matches $a
-     * @param type $a
-     * @param type $b
+     * @param string $a
+     * @param string $b
      * @return boolean
      */
     private function _filter_regex($a, $b) {
@@ -378,7 +378,7 @@ class ServerStatus {
     /**
      * filterfunction to extract, filter and sort status data
      * @param array  $a
-     * @param filter $aFilter 
+     * @param array  $aFilter Filter
      *      $aFilter ... Array
      *         'sServer'      string   name of server to fetch the data from; default: all servers
      *         'sType'        string   one of "status" | "requests"
@@ -395,7 +395,7 @@ class ServerStatus {
      *         'iLimit'       integer  max count of returned rows
      * @return array
      */
-    function dataFilter($a = false, $aFilter) {
+    function dataFilter($a = false, $aFilter = []) {
         // $this->log(__FUNCTION__ . "([data], <pre>".print_r($aFilter,1).")</pre> - start");
 
         global $aLangTxt;
@@ -434,27 +434,27 @@ class ServerStatus {
                     (array_key_exists('sServer', $aFilter) && $aFilter['sServer'] == $sHost) ||
                     (!array_key_exists('sServer', $aFilter))
             ) {
-                $aSingleRow = array();
                 if ($aFilter['sType'] == "status") {
-                    $aSingleRow['Webserver'] = $sHost;
+                    $aSingleRow = ['Webserver' => $sHost ];
                     foreach ($aFilter['aRows'] as $key) {
                         $aSingleRow[$key] = array_key_exists($key, $aData[$aFilter['sType']]) ? $aData[$aFilter['sType']][$key] : false;
                     }
-                    $aSingleRow = $this->_dataFilterCheckRow($aSingleRow, array_key_exists('aRules', $aFilter) ? $aFilter['aRules'] : false);
-                    if ($aSingleRow) {
-                        $aReturn[] = $aSingleRow;
+                    $aFilteredRow = $this->_dataFilterCheckRow($aSingleRow, array_key_exists('aRules', $aFilter) ? $aFilter['aRules'] : false);
+                    if ($aFilteredRow) {
+                        $aReturn[] = $aFilteredRow;
                     }
                 }
                 if ($aFilter['sType'] == "requests" && array_key_exists("requests", $aData)
                 ) {
                     foreach ($aData[$aFilter['sType']] as $aRequest) {
+                        $aSingleRow = ['Webserver' => $sHost ];
                         $aSingleRow['Webserver'] = $sHost;
                         foreach ($aFilter['aRows'] as $key) {
                             $aSingleRow[$key] = array_key_exists($key, $aRequest) ? $aRequest[$key] : '';
                         }
-                        $aSingleRow = $this->_dataFilterCheckRow($aSingleRow, array_key_exists('aRules', $aFilter) ? $aFilter['aRules'] : false);
-                        if ($aSingleRow) {
-                            $aReturn[] = $aSingleRow;
+                        $aFilteredRow = $this->_dataFilterCheckRow($aSingleRow, array_key_exists('aRules', $aFilter) ? $aFilter['aRules'] : false);
+                        if ($aFilteredRow) {
+                            $aReturn[] = $aFilteredRow;
                         }
                     }
                 }
@@ -558,8 +558,8 @@ class ServerStatus {
      * hint from kempo19b
      * http://php.net/manual/en/function.curl-multi-select.php
      * 
-     * @param handle  $mh             multicurl master handle
-     * @param boolean $still_running  
+     * @param CurlMultiHandle  $mh             multicurl master handle
+     * @param boolean          $still_running  flag: is curl is still running
      * @return type
      */
     private function full_curl_multi_exec($mh, &$still_running) {
@@ -639,7 +639,9 @@ class ServerStatus {
                 }
             } else {
                 $aServerdata = $this->_getServerData($sResponseBody, $sServer);
-                if (isset($aServerdata[$sServer]['requests']) &&$aServerdata[$sServer]['requests']) {
+                // echo '<pre>'.print_r($aServerdata, 1).'</pre>';
+                // if (isset($aServerdata[$sServer]['requests']) &&$aServerdata[$sServer]['requests']) {
+                if (isset($aServerdata[$sServer]['counter'])) {
                     $aServerdata[$sServer]['header']=$sResponseHeader;
                     // echo "<pre>" . print_r($aServerdata[$sServer], 1).'</pre>';
                     if (array_key_exists("requests", $aServerdata[$sServer])) {

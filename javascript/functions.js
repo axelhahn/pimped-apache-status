@@ -22,7 +22,7 @@ function initDrawH3list() {
             this.id = sH3id;
         if (this.id !== "h3menu") {
             i++;
-            sHtml += '<li><a href="#' + sH3id + '" class="scroll-link"><i class="fas fa-angle-right"></i>&nbsp;' + this.innerHTML.replace(/(<([^>]+)>)/ig, "") + '</a></li>';
+            sHtml += '<li><a href="#' + sH3id + '" class="scroll-link"><i class="fa-solid fa-angle-right"></i>&nbsp;' + this.innerHTML.replace(/(<([^>]+)>)/ig, "") + '</a></li>';
         }
 
     });
@@ -301,7 +301,9 @@ function showGraphInline(sDivPlotter, sSrv, sVarname, iCount, sTitle, iMax, sVar
         sMin += (sMin ? ', ' : '') + aData['min'];
         if(sVarname2){
             var aItem2 = aData2.data[i];
-            sData2 += (sData2 ? ', ' : '') + (aItem2[1]/1 === aItem2[1] ? aItem2[1] : '"'+aItem2[1]+'"');
+            if(aItem2){
+                sData2 += (sData2 ? ', ' : '') + (aItem2[1]/1 === aItem2[1] ? aItem2[1] : '"'+aItem2[1]+'"');
+            }
         }
     }
     // console.log("sData ("+sVarname+") = " + sData);
