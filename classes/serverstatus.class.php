@@ -378,7 +378,7 @@ class ServerStatus {
     /**
      * filterfunction to extract, filter and sort status data
      * @param array  $a
-     * @param filter $aFilter 
+     * @param array  $aFilter Filter
      *      $aFilter ... Array
      *         'sServer'      string   name of server to fetch the data from; default: all servers
      *         'sType'        string   one of "status" | "requests"
