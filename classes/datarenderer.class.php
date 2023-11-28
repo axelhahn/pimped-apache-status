@@ -1443,7 +1443,10 @@ class Datarenderer {
     public function renderWorkersBar($aSrvStatus, $sHost, $sWith='100%', $sBarHeight='') {
         global $aLangTxt;
         $iProcesses = $aSrvStatus[$sHost]['counter']['slots_total'];
-        $iSlotsUnused = $aSrvStatus[$sHost]['counter']['slots_unused'];
+        if(!$iProcesses) {
+            return '';
+        }
+        // $iSlotsUnused = $aSrvStatus[$sHost]['counter']['slots_unused'];
         $iActive = $aSrvStatus[$sHost]['counter']['requests_active'];
         $iWait = $aSrvStatus[$sHost]['counter']['requests_waiting'];
         
@@ -1455,7 +1458,8 @@ class Datarenderer {
                     <div class="barIdleWorker" style="width: ' . ($iWait/$iProcesses*100) . '%;'.$sHeight.'" title="' . sprintf($aLangTxt['bartitleIdleWorkers'], $iWait) . '"> </div>
                 </div>';
         
-    }    /**
+    }
+    /**
      * render table with worker status: total/ active/ waiting workers
      * @global array $aLangTxt   language dependend texts
      * @global array $aCfg  user configuration
