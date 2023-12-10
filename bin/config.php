@@ -499,7 +499,7 @@ elseif ($oCli->getvalue("defaults")){
                     // @example --action update --group=[name] --server [hostname] --newname [new-hostname]
                     // --------------------------------------------------
                     echo "; rename server [$sGroup] -> [$sServer]:\n"
-                        ."; new hostname: ${sNewName}\n"
+                        ."; new hostname: $sNewName\n"
                         ;
                     $aItem=$oServer->getServerDetails($sGroup, $sServer);
                     if(!count($aItem)){
@@ -522,10 +522,10 @@ elseif ($oCli->getvalue("defaults")){
                 // @example --action update --group=[name] --newname [new-groupname]
                 // --------------------------------------------------
                 echo "; rename group [$sGroup]:\n"
-                    ."; new groupname: ${sNewName}\n"
+                    ."; new groupname: $sNewName\n"
                     ;
                 if(array_search($sNewName, $oServer->getGroups())!==false){
-                    quit("The group ${sNewName} exists already. Use a non existing group name.\n");
+                    quit("The group $sNewName exists already. Use a non existing group name.\n");
                 }
                 $aItem['oldlabel']=$sGroup;
                 $aItem['label']=$sNewName;
