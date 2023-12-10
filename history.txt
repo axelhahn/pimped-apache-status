@@ -10,6 +10,10 @@
 
 ----------------------------------------------------------------------
 
+2023-12-10: v2.04.12
+  * INFO: this version is compatible to PHP 8.3
+  * FIX: division by zero after first run when adding localhost without mod_status
+
 2023-05-20: v2.04.11
   * INFO: this version is compatible to PHP 8.2
   * FIX: counters for waiting/ buzy/ free slots
