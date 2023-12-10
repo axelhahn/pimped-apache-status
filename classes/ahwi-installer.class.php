@@ -8,6 +8,8 @@
  * 
  * STATUS: alpha - do not use yet
  * 
+ * source: https://github.com/axelhahn/ahwebinstall
+ * 
  * @author Axel Hahn
  */
 
@@ -20,11 +22,27 @@ class ahwi {
     // ----------------------------------------------------------------------
     // INTERNAL CONFIG
     // ----------------------------------------------------------------------
-    var $aCfg = array();
-    var $iTimeStart = false;
-    var $sAbout = "PHP WEB INSTALLER";
-    var $aErrors = array();
+    protected $aCfg = array();
+    protected $iTimeStart = false;
+    protected $sAbout = "AXELS PHP WEB INSTALLER";
+    protected $aErrors = array();
+    protected $aChecks = array();
 
+    protected $aVcs=[
+        'git'=>[
+            'label'=>'Git',
+            'dir'=>'.git',
+            // 'file'=>'.git',
+            'check'=>'git --version',
+            'update'=>'git pull --force',
+        ],
+        'svn'=>[
+            'label'=>'Subversion',
+            'dir'=>'.svn',
+            'check'=>'svn --version',
+            'update'=>'svn up',
+        ],
+    ];
     // ----------------------------------------------------------------------
     // METHODS
     // ----------------------------------------------------------------------
@@ -55,8 +73,8 @@ class ahwi {
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         }
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'php-curl :: web installer');
+        curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'php-curl :: '.$this->sAbout);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 
@@ -116,8 +134,8 @@ class ahwi {
      * helper function after exracting zip file: skip a single subdir
      * (like zips in github)
      * 
-     * @param type $sSubdir
-     * @param type $aEntries
+     * @param string  $sSubdir
+     * @param array   $aEntries
      */
     protected function _moveIfSingleSubdir($sSubdir, $aEntries) {
         $sTargetPath = $this->aCfg['installdir'];
@@ -204,6 +222,24 @@ class ahwi {
     public function getProduct(){
         return $this->aCfg['product'];
     }
+    /**
+     * get array with all requirements, found values and success.
+     * @see getRequirementErrors() to get a list of errors only
+     * @return array
+     */
+    public function getRequirements(){
+        $this->checkRequirements();
+        return $this->aChecks;
+    }
+    /**
+     * get errors if method checkRequirements() failed.
+     * @see getRequirements() to get a list of all requirements and their success
+     * @return array
+     */
+    public function getRequirementErrors(){
+        $this->checkRequirements();
+        return $this->aErrors;
+    }
     
     /**
      * get url of new sources
@@ -247,20 +283,24 @@ class ahwi {
     * check if a php module was found
     * @return boolean
     */
-    function _checkModules($aRequiredMods=array()){
+    function _checkModules(){
         if (isset($this->aCfg['checks']['phpextensions']) 
             && is_array($this->aCfg['checks']['phpextensions'])
             && count($this->aCfg['checks']['phpextensions'])){
             
             $aAllMods=get_loaded_extensions(false);
             asort($aAllMods);
+            // echo '<pre>aAllMods = '.print_r($aAllMods, 1).'</pre>';
             
             foreach($this->aCfg['checks']['phpextensions'] as $sMod){
                 // echo $sMod.' - ';
-                if(!array_search($sMod, $aAllMods)===false){
-                    // echo  '<span class="ok">OK</span> installed';
-                } else {
-                    // echo '<span class="error">does not exist</span>';
+                $bModuleExists=!array_search($sMod, $aAllMods)===false;
+                $this->aChecks['phpextensions'][$sMod]=array(
+                    'required'=>'1',
+                    'value'=>$bModuleExists,
+                    'result'=>$bModuleExists,
+                );
+                if(!$bModuleExists){
                     $this->aErrors[]="php module $sMod was not found";
                 }
             }
@@ -272,7 +312,7 @@ class ahwi {
     * check php version 
     * @return boolean
     */
-    function _checkPhpversion($aRequiredMods=array()){
+    function _checkPhpversion(){
         if (isset($this->aCfg['checks']['phpversion']) 
             && $this->aCfg['checks']['phpversion']
             && version_compare(phpversion(), $this->aCfg['checks']['phpversion'],'<')){
@@ -296,21 +336,36 @@ class ahwi {
      */
     function checkRequirements() {
         $this->aErrors=array();
+        $this->aChecks=array();
+        /*
         if(!$this->aCfg['source']){
             return true;
         }
+         */
+        $this->aChecks['phpversion']=array(
+            'required'=>isset($this->aCfg['checks']['phpversion']) ? $this->aCfg['checks']['phpversion'] : false,
+            'value'=>phpversion(),
+            'result'=>'?',
+        );
         if (isset($this->aCfg['checks']['phpversion']) 
             && $this->aCfg['checks']['phpversion']
-            && version_compare(phpversion(), $this->aCfg['checks']['phpversion'],'<')){
+            && version_compare(phpversion(), $this->aCfg['checks']['phpversion'],'<')
+        ){
             $this->aErrors[]="Your PHP version is ".phpversion()."; required: ".$this->aCfg['checks']['phpversion'];
+            $this->aChecks['phpversion']['result']=false;
+        } else {
+            $this->aChecks['phpversion']['result']=true;
         }
         $this->_checkModules();
         $this->_checkDenyroot();
 
         if(count($this->aErrors)){
-            echo "Check for requirements failed.\n";
-            echo implode("\n*", $this->aErrors);
-            die();
+            if (php_sapi_name() == "cli") {
+                echo "Check for requirements failed.\n";
+                echo implode("\n*", $this->aErrors);
+                die();
+            }
+            return false;
         }
         return true;
     }
@@ -336,7 +391,7 @@ class ahwi {
             die("FATAL ERROR: download won\'t be started. Direcory is not writable: ".dirname($sZipfile).".\n");
         }
 
-        echo "INFO: fetching url $sUrl ...\n";
+        echo "INFO: fetching software url $sUrl ...\n";
         $sData = $this->_httpGet($sUrl);
         echo 'INFO: size is '.strlen($sData) . " byte\n";
         
@@ -348,11 +403,104 @@ class ahwi {
             die("ERROR: unable to store download file $sZipfile.\n");
         } else {
             echo "INFO: download was saved as: $sZipfile\n";
+            if (!$this->verifyDownload(md5_file($sZipfile))){
+                echo "INFO: Verification failed. Removing Download file $sZipfile.\n";
+                unlink($sZipfile);
+                die("ERROR: download file was not as expected.\n");
+            }
         }
-
         return true;
     }
 
+    /**
+     * detect vcs repository in install target to prevent damage of repository data
+     * with a given type it returns a bool ... without type you get an array
+     * of all known vcs types as key and bool as value (for its existance).
+     * @param  string  optional: subdir to detect in approot, eg. '.git'; default: false: detect git and svn
+     * @return boolean|array
+     */
+    function vcsDetect($sType=false){
+        $aReturn=[];
+        foreach($this->aVcs as $sVcs=>$aVcsType){
+            $aReturn[$sVcs]=false;
+            if(isset($aVcsType['dir'])){
+                $aReturn[$sVcs]=is_dir($this->aCfg['installdir'].'/'.$aVcsType['dir']);
+            }
+            if(!$aReturn[$sVcs] && isset($aVcsType['file'])){
+                $aReturn[$sVcs]=is_file($this->aCfg['installdir'].'/'.$aVcsType['file']);
+            }
+        }
+        return $sType ? $aReturn[$sType] : $aReturn;
+    }
+
+    /**
+     * update current installation with git|... and return an array with
+     * return code and array of output lines
+     * @param  string  subdir of vcs, ie. ".git" for git
+     * @return array
+     */
+    function vcsUpdate($sType){
+
+        // do we have a command set for given type?
+        if(!isset($this->aVcs[$sType])){
+            return false;
+        }
+
+        // does a subdir exist in install root
+        if (!$this->vcsDetect($sType)){
+            return false;
+        }
+
+        // check existance of vcs cli tool
+        $sTargetPath = $this->aCfg['installdir'];
+        exec($this->aVcs[$sType]['check'], $aOutput1, $iRc1);
+        if($iRc1!==0){
+            return [$iRc1, $aOutput1];
+        }
+
+        // remark: command1 && command2 is valid for win and linux
+        // but MS Windows needs cd /d ... to switch the drive letter
+        $sCcmd='cd '
+            .(PHP_OS_FAMILY=='Windows' ? '/d ' : '')
+            .'"'.$sTargetPath.'"'
+            .' && ' . $this->aVcs[$sType]['update'].' 2>&1'
+            ;
+        exec($sCcmd, $aOutput2, $iRc2);
+        return [$iRc2, array_merge($aOutput1, $aOutput2)];
+    }
+
+    /**
+     * verify checksum of download data
+     * @param string  $md5OfData  md5 hash (see method download())
+     * @param string  $sUrl       optional: force an md5 url
+     * @return boolean
+     */
+    function verifyDownload($md5OfData, $sUrl=false) {
+        $sMd5Url=($sUrl 
+                ? $sUrl 
+                : (isset($this->aCfg['md5']) && $this->aCfg['md5']))
+                    ? $this->aCfg['md5']
+                    : $this->aCfg['source'].'.md5'
+                ;
+        echo "INFO: fetching url for checksum $sMd5Url ...\n";
+        $sData = trim($this->_httpGet($sMd5Url));
+        echo 'INFO: size is '.strlen($sData) . " byte\n";
+
+        // if(strlen($sData)!=30 || strlen($sData)>36){
+        if(strlen($sData)!=32){
+            echo "INFO: Ooops, no md5 hash here - skipping md5 check ...\n";
+            return !$this->aCfg['md5'];
+        }
+        echo "INFO: checksums are ...\n"
+                . "  Download: $md5OfData\n"
+                . "  Required: $sData\n";
+        if(strtolower($sData)!=strtolower($md5OfData)){
+            echo "ERROR: checksums do not match\n";
+            return false;
+        }
+        echo "INFO: Checksum is OK.\n";
+        return true;
+    }
     /**
      * install/ unzip method; extract downloaded zip file into target directory
      * if the installation was successful the zip file will be deleted
