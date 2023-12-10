@@ -66,7 +66,7 @@ class configServer {
     
     /**
      * load serverver config
-     * @return type
+     * @return boolean
      */
     private function _load() {
         $this->_aServer = $this->_oCfg->getFullConfig();
@@ -79,7 +79,7 @@ class configServer {
     
     /**
      * save 
-     * @return type
+     * @return boolean
      */
     private function _save() {
         $this->_sort();
@@ -136,7 +136,7 @@ class configServer {
      * get the existing server ids of a given group as a flat array;
      * to get the existing groups use getGroups before
      * @see getGroups()
-     * @param string $sGroup
+     * @param string $sGroup  name of group
      * @return array
      */
     public function getServers($sGroup) {
@@ -155,9 +155,9 @@ class configServer {
      * @see getGroups()
      * @see getServers($sGroup)
      * 
-     * @param type $sGroup
-     * @param type $sId
-     * @return type
+     * @param string $sGroup  name of group
+     * @param string $sId     name of server
+     * @return array
      */
     public function getServerDetails($sGroup,$sId) {
         if (!array_key_exists($sGroup, $this->_aServer) ) {            
@@ -267,8 +267,8 @@ class configServer {
     /**
      * helper function to check item array ; it returns an array with the keys
      * return (true/ false) and error (error message)
-     * @param type $aItem
-     * @return type
+     * @param array $aItem
+     * @return array
      */
     private function _checkServerItem($aItem){
         // --- checks
