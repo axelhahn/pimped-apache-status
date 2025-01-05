@@ -10,12 +10,14 @@ require_once 'cdnorlocal.class.php';
  * admin functions to request API, download, read existing local downloads
  * This file is needed by admin/index.php only - NOT in your projects to publish
  *
- * @version 1.0.13
+ * @version 1.0.14
  * @author Axel Hahn
  * @link https://www.axel-hahn.de
  * @license GPL
  * @license http://www.gnu.org/licenses/gpl-3.0.html GPL 3.0
  * @package cdnorlocal
+ * 
+ * 2024-07-19  v1.0.14  WIP: php 8 only; declare variable types
  */
 class cdnorlocaladmin extends cdnorlocal
 {
@@ -24,9 +26,9 @@ class cdnorlocaladmin extends cdnorlocal
      * url for cdnjs api request
      * @var string
      */
-    var $sUrlApiPackage = 'https://api.cdnjs.com/libraries/%s';
+    protected string $sUrlApiPackage = 'https://api.cdnjs.com/libraries/%s';
 
-    var $aLibs = [];
+    protected array $aLibs = [];
 
     // ----------------------------------------------------------------------
     // 
@@ -35,16 +37,22 @@ class cdnorlocaladmin extends cdnorlocal
     // ----------------------------------------------------------------------
 
     /**
-     * helper function - get an alement from API return
+     * Helper function - get an alement from CDN search API return
      * 
      * @param string  $sLibrary  name of the library to ask for
      * @param string  $sElement  item to read, i.e. description|homepage|author|...
+     * @return bool|object|array
      */
-    protected function _getLibraryElement($sLibrary, $sElement)
+    protected function _getLibraryElement(string $sLibrary, string $sElement): bool|null|object|string|array
     {
-        // $this->_wd(__METHOD__ . "($sLibrary, $sElement)");
+        $this->_wd(__METHOD__ . "($sLibrary, $sElement)");
         if (!isset($this->aLibs[$sLibrary]['_cdn'])) {
+            $this->_wd(__METHOD__ . " Refresh data for $sLibrary...");
             $this->getLibraryMetadata($sLibrary);
+        }
+        if (!isset($this->aLibs[$sLibrary]['_cdn'])) {
+                // $this->_wd(__METHOD__ . " return false - no CDN data");
+            return false;
         }
 
         if (isset($this->aLibs[$sLibrary]['_cdn']->$sElement)) {
@@ -55,19 +63,21 @@ class cdnorlocaladmin extends cdnorlocal
             // $this->_wd(__METHOD__ . " return array");
             return $this->aLibs[$sLibrary]['_cdn'][$sElement];
         }
+        $this->_wd(__METHOD__ . " return false - requested item was not found");
         return false;
     }
 
 
 
     /**
-     * fetch metadata of a library from CDN API or local cache
+     * Fetch metadata of a library from CDN API or local cache
      * (and put/ "cache" them to $this->aLibs[$sLibrary]['_cdn'])
      * 
      * @param string  $sLibrary  name of the library to ask for
-     * @return array
+     * @param bool    $bRefresh  optional: force refresh
+     * @return bool
      */
-    public function getLibraryMetadata($sLibrary, $bRefresh = false)
+    public function getLibraryMetadata(string $sLibrary, bool $bRefresh = false): bool
     {
         $bHasDoneRefresh = false;
         ini_set("memory_limit", "-1");
@@ -105,13 +115,13 @@ class cdnorlocaladmin extends cdnorlocal
     }
 
     /**
-     * get get metainfos of a library from CDN API fith files and checksums
+     * Get metainfos of a library from CDN API fith files and checksums
      * 
      * @param string  $sLibrary  name of the library
      * @param string  $sVersion  optional: version of the library (default: version from local config)
      * @return array
      */
-    public function getLibraryMetainfos($sLibrary, $sVersion = false)
+    public function getLibraryMetainfos(string $sLibrary, string $sVersion = ''): array
     {
         $this->_wd(__METHOD__ . "($sLibrary, $sVersion) start");
         if (!$sVersion) {
@@ -120,6 +130,7 @@ class cdnorlocaladmin extends cdnorlocal
             $this->_wd(__METHOD__ . ' version: ' . $sVersion);
         }
 
+        $aJson=[];
         $sLibCachefile = $this->_getLibMetaFile($sLibrary . '__' . $sVersion);
         if (!file_exists($sLibCachefile)) {
             $sApiUrl = sprintf($this->sUrlApiPackage, "$sLibrary/$sVersion/");
@@ -142,73 +153,73 @@ class cdnorlocaladmin extends cdnorlocal
     }
 
     /**
-     * get author of a library
+     * Get author of a library
      * 
      * @param string  $sLibrary  name of the library
      * @return string
      */
-    public function getLibraryAuthor($sLibrary)
+    public function getLibraryAuthor(string $sLibrary): string
     {
 
         $sReturn = $this->_getLibraryElement($sLibrary, 'author');
         if (isset($sReturn->name)) {
             return $sReturn->name
-                . (isset($sReturn->url) ? '; <a href="' . $sReturn->url . '" target="_blank">' . $sReturn->url . '</a>' : '');
+                . (isset($sReturn->url) ? "; <a href=\"$sReturn->url\" target=\"_blank\">$sReturn->url</a>" : '');
         }
-        return $sReturn;
+        return '';
     }
 
 
     /**
-     * get description of a library
+     * Get description of a library
      * 
      * @param string  $sLibrary  name of the library
      * @return string
      */
-    public function getLibraryDescription($sLibrary)
+    public function getLibraryDescription(string $sLibrary): string
     {
         return htmlentities($this->_getLibraryElement($sLibrary, 'description'));
     }
 
     /**
-     * get filename of a library
+     * Get filename of a library
      * 
      * @param string  $sLibrary  name of the library
      * @return string
      */
-    public function getLibraryFilename($sLibrary)
+    public function getLibraryFilename(string $sLibrary): string
     {
         return $this->_getLibraryElement($sLibrary, 'filename');
     }
 
     /**
-     * get homepage of a library
+     * Get homepage of a library
      * 
      * @param string  $sLibrary  name of the library
      * @return string
      */
-    public function getLibraryHomepage($sLibrary)
+    public function getLibraryHomepage(string $sLibrary): string
     {
         return $this->_getLibraryElement($sLibrary, 'homepage');
     }
 
     /**
-     * get array with keywords of a library
+     * Get array with keywords of a library
      * 
      * @param string  $sLibrary  name of the library
      * @return array
      */
-    public function getLibraryKeywords($sLibrary)
+    public function getLibraryKeywords($sLibrary):array
     {
         return $this->_getLibraryElement($sLibrary, 'keywords');
     }
     /**
-     * get array with licenses of a library
+     * Get array with licenses of a library
      * 
      * @param string  $sLibrary  name of the library
      * @return array
      */
-    public function getLibraryLicenses($sLibrary)
+    public function getLibraryLicenses(string $sLibrary): array
     {
         $aLicenses = $this->_getLibraryElement($sLibrary, 'licenses');
         if (!$aLicenses) {
@@ -222,34 +233,34 @@ class cdnorlocaladmin extends cdnorlocal
     }
 
     /**
-     * get latest version of a library
+     * Get latest version of a library
      * 
      * @param string  $sLibrary  name of the library
      * @return string
      */
-    public function getLibraryLatestVersion($sLibrary)
+    public function getLibraryLatestVersion(string $sLibrary): string
     {
         return $this->_getLibraryElement($sLibrary, 'version');
     }
     /**
-     * get name of a library
+     * Get name of a library
      * 
      * @param string  $sLibrary  name of the library
      * @return string
      */
-    public function getLibraryName($sLibrary)
+    public function getLibraryName(string $sLibrary): string
     {
         return $this->_getLibraryElement($sLibrary, 'name');
     }
 
     /**
-     * get all versions of a library from CDN API
+     * Get all versions of a library from CDN API
      * 
      * @param string  $sLibrary  name of the library to ask for
-     * @param integer $iMax      optional: max count of return values; default: all
+     * @param integer $iMax      optional: max count of return values; default: 0 (=all)
      * @return array
      */
-    public function getLibraryVersions($sLibrary, $iMax = false)
+    public function getLibraryVersions(string $sLibrary, $iMax = 0): array
     {
         $this->getLibraryMetadata($sLibrary);
         $aReturn = [];
@@ -266,17 +277,17 @@ class cdnorlocaladmin extends cdnorlocal
     }
 
     /**
-     * check if a library was downloaded locally or not
+     * Check if a library was downloaded locally or not
      * 
      * @param  string  $sLibrary  name of the library
      * @param  string  $sVersion  optional version (default: none)
      * @return boolean
      */
-    public function isLocalLibrary($sLibrary, $sVersion = false)
+    public function isLocalLibrary(string $sLibrary, string $sVersion = ''): bool
     {
-        $sRelUrl = $sLibrary . ($sVersion ? '/' . $sVersion : '');
+        $sRelUrl = $sLibrary . ($sVersion ? "/$sVersion" : '');
         $sLocaldir = $this->_getLocalfilename($sRelUrl);
-        return (is_dir($sLocaldir));
+        return is_dir($sLocaldir);
     }
 
     // ----------------------------------------------------------------------
@@ -291,8 +302,9 @@ class cdnorlocaladmin extends cdnorlocal
      * https://stackoverflow.com/questions/21362362/file-get-contents-from-multiple-url
      * 
      * @param array  $aAssets  array with array with keys "url" + "file"
+     * @return void
      */
-    protected function _httpGet($aAssets)
+    protected function _httpGet(array $aAssets): void
     {
         // cURL multi-handle
         $mh = curl_multi_init();
@@ -355,34 +367,34 @@ class cdnorlocaladmin extends cdnorlocal
 
 
     /**
-     * get a filename for a json info file to store metadata of a single library
+     * Get a filename for a json info file to store metadata of a single library
      * 
      * @param  string  $sLibrary  name of library
      * @return string
      */
-    protected function _getInfoFilename($sLibrary)
+    protected function _getInfoFilename(string $sLibrary): string
     {
-        return $this->_getLocalfilename('') . '/' . $this->sCdnMetadir . '/' . $sLibrary . '.json';
+        return $this->_getLocalfilename('') . "/$this->sCdnMetadir/$sLibrary.json";
         // return $this->_getLocalfilename($sLibrary).'/.ht_info_cdnorlocal.json';
     }
 
     /**
-     * get a filename for a json info file to store metadata of all libraries
+     * Get a filename for a json info file to store metadata of all libraries
      * 
      * @return string
      */
-    protected function _getLocalLibsFile()
+    protected function _getLocalLibsFile(): string
     {
         return $this->_getLocalfilename('') . '/' . $this->sCdnMetadir . '/my_libs.json';
         // return $this->_getLocalfilename('').'/.ht_info_all_libs_cdnorlocal.json';
     }
 
     /**
-     * store fresh metadata of all downloaded libraries and versions
+     * Read all locally downloaded libraries and all its versions and write them to json
      * 
      * @return boolean
      */
-    protected function _putLocalLibsFile()
+    protected function _putLocalLibsFile(): bool
     {
         $sJsonfile = $this->_getLocalLibsFile();
         return file_put_contents($sJsonfile, json_encode($this->_reReadLibdirs(), JSON_PRETTY_PRINT));
@@ -390,13 +402,14 @@ class cdnorlocaladmin extends cdnorlocal
 
 
     /**
-     * get fresh data with reading  local vendor dir and find downloaded 
+     * Get fresh data with reading local vendor dir and find downloaded 
      * classes and versions
      * 
      * @return array
      */
-    protected function _reReadLibdirs()
+    protected function _reReadLibdirs(): array
     {
+        $this->_wd(__METHOD__ . "() start");
         $sLocaldir = $this->_getLocalfilename('');
         $aReturn = [];
         if (is_dir($sLocaldir)) {
@@ -421,13 +434,15 @@ class cdnorlocaladmin extends cdnorlocal
     }
 
     /**
-     * recursively remove a directory
+     * Recursively remove a directory. Return code is success of deletion.
+     * It uses glob() which is good enough for this purpose.
      * 
      * @param string  $dir  name of the directory
+     * @return bool
      */
-    private function _rrmdir($dir)
+    private function _rrmdir(string $dir): bool
     {
-        foreach (glob($dir . '/*') as $file) {
+        foreach (glob("$dir/*") as $file) {
             if (is_dir($file)) {
                 $this->_rrmdir($file);
             } else {
@@ -441,14 +456,16 @@ class cdnorlocaladmin extends cdnorlocal
     }
 
     /**
-     * delete a version of a local library 
+     * Delete a version of a local library. 
+     * It internally updates the cached global lib data file.
+     * It returns true if the directory for this lib version does not exist anymore.
      * 
      * @param  string  $sLibrary   name of library
      * @param  string  $sVersion   version to delete
      * @param  bool    $bIsUnused  flag: is lib unused (if true then the metafile will be deleted)
-     * @return type
+     * @return bool
      */
-    public function delete($sLibrary, $sVersion, $bIsUnused = true)
+    public function delete(string $sLibrary, string $sVersion, bool $bIsUnused = true): bool
     {
 
         $sRelUrl = $sLibrary . '/' . $sVersion;
@@ -469,14 +486,14 @@ class cdnorlocaladmin extends cdnorlocal
     }
 
     /**
-     * download all files of a given library.
+     * Download all files of a given library.
      * 
      * @param  string  $sLibrary  name of library
      * @param  string  $sVersion  version number
      * @param  bool    $bForceDownload  optional flag: if true a download will be repeated even if the local copy exists
      * @return boolean
      */
-    public function downloadAssets($sLibrary, $sVersion, $bForceDownload = false)
+    public function downloadAssets(string $sLibrary, string $sVersion, bool $bForceDownload = false): bool
     {
         $sRelUrl = $sLibrary . '/' . $sVersion;
         $sLocaldir = $this->_getLocalfilename($sRelUrl);
@@ -555,10 +572,17 @@ class cdnorlocaladmin extends cdnorlocal
     // 
     // ----------------------------------------------------------------------
 
-    // Comparison function
-    protected function _orderByNewestVersion($a, $b)
+    /**
+     * Comparison function to order by version number
+     * @see getLocalLibs
+     * 
+     * @param string $a
+     * @param string $b
+     * @return bool|int
+     */
+    protected function _orderByNewestVersion(string $a, string $b): bool|int
     {
-        $this->_wd(__METHOD__ . "($a, $b)");
+        // $this->_wd(__METHOD__ . "($a, $b)");
         if ($a == $b) {
             return 0;
         }
@@ -566,14 +590,16 @@ class cdnorlocaladmin extends cdnorlocal
     }
 
     /**
-     * get an array with all downloaded libs and its versions
+     * Get an array with all downloaded libs and its versions.
+     * It returns false if it has no data.
      * 
      * @param boolean  $bForceRefresh  force refresh
      * @return array
      */
-    public function getLocalLibs($bForceRefresh = false)
+    public function getLocalLibs(bool $bForceRefresh = false): bool|array
     {
         $sJsonfile = $this->_getLocalLibsFile();
+
         if (!file_exists($sJsonfile) || $bForceRefresh) {
             $this->_putLocalLibsFile();
         }
@@ -597,18 +623,17 @@ class cdnorlocaladmin extends cdnorlocal
     // ----------------------------------------------------------------------
 
     /**
-     * search for a library with CDN API
+     * Search for a library with CDN API and return stdClass Object
      * 
      * @param string  $sLibrary  name of the library to ask for
      * @return object
      */
-    public function searchLibrary($sLibrary)
+    public function searchLibrary(string $sLibrary): object
     {
         $this->_wd(__METHOD__ . "($sLibrary)");
         $sApiUrl = sprintf($this->sUrlApiPackage, '?search=' . str_replace(' ', '+', $sLibrary) . '&fields=version,description');
         $this->_wd(__METHOD__ . " fetch $sApiUrl");
         $aJson = json_decode(file_get_contents($sApiUrl));
-
         return $aJson;
     }
 }
