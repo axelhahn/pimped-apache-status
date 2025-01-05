@@ -208,7 +208,7 @@ class cli {
      * @return boolean
      */
     public function forceCli(){
-            if (php_sapi_name() !== "cli") {
+            if (php_sapi_name() !== "cli" && php_sapi_name() !== "cgi-fcgi") {
             die("ERROR: This script is for command line usage only.");
         }
         return true;

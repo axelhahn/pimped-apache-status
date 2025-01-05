@@ -5,12 +5,7 @@
 /config/__2_delete_config_user.php
 /nbproject/*
 /tmp/*
-/vendor/admin-lte
-/vendor/Chart.js
-/vendor/datatables
-/vendor/font-awesome
-/vendor/jquery
-/vendor/twitter-bootstrap
+/vendor/*
 /views/dump.php
 /views/singleserver.php
 text_4_video__install.txt

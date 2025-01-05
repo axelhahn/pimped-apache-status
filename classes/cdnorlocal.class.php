@@ -22,48 +22,54 @@ namespace axelhahn;
  * AND/ OR
  * https://unpkg.com/
  * 
- * @version 1.0.13
+ * @version 1.0.14
  * @author Axel Hahn
  * @link https://www.axel-hahn.de
  * @license GPL
  * @license http://www.gnu.org/licenses/gpl-3.0.html GPL 3.0
  * @package cdnorlocal
+ * 
+ * 2024-07-19  v1.0.14  WIP: php 8 only; declare variable types
  */
 class cdnorlocal
 {
 
-    protected $sVersion = '1.0.13';
+    /**
+     * Version number of this class
+     * @var string
+     */
+    protected string $sVersion = '1.0.14';
 
     /**
      * flag to show debugging infos (used in _wd method [write debug])
      * @var boolean
      */
-    var $_bDebug = false;
+    protected bool $_bDebug = false;
 
     /**
      * local vendor dir ... if a lib was downloaded with admin
      * @var string
      */
-    var $sVendorDir = false;
+    public string $sVendorDir = '';
 
     /**
      * local vendor dir ... if a lib was downloaded with admin
      * @var string
      */
-    var $sCdnMetadir = '.cdnmetadata';
+    public string $sCdnMetadir = '.cdnmetadata';
 
     /**
      * local vendor url ... if a lib was downloaded with admin
      * this is the prefix for linking in html documents
      * @var string
      */
-    var $sVendorUrl = false;
+    protected string $sVendorUrl = '';
 
     /**
      * url prefix of CDNs
      * @var array
      */
-    var $aCdnUrls = [
+    var array $aCdnUrls = [
         'cdnjs.cloudflare.com' => [
             'about' => '',
             'url' => 'https://cdnjs.cloudflare.com/ajax/libs/[PKG]/[VERSION]/[FILE]',
@@ -80,13 +86,18 @@ class cdnorlocal
         ],
          */
     ];
-    protected $_sCdn = false;
+
+    /**
+     * Used CDN name ... a key of $this->aCdnUrls
+     * @var string
+     */
+    protected string $_sCdn = '';
 
     /**
      * array of libs
      * @var array
      */
-    var $_aLibs = [];
+    protected array $_aLibs = [];
 
     // ----------------------------------------------------------------------
     // 
@@ -96,15 +107,15 @@ class cdnorlocal
 
     /**
      * constructor
-     * @param  array  $aOptions with possible keys 
-     *                  - debug
-     *                  - vendordir & vendorurl
-     *                  - vendorrelpath
+     * @param  array  $aOptions optional: options array with possible keys 
+     *                          - debug
+     *                          - vendordir & vendorurl
+     *                          - vendorrelpath
      */
-    public function __construct($aOptions = false)
+    public function __construct(array $aOptions = [])
     {
 
-        if (is_array($aOptions)) {
+        if (count($aOptions)) {
             if (isset($aOptions['debug'])) {
                 $this->setDebug($aOptions['debug']);
             }
@@ -128,11 +139,11 @@ class cdnorlocal
     }
 
     /**
-     * write debug output if the flag was set
+     * Write debug output if the flag was set
      * @param string  $sText  message to show
      * @return boolean
      */
-    protected function _wd($sText)
+    protected function _wd(string $sText): bool
     {
         if ($this->_bDebug) {
             echo "DEBUG " . __CLASS__ . " - " . $sText . "<br>\n";
@@ -141,10 +152,10 @@ class cdnorlocal
     }
 
     /**
-     * dump current values
+     * Dump current values
      * @return boolean
      */
-    public function dump()
+    public function dump(): bool
     {
         echo '
         <h2>Dump ' . __CLASS__ . '</h2>
@@ -180,37 +191,36 @@ class cdnorlocal
 
 
     /**
-     * return the local filename (maybe it does not exist)
+     * Get the local filename (maybe it does not exist)
      * 
      * @param string $sRelUrl  relative url of css/ js file (i.e. "jquery/3.2.1/jquery.min.js")
      * @return string
      */
-    protected function _getLocalfilename($sRelUrl)
+    protected function _getLocalfilename(string $sRelUrl): string
     {
-        return $this->sVendorDir . '/' . $sRelUrl;
+        return "$this->sVendorDir/$sRelUrl";
     }
+
     /**
      * get a filename for a json info file to store/ read metadata of a single library
      * 
-     * @param  string  $sLibAndVersion  name of library + version, eg "jquery__3.2.1"
+     * @param  string  $sLibAndVersion  name of library + '__' + version, eg "jquery__3.2.1"
      * @return string
      */
-    protected function _getLibMetaFile($sLibAndVersion)
+    protected function _getLibMetaFile(string $sLibAndVersion): string
     {
         $sDir = $this->_getLocalfilename('') . '/' . $this->sCdnMetadir;
-        // if (!is_dir($sDir)) {
-        //     mkdir($sDir);
-        // }
         return $sDir . '/' . $sLibAndVersion . '.json';
     }
 
     /**
-     * return the local filename if it exists
+     * Get the local filename if it exists.
+     * It returns false if it does not exist
      * 
      * @param string $sRelUrl  relative url of css/ js file (i.e. "jquery/3.2.1/jquery.min.js")
-     * @return string|bool
+     * @return bool|string
      */
-    public function getLocalfile($sRelUrl)
+    public function getLocalfile(string $sRelUrl): bool|string
     {
         return file_exists($this->_getLocalfilename($sRelUrl))
             ? $this->_getLocalfilename($sRelUrl)
@@ -218,15 +228,15 @@ class cdnorlocal
     }
 
     /**
-     * set a CDN to deliver sources; returns true if the CDN is supported;
-     * returns false if CDN is not supported
+     * Set a CDN to deliver sources; returns true if the CDN is supported;
+     * returns false if CDN is not supported/ unknown
      * 
      * @see getCdns() to get a list of supported CDNs
      * 
      * @param string $sNewCdn
      * @return boolean
      */
-    public function setCdn($sNewCdn)
+    public function setCdn(string $sNewCdn): bool
     {
         if (isset($this->aCdnUrls[$sNewCdn])) {
             $this->_sCdn = $sNewCdn;
@@ -236,38 +246,39 @@ class cdnorlocal
     }
 
     /**
-     * set a vendor url to use as link for libraries
+     * Enable / disable debug output
      * 
-     * @param string  $sNewValue  new url
-     * @return string
+     * @param bool  $sNewValue  Flag to enable/ disable debugging; true = enabled
+     * @return bool
      */
-    public function setDebug($sNewValue)
+    public function setDebug(bool $sNewValue): bool
     {
         $this->_wd(__METHOD__ . "($sNewValue)");
-        return $this->_bDebug = $sNewValue;
+        $this->_bDebug = $sNewValue;
+        return true;
     }
     /**
-     * set a vendor dir to scan libraries as relative path to the class
+     * Set a vendor dir to scan libraries as relative path to the class
      * 
      * @param string  $sNewValue  new local dir; relative to the class file
-     * @return string
+     * @return boolean
      */
-    public function setVendorWithRelpath($sRelpath)
+    public function setVendorWithRelpath(string $sRelpath): bool
     {
         $this->_wd(__METHOD__ . "($sRelpath)");
         $this->setVendorDir(__DIR__ . '/' . $sRelpath);
         $this->setVendorUrl($sRelpath);
         return true;
     }
+
     /**
-     * set a vendor dir to scan libraries as full path
+     * Set a vendor dir to scan libraries as full path. It is the basepath with all libs in subdirs.
      * 
      * @param string  $sNewValue   new local dir; absolute path
      * @param boolean $bMustExist  optional flag: ensure that the directory exists
      * @return string
      */
-
-    public function setVendorDir($sNewValue, $bMustExist = false)
+    public function setVendorDir(string $sNewValue, bool $bMustExist = false): string 
     {
         $this->_wd(__METHOD__ . "($sNewValue)");
         if (!file_exists($sNewValue) && $bMustExist) {
@@ -277,12 +288,12 @@ class cdnorlocal
     }
 
     /**
-     * set a vendor url to use as link for libraries
+     * Set a vendor url to use as link for libraries
      * 
      * @param string  $sNewValue  new url
      * @return string
      */
-    public function setVendorUrl($sNewValue)
+    public function setVendorUrl(string $sNewValue): string
     {
         $this->_wd(__METHOD__ . "($sNewValue)");
         return $this->sVendorUrl = $sNewValue;
@@ -295,12 +306,12 @@ class cdnorlocal
     // ----------------------------------------------------------------------
 
     /**
-     * add a library into lib stack
+     * Add a library into lib stack
      * @param string $sReldir  relative dir and version (i.e. "jquery/3.2.1")
      * @param string $sFile    optional file (behind relpath)
      * @return boolean
      */
-    public function addLib($sReldir, $sFile = false)
+    public function addLib(string $sReldir, string $sFile = ''): bool
     {
         $this->_wd(__METHOD__ . "($sReldir,$sFile)");
         if (!isset($this->_aLibs[$sReldir])) {
@@ -328,23 +339,25 @@ class cdnorlocal
     }
 
     /**
-     * get array with a flat list of supported CDNs
+     * Get array with a flat list of supported CDNs
      * @return array
      */
-    public function getCdns()
+    public function getCdns(): array
     {
         return array_keys($this->aCdnUrls);
     }
+
     /**
-     * get array with a flat list of supported CDNs
-     * @return array
+     * Get name of currently set CDN
+     * @return string
      */
-    public function getCurrentCdn()
+    public function getCurrentCdn(): string
     {
         return $this->_sCdn;
     }
+
     /**
-     * return array of all libs filtered by criteria
+     * Get array of all libs filtered by criteria
      * 
      * @example 
      * 
@@ -357,12 +370,12 @@ class cdnorlocal
      *   get unused libs that are still local (and can be deleted)
      *   <code>$oCdn->getFilteredLibs(['islocal'=>1, 'isunused'=>1])</code>
      * 
-     * @param array  $aFilter  array with filter items containing these keys:
+     * @param array  $aFilter  optional array with filter items containing these keys:
      *                         - islocal   true|false; default is false
      *                         - isunused  true|false; default is false
      * @return array
      */
-    public function getFilteredLibs($aFilter = [])
+    public function getFilteredLibs(array $aFilter = []): array
     {
         $this->_wd(__METHOD__ . "()");
         $aReturn = [];
@@ -381,14 +394,14 @@ class cdnorlocal
         return $aReturn;
     }
     /**
-     * return all libs from lib stack; with enabled flag entries in local 
+     * Get all libs from lib stack; with enabled flag entries in local 
      * vendor cache will be added to show the versions that can be deleted
      * (detectable by subkey "isunused" => true)
      * 
-     * @param boolean  $bDetectUnused  flag: detect unused local libs
+     * @param boolean  $bDetectUnused  optional flag: detect unused local libs; default is false (=no)
      * @return array
      */
-    public function getLibs($bDetectUnused = false)
+    public function getLibs(bool $bDetectUnused = false): array
     {
         $this->_wd(__METHOD__ . "()");
         $aReturn = $this->_aLibs;
@@ -414,13 +427,16 @@ class cdnorlocal
     }
 
     /**
-     * find item with a value and return other value
+     * Search in current libraries - it finds an item with given key and value
+     * and can return other value.
+     * It returns false if nothing was found.
+     * 
      * @param string $sScanItem    item to search (one of lib|version|relpath)
-     * @param $sReldir$sScanValue  needed value
-     * @param $sReldir$sReturnKey  return key (one of lib|version|relpath)
-     * @return varia
+     * @param string $sScanValue   needed value
+     * @param string $sReturnKey   return key (one of lib|version|relpath)
+     * @return bool|string
      */
-    public function _getLibItem($sScanItem, $sScanValue, $sReturnKey)
+    public function _getLibItem($sScanItem, $sScanValue, $sReturnKey): bool|string
     {
         $this->_wd(__METHOD__ . "($sScanItem, $sScanValue, $sReturnKey)");
         foreach ($this->_aLibs as $sRelpath => $aLibdata) {
@@ -432,40 +448,40 @@ class cdnorlocal
     }
 
     /**
-     * get the (first) version of a lib in the lib stack
+     * Get the (first) version of a lib in the lib stack
      * @param string  $sLib  name of the library (i.e. "jquery"; relpath without version)
      * @return string
      */
-    public function getLibVersion($sLib)
+    public function getLibVersion(string $sLib): string
     {
         return $this->_getLibItem('lib', $sLib, 'version');
     }
 
     /**
-     * get the (first) version of a lib in the lib stack
+     * Get the relative path of a lib
      * @param string  $sLib  name of the library (i.e. "jquery"; relpath without version)
      * @return string
      */
-    public function getLibRelpath($sLib)
+    public function getLibRelpath(string $sLib): string
     {
         return $this->_getLibItem('lib', $sLib, 'relpath');
     }
 
     /**
-     * get version of current cdnorlocal class
+     * Get version of current cdnorlocal class
      * @return string
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         return $this->sVersion;
     }
 
     /**
-     * set an array of lib items to the lib 
+     * Set an array of lib items to the lib 
      * @param array  $aLibs  array of relpath (i.e. "jquery/3.2.1")
      * @return boolean
      */
-    public function setLibs($aLibs)
+    public function setLibs(array $aLibs): bool
     {
         $this->_wd(__METHOD__ . "([array])");
         if (!is_array($aLibs)) {
@@ -490,22 +506,32 @@ class cdnorlocal
      * - version
      * - file (relative to lib root)
      * - part of filename for metadata
+     * It returns false if the relurl is not in the right format
+     * 
+     * @param  string  $sRelUrl  relurl of a file (i.e. "jquery/3.2.1/jquery.min.js")
+     * @return bool|array
      */
-    protected function _splitRelUrl($sRelUrl)
+    protected function _splitRelUrl(string $sRelUrl): bool|array
     {
-        $aTmp = preg_match_all('#^(.*)/(.*)/(.*)$#U', $sRelUrl, $aMatches);
+        preg_match_all('#^(.*)/(.*)/(.*)$#U', $sRelUrl, $aMatches);
         if (!count($aMatches) === 4) {
             return false;
         }
         return [
-            'pkg'      => $aMatches[1][0],
-            'version'  => $aMatches[2][0],
-            'file'     => $aMatches[3][0],
+            'pkg' => $aMatches[1][0],
+            'version' => $aMatches[2][0],
+            'file' => $aMatches[3][0],
             'metafile' => $aMatches[1][0] . '__' . $aMatches[2][0], // pkg + __ + version
         ];
     }
 
-    public function getFullCdnUrl($sRelUrl, $sCdn = false)
+    /**
+     * Get a full url to a CDN of a given relurl
+     * @param string  $sRelUrl  relative path
+     * @param string  $sCdn     optional: use another CDN key; default: current CDN
+     * @return bool|string
+     */
+    public function getFullCdnUrl(string $sRelUrl, string $sCdn = ''): bool|string
     {
         if (!$sCdn) {
             $sCdn = $this->_sCdn;
@@ -516,14 +542,14 @@ class cdnorlocal
             return false;
         }
         return str_replace(
-            ['[PKG]',         '[VERSION]',         '[FILE]'],
+            ['[PKG]', '[VERSION]', '[FILE]'],
             [$aSplits['pkg'], $aSplits['version'], $aSplits['file']],
             $this->aCdnUrls[$sCdn]['url']
         );
     }
 
     /**
-     * get full url based on relative filename. It returns the url of
+     * Get full url based on relative filename. It returns the url of
      * local directory if it exists or a url of CDNJS 
      * 
      * To use a local path a library must exist. Default vendor dir
@@ -536,27 +562,28 @@ class cdnorlocal
      * @see setVendorWithRelpath()
      * 
      * @param string $sRelUrl  relative url of css/ js file (i.e. "jquery/3.2.1/jquery.min.js")
-     * @return type
+     * @return bool|string
      */
-    public function getFullUrl($sRelUrl)
+    public function getFullUrl(string $sRelUrl): bool|string
     {
-        return ($this->getLocalfile($sRelUrl)
-            ? $this->sVendorUrl . '/' . $sRelUrl
+        return $this->getLocalfile($sRelUrl)
+            ? "$this->sVendorUrl/$sRelUrl"
             : $this->getFullCdnUrl($sRelUrl)
-        );
+        ;
     }
 
     /**
-     * get html code to include a css or js file (kind of lazy function)
+     * Get html code to include a css or js file (kind of lazy function)
      * Remark: other file extensions are not supported
      * Use the method getFullUrl() to get a full url and then embed it directly
      * 
      * @see getFullUrl()
      * 
      * @param string $sRelUrl  relative url of css/ js file (i.e. "jquery/3.2.1/jquery.min.js")
+     * @param string $sCecksum optional checksum
      * @return string
      */
-    function getHtmlInclude($sRelUrl, $sCecksum = '')
+    function getHtmlInclude(string $sRelUrl, string $sCecksum = ''): string
     {
         $sUrl = $this->getFullUrl($sRelUrl);
         $ext = pathinfo($sRelUrl, PATHINFO_EXTENSION);
@@ -575,19 +602,14 @@ class cdnorlocal
             }
         }
 
-        $sSecurity = ($sCecksum ? 'integrity="' . $sCecksum . '" ' : '')
-            . 'crossorigin="anonymous" referrerpolicy="no-referrer"';
-        switch ($ext) {
-            case 'css':
-                return '<link rel="stylesheet" type="text/css" href="' . $sUrl . '" '
-                    . $sSecurity
-                    . ' />';
-            case 'js':
-                return '<script src="' . $sUrl . '" '
-                    . $sSecurity
-                    . '></script>';
-            default:
-                return "<!-- ERROR: I don't know (yet) how to handle extension [$ext] ... to include $sRelUrl; You can use getFullUrl('$sRelUrl'); -->";
-        }
+        $sSecurity = ($sCecksum ? "integrity=\"$sCecksum\" " : '')
+            . 'crossorigin="anonymous" referrerpolicy="no-referrer"'
+            ;
+
+        return match ($ext) {
+            'css' => "<link rel=\"stylesheet\" type=\"text/css\" href=\"$sUrl\" $sSecurity/>",
+            'js'  => "<script src=\"$sUrl\" $sSecurity></script>",
+            default => "<!-- ERROR: I don't know (yet) how to handle extension [$ext] ... to include $sRelUrl; You can use getFullUrl('$sRelUrl'); -->",
+        };
     }
 }

@@ -21,75 +21,104 @@
  * 
  * @author Axel Hahn
  */
-class ahwiupdatecheck {
+class ahwiupdatecheck
+{
 
-    
-    protected $_sCheckUrl=false;
-    protected $_aCfg=array(
-        'product'=>false,
-        'version'=>false,
-        'baseurl'=>false,
-        'url'=>false,
-        'tmpdir'=>false,
-        'ttl'=>0,     // 1 day
+
+    /**
+     * Url to check for a new version
+     * @var string
+     */
+    protected string $_sCheckUrl = false;
+
+    /**
+     * Config array
+     * @var array
+     */
+    protected array $_aCfg = array(
+        'product' => false,
+        'version' => false,
+        'baseurl' => false,
+        'url' => false,
+        'tmpdir' => false,
+        'ttl' => 0,     // 1 day
     );
-    protected $_aInfosDefault=array(
-            'flag_update'=>false,
-            'message'=>false,
-            'error'=>false,
-            'clientversion'=>'unknown',
-            'latest_version'=>'unknown',
-            'release'=>'unknown',
-            'download'=>false,
-            'md5'=>false,
-    );
-    protected $_aInfos=array();
-    
+
+    /**
+     * Default array for update infos
+     * @var array
+     */
+    protected array $_aInfosDefault = [
+        'flag_update' => false,
+        'message' => false,
+        'error' => false,
+        'clientversion' => 'unknown',
+        'latest_version' => 'unknown',
+        'release' => 'unknown',
+        'download' => false,
+        'md5' => false,
+    ];
+    protected $_aInfos = [];
+
     // ----------------------------------------------------------------------
     // constructor
     // ----------------------------------------------------------------------
 
-    public function __construct($aCfg) {
+    /**
+     * Constructor
+     * 
+     * @param array $aCfg  configuration
+     */
+    public function __construct(array $aCfg)
+    {
         $this->_setCfg($aCfg);
-        return true;
     }
 
     // ----------------------------------------------------------------------
     // protected
     // ----------------------------------------------------------------------
-    
-    
-    /**
-     * search temp directory using tmpdir in config. if false then use system
-     * temp dir
-     * @param bool  $bForce  force check and ignore ttl
-     * @return type
-     */
-    protected function _getTempdir(){
-        $sTmpDir=(isset($this->_aCfg['tmpdir']) && $this->_aCfg['tmpdir']) ? $this->_aCfg['tmpdir'] : sys_get_temp_dir();
 
-        if($sTmpDir && !($sTmpDir[0]==='/' || $sTmpDir[1]===':')){
-            $sTmpDir=__DIR__ . '/' . $sTmpDir;
+
+    /**
+     * Search temp directory using tmpdir in config. if false then use system
+     * temp dir
+     * 
+     * @param bool  $bForce  force check and ignore ttl
+     * @return string
+     */
+    protected function _getTempdir(): string
+    {
+        $sTmpDir = (isset($this->_aCfg['tmpdir']) && $this->_aCfg['tmpdir']) ? $this->_aCfg['tmpdir'] : sys_get_temp_dir();
+
+        if ($sTmpDir && !($sTmpDir[0] === '/' || $sTmpDir[1] === ':')) {
+            $sTmpDir = __DIR__ . '/' . $sTmpDir;
         }
-        if(!is_writable($sTmpDir)){
-            die('ERROR: directory is not writable: ['.$sTmpDir.'] - check write access or set a new value for "tmpdir"<br>');
+        if (!is_writable($sTmpDir)) {
+            die('ERROR: directory is not writable: [' . $sTmpDir . '] - check write access or set a new value for "tmpdir"<br>');
         }
         return $sTmpDir;
     }
-    
-    protected function _getCacheFilename(){
-        return $this->_getTempdir() . '/checkupdate_' 
-                . ($this->_aCfg['product'] ? strtolower($this->_aCfg['product']) : md5($this->_aCfg['url'])) 
-                . '.tmp';
+
+    /**
+     * Get a filename for a cache file
+     * @return string
+     */
+    protected function _getCacheFilename(): string
+    {
+        return $this->_getTempdir() . '/checkupdate_'
+            . ($this->_aCfg['product'] ? strtolower($this->_aCfg['product']) : md5($this->_aCfg['url']))
+            . '.tmp';
     }
 
     /**
-     * make an http(s) get request and return the response body
+     * Make an http(s) get request and return the response body
+     * 
      * @param string   $url          url to fetch
      * @param boolean  $bHeaderOnly  send header only
      * @return string
      */
-    private function _httpGet($url, $bHeaderOnly = false) {
+    private function _httpGet(string $url, bool $bHeaderOnly = false): string
+    {
         $ch = curl_init($url);
         if ($bHeaderOnly) {
             curl_setopt($ch, CURLOPT_HEADER, 1);
@@ -105,22 +134,24 @@ class ahwiupdatecheck {
 
         $res = curl_exec($ch);
         curl_close($ch);
-        return ($res);
+        return $res;
     }
-    
+
     /**
-     * override current values of $this->_aCfg
+     * Override current values of $this->_aCfg
+     * 
      * @param array $aCfg  new cfg values
      * @return boolean
      */
-    protected function _setCfg($aCfg){
+    protected function _setCfg(array $aCfg): bool
+    {
         // echo __METHOD__. ' new data: <pre>'.print_r($aCfg, 1).'</pre>';
-        if(is_array($aCfg)){
-            foreach(array_keys($this->_aCfg) as $sKey){
-                $this->_aCfg[$sKey]=isset($aCfg[$sKey]) ? $aCfg[$sKey] : $this->_aCfg[$sKey];
+        if (is_array($aCfg)) {
+            foreach (array_keys($this->_aCfg) as $sKey) {
+                $this->_aCfg[$sKey] = $aCfg[$sKey] ?? $this->_aCfg[$sKey];
             }
-            if($this->_aCfg['product'] && $this->_aCfg['version'] && $this->_aCfg['baseurl']){
-                $this->_aCfg['url']=$this->_aCfg['baseurl'].strtolower($this->_aCfg['product']).'_'.$this->_aCfg['version'].'.json';
+            if ($this->_aCfg['product'] && $this->_aCfg['version'] && $this->_aCfg['baseurl']) {
+                $this->_aCfg['url'] = $this->_aCfg['baseurl'] . strtolower($this->_aCfg['product']) . '_' . $this->_aCfg['version'] . '.json';
             }
         }
         $this->getUpdateInfos();
@@ -131,8 +162,6 @@ class ahwiupdatecheck {
     // ----------------------------------------------------------------------
     // public ... fetch update infos
     // ----------------------------------------------------------------------
-    
-    
 
     /**
      * get array with update infos 
@@ -147,25 +176,26 @@ class ahwiupdatecheck {
      *     [md5] => https://sourceforge.net/projects/pimpapachestat/files/versionNNN.md5/download
      * )
      * 
-     * @global type $aEnv
+     * @global array $aEnv
      * @global array $aCfg
      * @return array
      */
-    function getUpdateInfos($bForce = false){
-        
-        $sUrlCheck=$this->_aCfg['url'];
-        if(!$sUrlCheck){
-            echo __METHOD__." ABORT<br>";
+    function getUpdateInfos($bForce = false): array|bool
+    {
+
+        $sUrlCheck = $this->_aCfg['url'] ?? '';
+        if (!$sUrlCheck) {
+            echo __METHOD__ . " ABORT: key 'url' is missing<br>";
             return false;
         }
         // global $oLog;
-        
+
         $sCachefile = $this->_getCacheFilename();
         $bExec = true;
         $iTtl = (int) $this->_aCfg['ttl'];
         $iAge = false;
 
-        $aDefault=$this->_aInfosDefault;
+        $aDefault = $this->_aInfosDefault;
 
         // 
         if ($bForce) {
@@ -187,31 +217,31 @@ class ahwiupdatecheck {
             $sResponse = $this->_httpGet($sUrlCheck);
             // echo "DEBUG: $sResult<br>";
             if (!$sResponse) {
-                $aUpdateInfos['error']= 'request for fetching update infos failed.';
+                $aUpdateInfos['error'] = 'request for fetching update infos failed.';
                 // $this->_aInfos=array_merge($aDefault, $aUpdateInfos);
                 // $oLog->add(__FUNCTION__ . " unable to check version.");
             } else {
                 // $oLog->add(__FUNCTION__ . " <pre>$sResult</pre>");
-                $aUpdateInfos= json_decode($sResponse, 1);
-                if(!is_array($aUpdateInfos)){
-                    $aUpdateInfos=array('error'=>$sResponse);
+                $aUpdateInfos = json_decode($sResponse, 1);
+                if (!is_array($aUpdateInfos)) {
+                    $aUpdateInfos = array('error' => $sResponse);
                     // $this->_aInfos=array_merge($aDefault, $aUpdateInfos);
                 } else {
-                    
+
                 }
             }
-            $this->_aInfos=array_merge($aDefault, $aUpdateInfos);
+            $this->_aInfos = array_merge($aDefault, $aUpdateInfos);
             // echo "DEBUG write cache $sCachefile <pre>".print_r($this->_aInfos, 1)."</pre>";
-            if (!file_put_contents($sCachefile, json_encode($this->_aInfos,JSON_PRETTY_PRINT))){
+            if (!file_put_contents($sCachefile, json_encode($this->_aInfos, JSON_PRETTY_PRINT))) {
                 // $oLog->add(__FUNCTION__ . " unable to write file [$sTarget]", "error");
             }
-            $this->_aInfos['_source']='live';
-            $this->_aInfos['_age']=$iAge;
+            $this->_aInfos['_source'] = 'live';
+            $this->_aInfos['_age'] = $iAge;
         } else {
             // $oLog->add(__FUNCTION__ . " reading cache $sTarget ...");
             $this->_aInfos = json_decode(file_get_contents($sCachefile), 1);
-            $this->_aInfos['_source']='cache';
-            $this->_aInfos['_age']=$iAge;
+            $this->_aInfos['_source'] = 'cache';
+            $this->_aInfos['_age'] = $iAge;
         }
         // $oLog->add(__FUNCTION__ . " <pre>".print_r($aUpdateInfos, 1)."</pre>");
         // echo " <pre>".print_r($this->_aInfos, 1)."</pre>";
@@ -221,40 +251,49 @@ class ahwiupdatecheck {
     // ----------------------------------------------------------------------
     // public ... ask for update infos
     // ----------------------------------------------------------------------
-    
+
     /**
-     * get info if an update is available as boolean
+     * Get info if an update is available as boolean
      * @return boolean
      */
-    public function hasUpdate(){
+    public function hasUpdate(): bool
+    {
         return $this->_aInfos['flag_update'];
     }
+
     /**
-     * get version of installed software
-     * @return boolean
+     * Get version of installed software
+     * @return string
      */
-    public function getClientVersion(){
+    public function getClientVersion(): string
+    {
         return $this->_aInfos['clientversion'];
     }
+
     /**
-     * get download url for latest software version
-     * @return boolean
+     * Get download url for latest software version
+     * @return string
      */
-    public function getDownloadUrl(){
+    public function getDownloadUrl(): string
+    {
         return $this->_aInfos['download'];
     }
+
     /**
-     * get download url for latest software version
-     * @return boolean
+     * Get check sum url of latest software version
+     * @return string
      */
-    public function getChecksumUrl(){
+    public function getChecksumUrl(): string
+    {
         return $this->_aInfos['md5'];
     }
+
     /**
-     * get version of latest software version
-     * @return boolean
+     * Get version number of latest software version
+     * @return string
      */
-    public function getLatestVersion(){
+    public function getLatestVersion(): string
+    {
         return $this->_aInfos['latest_version'];
     }
 }

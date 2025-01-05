@@ -1,8 +1,8 @@
 {
     "project": {
         "title": "Pimped Apache Status",
-        "version": "2.04.12",
-        "releasedate": "2023-12-10",
+        "version": "2.04.13",
+        "releasedate": "2025-01-05",
         "license": "GPL 3.0"
     },
     "active": [],
@@ -40,8 +40,8 @@
     "vendor": [
         "admin-lte/2.4.18",
         "datatables/1.10.21",
-        "font-awesome/6.4.0",
-        "jquery/3.6.4",
+        "font-awesome/6.7.2",
+        "jquery/3.7.1",
         "twitter-bootstrap/3.4.1",
         "Chart.js/3.7.1"
     ]
