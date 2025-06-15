@@ -21,7 +21,7 @@ define("CLIVALUE_NONE", 3);
  * - colored text
  * 
  * @package cli
- * @version 1.08
+ * @version 1.09
  * @author Axel Hahn (https://www.axel-hahn.de/)
  * @license GNU GPL v 3.0
  * @link https://github.com/axelhahn/ahcli
@@ -35,60 +35,60 @@ class cli {
      * current config array
      * @var array
      */
-    protected $_aConfig = array();
+    protected $_aConfig = [];
 
     /**
      * current variables and values from cli and interactive input
      * @var array
      */
-    protected $_aValues = array();
+    protected $_aValues = [];
     
     
-    protected $aFgColors = array(
-            'reset' => '0',
-            'black' => '0;30',
-            'dark gray' => '1;30',
-            'blue' => '0;34',
-            'light blue' => '1;34',
-            'green' => '0;32',
-            'light green' => '1;32',
-            'cyan' => '0;36',
-            'light cyan' => '1;36',
-            'red' => '0;31',
-            'light red' => '1;31',
-            'purple' => '0;35',
-            'light purple' => '1;35',
-            'brown' => '0;33',
-            'yellow' => '1;33',
-            'light gray' => '0;37',
-            'white' => '1;37'
-        );
-    protected $aBgColors = array(
-            'black' => '40',
-            'red' => '41',
-            'green' => '42',
-            'yellow' => '43',
-            'blue' => '44',
-            'magenta' => '45',
-            'cyan' => '46',
-            'light gray' => '47',
-        );
+    protected $aFgColors = [
+        'reset' => '0',
+        'black' => '0;30',
+        'dark gray' => '1;30',
+        'blue' => '0;34',
+        'light blue' => '1;34',
+        'green' => '0;32',
+        'light green' => '1;32',
+        'cyan' => '0;36',
+        'light cyan' => '1;36',
+        'red' => '0;31',
+        'light red' => '1;31',
+        'purple' => '0;35',
+        'light purple' => '1;35',
+        'brown' => '0;33',
+        'yellow' => '1;33',
+        'light gray' => '0;37',
+        'white' => '1;37'
+    ];
+    protected $aBgColors = [
+        'black' => '40',
+        'red' => '41',
+        'green' => '42',
+        'yellow' => '43',
+        'blue' => '44',
+        'magenta' => '45',
+        'cyan' => '46',
+        'light gray' => '47',
+    ];
     
-    protected $_aThemes = array(
-        'default' => array(
-            'reset' => array('reset', null),
-            'head' => array('light blue', null),
-            'input' => array('white', 'green'),
-            'cli' => array('cyan', null),
+    protected $_aThemes = [
+        'default' => [
+            'reset' => ['reset', null],
+            'head' => ['light blue', null],
+            'input' => ['white', 'green'],
+            'cli' => ['cyan', null],
             
-            'ok' => array('light green', null),
-            'info' => array('light cyan', null),
-            'warning' => array('yellow', null),
-            'error' => array('light red', null),
+            'ok' => ['light green', null],
+            'info' => ['light cyan', null],
+            'warning' => ['yellow', null],
+            'error' => ['light red', null],
             // 'warning' => array('black', 'yellow'),
             // 'error' => array('black', 'red'),
-        )
-    );
+        ]
+    ];
     public $sTheme='default';
     
 
@@ -104,7 +104,6 @@ class cli {
         if ($aArgs) {
             $this->setargs($aArgs);
         }
-        return true;
     }
 
     // ----------------------------------------------------------------------
@@ -173,9 +172,9 @@ class cli {
      */
     protected function _getGetoptParams() {
         $sShort = '';
-        $aOptions = array();
+        $aOptions = [];
         foreach ($this->_aConfig['params'] as $sParam => $aData) {
-            foreach (array('short', 'value', 'shortinfo') as $sKey) {
+            foreach (['short', 'value', 'shortinfo'] as $sKey) {
                 if (!array_key_exists($sKey, $aData)) {
                     die(__CLASS__ . ':: ERROR in cli config: missing key [params]->[' . $sParam . ']->[' . $sKey . '] in [array].');
                 }
@@ -189,10 +188,10 @@ class cli {
             $sShort.=$aData['short'] . $sDots;
             $aOptions[] = $sParam . $sDots;
         }
-        return array(
+        return [
             'short' => $sShort,
             'long' => $aOptions,
-        );
+        ];
     }
 
 
@@ -254,13 +253,13 @@ class cli {
      * @return boolean
      */
     public function setargs($aArgs) {
-        foreach (array('label', 'params') as $sKey) {
+        foreach (['label', 'params'] as $sKey) {
             if (!array_key_exists($sKey, $aArgs)) {
                 die(__CLASS__ . ':: ERROR in cli config: missing key [' . $sKey . '] in [array].');
             }
         }
         $this->_aConfig = $aArgs;
-        $this->_aValues = array();
+        $this->_aValues = [];
         $this->getopt();
         return true;
     }
@@ -453,7 +452,7 @@ class cli {
      * set a new Theme
      * 
      * @param string $sTheme  name of the theme
-     * @return boolean
+     * @return boolean|string
      */
     public function setTheme($sTheme){
         
@@ -463,5 +462,15 @@ class cli {
         $this->sTheme=$sTheme;
         return $this->sTheme;
     }
-}
 
+    /**
+     * write something to stderr
+     * 
+     * @param string $sText  text to write to stderr
+     * @return void
+     */
+    public function stderr(string $sText): void {
+        file_put_contents('php://stderr', $sText,FILE_APPEND);
+    }
+
+}
