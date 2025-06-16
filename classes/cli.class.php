@@ -99,11 +99,10 @@ class cli
      * create cli helper object
      * 
      * @param array  $aArgs  config array
-     * @return boolean
      */
-    public function __construct($aArgs = false)
+    public function __construct(array $aArgs = [])
     {
-        if ($aArgs) {
+        if (count($aArgs)) {
             $this->setargs($aArgs);
         }
     }
@@ -118,11 +117,11 @@ class cli
      * 
      * @see read()
      * @see getopt()
-     * @param string  $sVar  variable name (a key below 'params')
-     * @param string  $sValue   value that will b verified
+     * @param string  $sVar     variable name (a key below 'params')
+     * @param mixed   $sValue   value that will be verified
      * @return boolean
      */
-    protected function _checkPattern($sVar, $sValue)
+    protected function _checkPattern(string $sVar, mixed $sValue): bool
     {
 
         $aData = $this->_aConfig['params'][$sVar];
@@ -151,10 +150,10 @@ class cli
      * 
      * @see read()
      * @param string $sPrefix  prefix/ login prompt
-     * @param type   $default  default value if no value was given
-     * @return string
+     * @param mixed  $default  default value if no value was given
+     * @return bool|string
      */
-    protected function _cliInput($sPrefix, $default = false)
+    protected function _cliInput(string $sPrefix, mixed $default = false): bool|string
     {
 
         $this->color('input', $sPrefix ? $sPrefix : '>');
@@ -175,7 +174,7 @@ class cli
      * @see getopts()
      * @return array
      */
-    protected function _getGetoptParams()
+    protected function _getGetoptParams(): array
     {
         $sShort = '';
         $aOptions = [];
@@ -212,7 +211,7 @@ class cli
      * 
      * @return boolean
      */
-    public function forceCli()
+    public function forceCli(): bool
     {
         if (php_sapi_name() !== "cli" && php_sapi_name() !== "cgi-fcgi") {
             die("ERROR: This script is for command line usage only.");
@@ -226,9 +225,9 @@ class cli
      * against it.
      * 
      * @param string  $sVar  variable name (a key below 'params')
-     * @return string
+     * @return mixed
      */
-    public function read($sVar)
+    public function read(string $sVar): mixed
     {
         $this->forceCli();
         if (!array_key_exists($sVar, $this->_aConfig['params'])) {
@@ -242,7 +241,7 @@ class cli
             if (array_key_exists('description', $this->_aConfig['params'][$sVar])) {
                 echo $this->_aConfig['params'][$sVar]['description'] . "\n";
             }
-            $sValue = $this->_cliInput($sVar . '>');
+            $sValue = $this->_cliInput("$sVar >");
 
             if ($this->_checkPattern($sVar, $sValue)) {
                 // echo "Thank you.\n";
@@ -260,7 +259,7 @@ class cli
      * @param array $aArgs
      * @return boolean
      */
-    public function setargs($aArgs)
+    public function setargs(array $aArgs): bool
     {
         foreach (['label', 'params'] as $sKey) {
             if (!array_key_exists($sKey, $aArgs)) {
@@ -274,14 +273,14 @@ class cli
     }
 
     /**
-     * set an variable and its value; this function is used internally
+     * Set an variable and its value; this function is used internally
      * and can be used 
      * 
      * @param string  $sVar    variable name (a key below 'params')
      * @param mixed   $sValue  a value to set
      * @return boolean
      */
-    public function setvalue($sVar, $sValue)
+    public function setvalue(string $sVar, mixed $sValue): bool
     {
         if (!array_key_exists($sVar, $this->_aConfig['params'])) {
             die(__CLASS__ . ':: ERROR in cli config: missing key [params]->[' . $sVar . '] in [array].');
@@ -292,13 +291,14 @@ class cli
     // ----------------------------------------------------------------------
     // GETTER
     // ----------------------------------------------------------------------
+
     /**
      * get label and descriptioon to display as header
      * 
      * @param boolean  $bLong  show description too (if available); default: false
      * @return string
      */
-    public function getlabel($bLong = false)
+    public function getlabel(bool $bLong = false): string
     {
         return "\n" . '===== ' . $this->_aConfig['label'] . ' =====' . "\n\n"
             . (($bLong && array_key_exists('description', $this->_aConfig) && $this->_aConfig['description']) ? $this->_aConfig['description'] . "\n" : '')
@@ -310,7 +310,7 @@ class cli
      * 
      * @return array
      */
-    public function getopt()
+    public function getopt(): array
     {
         $this->forceCli();
         $aParamdef = $this->_getGetoptParams();
@@ -340,9 +340,9 @@ class cli
      * get the value based on variable
      * 
      * @param string  $sKey  name of variable
-     * @return string
+     * @return mixed
      */
-    public function getvalue($sKey)
+    public function getvalue(string $sKey): mixed
     {
         if (!array_key_exists($sKey, $this->_aConfig['params'])) {
             $this->color('error');
@@ -354,7 +354,11 @@ class cli
         return false;
     }
 
-    public function getAllValues()
+    /**
+     * Get all array with all current values
+     * @return array
+     */
+    public function getAllValues(): array
     {
         return $this->_aValues;
     }
@@ -364,7 +368,7 @@ class cli
      * 
      * @return string
      */
-    public function showhelp()
+    public function showhelp(): string
     {
         $sReturn = "HELP:\n"
             . ($this->_aConfig['description'] ? $this->_aConfig['description'] . "\n" : '')
@@ -399,7 +403,7 @@ class cli
      * @param string $sOutput
      * @return boolean
      */
-    public function color($sType, $sOutput = false)
+    public function color(string $sType, string $sOutput = ''): bool
     {
         if (!array_key_exists($sType, $this->_aThemes[$this->sTheme])) {
             $sType = 'reset';
@@ -421,7 +425,7 @@ class cli
      * @param string  $sBgColor  background color
      * @return string
      */
-    public function getColor($sFgColor = false, $sBgColor = false)
+    public function getColor(string $sFgColor = '', string $sBgColor = ''): string
     {
 
         $sReturn = '';
@@ -447,7 +451,7 @@ class cli
      * @param string $sTheme   name of the theme
      * @return boolean
      */
-    public function addTheme($aColors, $sTheme)
+    public function addTheme(array $aColors, string $sTheme): bool
     {
         if (!is_array($aColors) || !count($aColors)) {
             echo "ERROR: colors must be an array\n";
@@ -471,20 +475,20 @@ class cli
      * set a new Theme
      * 
      * @param string $sTheme  name of the theme
-     * @return boolean|string
+     * @return boolean
      */
-    public function setTheme($sTheme)
+    public function setTheme(string $sTheme): bool
     {
 
         if (!array_key_exists($sTheme, $this->_aThemes)) {
             return false;
         }
         $this->sTheme = $sTheme;
-        return $this->sTheme;
+        return true;
     }
 
     /**
-     * write something to stderr
+     * write text to stderr
      * 
      * @param string $sText  text to write to stderr
      * @return void
