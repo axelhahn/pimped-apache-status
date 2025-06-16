@@ -26,7 +26,8 @@ define("CLIVALUE_NONE", 3);
  * @license GNU GPL v 3.0
  * @link https://github.com/axelhahn/ahcli
  */
-class cli {
+class cli
+{
 
     // ----------------------------------------------------------------------
     // CONFIG
@@ -42,8 +43,8 @@ class cli {
      * @var array
      */
     protected $_aValues = [];
-    
-    
+
+
     protected $aFgColors = [
         'reset' => '0',
         'black' => '0;30',
@@ -73,14 +74,14 @@ class cli {
         'cyan' => '46',
         'light gray' => '47',
     ];
-    
+
     protected $_aThemes = [
         'default' => [
             'reset' => ['reset', null],
             'head' => ['light blue', null],
             'input' => ['white', 'green'],
             'cli' => ['cyan', null],
-            
+
             'ok' => ['light green', null],
             'info' => ['light cyan', null],
             'warning' => ['yellow', null],
@@ -89,8 +90,8 @@ class cli {
             // 'error' => array('black', 'red'),
         ]
     ];
-    public $sTheme='default';
-    
+    public $sTheme = 'default';
+
 
     // ----------------------------------------------------------------------
 
@@ -100,7 +101,8 @@ class cli {
      * @param array  $aArgs  config array
      * @return boolean
      */
-    public function __construct($aArgs = false) {
+    public function __construct($aArgs = false)
+    {
         if ($aArgs) {
             $this->setargs($aArgs);
         }
@@ -120,18 +122,20 @@ class cli {
      * @param string  $sValue   value that will b verified
      * @return boolean
      */
-    protected function _checkPattern($sVar, $sValue) {
+    protected function _checkPattern($sVar, $sValue)
+    {
 
         $aData = $this->_aConfig['params'][$sVar];
         if (array_key_exists('pattern', $aData)) {
-            
+
             // do not test optional params that exist but have no value
-            if($aData['value']===CLIVALUE_OPTIONAL && !$sValue ){
+            if ($aData['value'] === CLIVALUE_OPTIONAL && !$sValue) {
                 return true;
             }
-            
-            if ($sValue === false || preg_match($aData['pattern'], $sValue)<1) {
-                $this->color('error', 
+
+            if ($sValue === false || preg_match($aData['pattern'], $sValue) < 1) {
+                $this->color(
+                    'error',
                     'ERROR: parameter "' . $sVar . '" (' . $aData['shortinfo'] . ') - it has a wrong value.' . "\n"
                     . '"' . $sValue . '" does not match ' . $aData['pattern'] . ' ' . "\n"
                 );
@@ -150,8 +154,9 @@ class cli {
      * @param type   $default  default value if no value was given
      * @return string
      */
-    protected function _cliInput($sPrefix, $default = false) {
-        
+    protected function _cliInput($sPrefix, $default = false)
+    {
+
         $this->color('input', $sPrefix ? $sPrefix : '>');
         echo ' ';
 
@@ -170,7 +175,8 @@ class cli {
      * @see getopts()
      * @return array
      */
-    protected function _getGetoptParams() {
+    protected function _getGetoptParams()
+    {
         $sShort = '';
         $aOptions = [];
         foreach ($this->_aConfig['params'] as $sParam => $aData) {
@@ -180,12 +186,12 @@ class cli {
                 }
             }
             $sDots = ''
-                    . ($aData['value'] === CLIVALUE_REQUIRED 
-                        ? ':' 
-                        : ($aData['value'] === CLIVALUE_OPTIONAL ? '::' : '')
-                    )
+                . ($aData['value'] === CLIVALUE_REQUIRED
+                    ? ':'
+                    : ($aData['value'] === CLIVALUE_OPTIONAL ? '::' : '')
+                )
             ;
-            $sShort.=$aData['short'] . $sDots;
+            $sShort .= $aData['short'] . $sDots;
             $aOptions[] = $sParam . $sDots;
         }
         return [
@@ -206,8 +212,9 @@ class cli {
      * 
      * @return boolean
      */
-    public function forceCli(){
-            if (php_sapi_name() !== "cli" && php_sapi_name() !== "cgi-fcgi") {
+    public function forceCli()
+    {
+        if (php_sapi_name() !== "cli" && php_sapi_name() !== "cgi-fcgi") {
             die("ERROR: This script is for command line usage only.");
         }
         return true;
@@ -221,7 +228,8 @@ class cli {
      * @param string  $sVar  variable name (a key below 'params')
      * @return string
      */
-    public function read($sVar) {
+    public function read($sVar)
+    {
         $this->forceCli();
         if (!array_key_exists($sVar, $this->_aConfig['params'])) {
             die(__CLASS__ . ':: ERROR in cli config: missing key [params]->[' . $sVar . '] in [array].');
@@ -231,9 +239,9 @@ class cli {
 
         $bOK = false;
         while (!$bOK) {
-			if (array_key_exists('description', $this->_aConfig['params'][$sVar])){
-				echo $this->_aConfig['params'][$sVar]['description'] . "\n";
-			}
+            if (array_key_exists('description', $this->_aConfig['params'][$sVar])) {
+                echo $this->_aConfig['params'][$sVar]['description'] . "\n";
+            }
             $sValue = $this->_cliInput($sVar . '>');
 
             if ($this->_checkPattern($sVar, $sValue)) {
@@ -252,7 +260,8 @@ class cli {
      * @param array $aArgs
      * @return boolean
      */
-    public function setargs($aArgs) {
+    public function setargs($aArgs)
+    {
         foreach (['label', 'params'] as $sKey) {
             if (!array_key_exists($sKey, $aArgs)) {
                 die(__CLASS__ . ':: ERROR in cli config: missing key [' . $sKey . '] in [array].');
@@ -272,7 +281,8 @@ class cli {
      * @param mixed   $sValue  a value to set
      * @return boolean
      */
-    public function setvalue($sVar, $sValue) {
+    public function setvalue($sVar, $sValue)
+    {
         if (!array_key_exists($sVar, $this->_aConfig['params'])) {
             die(__CLASS__ . ':: ERROR in cli config: missing key [params]->[' . $sVar . '] in [array].');
         }
@@ -288,9 +298,10 @@ class cli {
      * @param boolean  $bLong  show description too (if available); default: false
      * @return string
      */
-    public function getlabel($bLong = false) {
+    public function getlabel($bLong = false)
+    {
         return "\n" . '===== ' . $this->_aConfig['label'] . ' =====' . "\n\n"
-                . (($bLong && array_key_exists('description', $this->_aConfig) && $this->_aConfig['description']) ? $this->_aConfig['description'] . "\n" : '')
+            . (($bLong && array_key_exists('description', $this->_aConfig) && $this->_aConfig['description']) ? $this->_aConfig['description'] . "\n" : '')
         ;
     }
 
@@ -299,7 +310,8 @@ class cli {
      * 
      * @return array
      */
-    public function getopt() {
+    public function getopt()
+    {
         $this->forceCli();
         $aParamdef = $this->_getGetoptParams();
         $aOptions = getopt($aParamdef['short'], $aParamdef['long']);
@@ -312,11 +324,12 @@ class cli {
                     if (!$this->_checkPattern($sParam, $sValue)) {
                         die();
                     }
-                    $this->setValue($sParam, 
-                            ($sValue === false || $aData['value'] == CLIVALUE_NONE) 
-                                ? true 
-                                : $sValue
-                            );
+                    $this->setValue(
+                        $sParam,
+                        ($sValue === false || $aData['value'] == CLIVALUE_NONE)
+                        ? true
+                        : $sValue
+                    );
                 }
             }
         }
@@ -329,18 +342,20 @@ class cli {
      * @param string  $sKey  name of variable
      * @return string
      */
-    public function getvalue($sKey) {
+    public function getvalue($sKey)
+    {
         if (!array_key_exists($sKey, $this->_aConfig['params'])) {
             $this->color('error');
-            die(__CLASS__ . ':: ERROR in cli config: a parameter variable [' . $sKey . '] was not defined.'."\n");
+            die(__CLASS__ . ':: ERROR in cli config: a parameter variable [' . $sKey . '] was not defined.' . "\n");
         }
         if (array_key_exists($sKey, $this->_aValues)) {
             return $this->_aValues[$sKey];
         }
         return false;
     }
-    
-    public function getAllValues(){
+
+    public function getAllValues()
+    {
         return $this->_aValues;
     }
 
@@ -349,23 +364,24 @@ class cli {
      * 
      * @return string
      */
-    public function showhelp() {
+    public function showhelp()
+    {
         $sReturn = "HELP:\n"
-                . ($this->_aConfig['description'] ? $this->_aConfig['description'] . "\n" : '')
-                . "\n"
-                . "PARAMETERS:\n"
+            . ($this->_aConfig['description'] ? $this->_aConfig['description'] . "\n" : '')
+            . "\n"
+            . "PARAMETERS:\n"
         ;
         foreach ($this->_aConfig['params'] as $sParam => $aData) {
-            $sReturn.=(isset($aData['short']) && $aData['short'] ? '  -'.$aData['short']."\n" : "")
-                    .'  --' . $sParam
-                    . ($aData['value'] === CLIVALUE_REQUIRED ? ' [value] (value required)' : '')
-                    . ($aData['value'] === CLIVALUE_OPTIONAL ? ' [=value] (value is optional)' : '')
-                    . ($aData['value'] === CLIVALUE_NONE ? ' (without value)' : '')
-                    . "\n"
-                    . '    ' . $aData['shortinfo'] . "\n"
-                    .(isset($aData['description']) && $aData['description'] ? '    '.$aData['description']."\n" : "")
-                    .(isset($aData['pattern']) && $aData['pattern'] ? '    If a value is given then it will be checked against regex ' . $aData['pattern']."\n" : "")
-                    . "\n"
+            $sReturn .= (isset($aData['short']) && $aData['short'] ? '  -' . $aData['short'] . "\n" : "")
+                . '  --' . $sParam
+                . ($aData['value'] === CLIVALUE_REQUIRED ? ' [value] (value required)' : '')
+                . ($aData['value'] === CLIVALUE_OPTIONAL ? ' [=value] (value is optional)' : '')
+                . ($aData['value'] === CLIVALUE_NONE ? ' (without value)' : '')
+                . "\n"
+                . '    ' . $aData['shortinfo'] . "\n"
+                . (isset($aData['description']) && $aData['description'] ? '    ' . $aData['description'] . "\n" : "")
+                . (isset($aData['pattern']) && $aData['pattern'] ? '    If a value is given then it will be checked against regex ' . $aData['pattern'] . "\n" : "")
+                . "\n"
             ;
         }
         return $sReturn;
@@ -383,20 +399,21 @@ class cli {
      * @param string $sOutput
      * @return boolean
      */
-    public function color($sType, $sOutput=false){
-        if (!array_key_exists($sType, $this->_aThemes[$this->sTheme])){
-            $sType='reset';
+    public function color($sType, $sOutput = false)
+    {
+        if (!array_key_exists($sType, $this->_aThemes[$this->sTheme])) {
+            $sType = 'reset';
         }
         echo $this->getColor(
-                $this->_aThemes[$this->sTheme][$sType][0], 
-                $this->_aThemes[$this->sTheme][$sType][1]
+            $this->_aThemes[$this->sTheme][$sType][0],
+            $this->_aThemes[$this->sTheme][$sType][1]
         );
-        if ($sOutput){
+        if ($sOutput) {
             echo $sOutput . $this->getColor();
         }
         return true;
     }
-    
+
     /**
      * get colorcode for console output
      * 
@@ -404,23 +421,24 @@ class cli {
      * @param string  $sBgColor  background color
      * @return string
      */
-    public function getColor($sFgColor=false, $sBgColor = false) {
+    public function getColor($sFgColor = false, $sBgColor = false)
+    {
 
         $sReturn = '';
-        if(!$sFgColor || !array_key_exists($sFgColor, $this->aFgColors)){
-            $sFgColor='reset';
+        if (!$sFgColor || !array_key_exists($sFgColor, $this->aFgColors)) {
+            $sFgColor = 'reset';
         }
         $sReturn .= "\e[{$this->aFgColors[$sFgColor]}m";
 
-        if ($sBgColor && !array_key_exists($sBgColor, $this->aBgColors)){
+        if ($sBgColor && !array_key_exists($sBgColor, $this->aBgColors)) {
             $sBgColor = null;
         }
-        if ($sBgColor){
+        if ($sBgColor) {
             $sReturn .= "\e[{$this->aBgColors[$sBgColor]}m";
         }
 
         return $sReturn;
-    }    
+    }
 
     /**
      * add a Theme
@@ -429,22 +447,23 @@ class cli {
      * @param string $sTheme   name of the theme
      * @return boolean
      */
-    public function addTheme($aColors, $sTheme){
-        if(!is_array($aColors) || !count($aColors)){
+    public function addTheme($aColors, $sTheme)
+    {
+        if (!is_array($aColors) || !count($aColors)) {
             echo "ERROR: colors must be an array\n";
             return false;
         }
-        if(!is_string($sTheme) || !$sTheme || $sTheme!==  preg_replace('/[^a-z0-9\ ]/i', '', $sTheme)){
+        if (!is_string($sTheme) || !$sTheme || $sTheme !== preg_replace('/[^a-z0-9\ ]/i', '', $sTheme)) {
             echo "ERROR: name of theme must be a string and can copntain chars, numbers and spaces\n";
             return false;
         }
-        foreach (array_keys($this->_aThemes['default']) as $sType){
-            if (!array_key_exists($sType, $aColors)){
-                echo "ERROR: colors must contain the keys ".implode("|", array_keys($this->_aThemes['default']))."\n";
+        foreach (array_keys($this->_aThemes['default']) as $sType) {
+            if (!array_key_exists($sType, $aColors)) {
+                echo "ERROR: colors must contain the keys " . implode("|", array_keys($this->_aThemes['default'])) . "\n";
                 return false;
             }
         }
-        $this->_aThemes[$sTheme]=$aColors;
+        $this->_aThemes[$sTheme] = $aColors;
         return $this->setTheme($sTheme);
     }
 
@@ -454,12 +473,13 @@ class cli {
      * @param string $sTheme  name of the theme
      * @return boolean|string
      */
-    public function setTheme($sTheme){
-        
-        if (!array_key_exists($sTheme, $this->_aThemes)){
+    public function setTheme($sTheme)
+    {
+
+        if (!array_key_exists($sTheme, $this->_aThemes)) {
             return false;
         }
-        $this->sTheme=$sTheme;
+        $this->sTheme = $sTheme;
         return $this->sTheme;
     }
 
@@ -469,8 +489,9 @@ class cli {
      * @param string $sText  text to write to stderr
      * @return void
      */
-    public function stderr(string $sText): void {
-        file_put_contents('php://stderr', $sText,FILE_APPEND);
+    public function stderr(string $sText): void
+    {
+        file_put_contents('php://stderr', $sText, FILE_APPEND);
     }
 
 }
