@@ -278,6 +278,8 @@ SYNTAX:
       WARNING: this deletes a group even if it contains servers.
 
 Lines starting with ; (semikolon) are comments only written to stderr.
+The output on stdout can be piped to json tools like jq.
+
 See the docs for more details: '.$sCliDocsUrl.'
 
 ';
@@ -466,7 +468,7 @@ elseif ($oCli->getvalue("defaults")){
                 $oCli->stderr("; read servernames of group [$sGroup]:\n");
                 handleJsonResult($oServer->getServers($sGroup));
                 // $oCli->color('info');
-                $oCli->stderr("; Hint: use as additional param --server '[NAME]' to show its settings.\n");
+                $oCli->stderr("; Hint: use as additional param --server='[NAME]' to show its settings.\n");
             } else {
                 $oCli->stderr("; read existing groups:\n");
                 // $oCli->color('cli');
@@ -494,7 +496,7 @@ elseif ($oCli->getvalue("defaults")){
                     $oCli->stderr("; update server [$sGroup] -> [$sServer]:\n"
                         ."; host data: ".json_encode($aItem)."\n"
                     );
-                    handleJsonResult($oServer->setServer($aItem), JSON_PRETTY_PRINT);
+                    handleJsonResult($oServer->setServer($aItem));
                 } else {
                     // --------------------------------------------------
                     // @example --action update --group=[name] --server [hostname] --newname [new-hostname]
