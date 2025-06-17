@@ -33,18 +33,22 @@ class cli
     // CONFIG
     // ----------------------------------------------------------------------
     /**
-     * current config array
+     * Current config array
      * @var array
      */
     protected $_aConfig = [];
 
     /**
-     * current variables and values from cli and interactive input
+     * Current variables and values from cli and interactive input
      * @var array
      */
     protected $_aValues = [];
 
 
+    /**
+     * Hash of foreground colors
+     * @var array
+     */
     protected $aFgColors = [
         'reset' => '0',
         'black' => '0;30',
@@ -64,6 +68,11 @@ class cli
         'light gray' => '0;37',
         'white' => '1;37'
     ];
+
+    /**
+     * Hash of background colors
+     * @var array
+     */
     protected $aBgColors = [
         'black' => '40',
         'red' => '41',
@@ -75,6 +84,10 @@ class cli
         'light gray' => '47',
     ];
 
+    /**
+     * Hash of themes with colors by type
+     * @var array
+     */
     protected $_aThemes = [
         'default' => [
             'reset' => ['reset', null],
@@ -90,13 +103,18 @@ class cli
             // 'error' => array('black', 'red'),
         ]
     ];
+
+    /**
+     * Name of current color theme
+     * @var string
+     */
     public $sTheme = 'default';
 
 
     // ----------------------------------------------------------------------
 
     /**
-     * create cli helper object
+     * Create cli helper object
      * 
      * @param array  $aArgs  config array
      */
@@ -112,7 +130,7 @@ class cli
     // ----------------------------------------------------------------------
 
     /**
-     * helper: check a variable ... if a pattern was defined return the result 
+     * Helper: check a variable ... if a pattern was defined return the result 
      * of match of value against pre defined pattern
      * 
      * @see read()
@@ -146,7 +164,7 @@ class cli
     }
 
     /**
-     * helper: cli input to enter a value
+     * Helper: cli input to enter a value
      * 
      * @see read()
      * @param string $sPrefix  prefix/ login prompt
@@ -168,7 +186,7 @@ class cli
     }
 
     /**
-     * helper: generate the short and long option parameters for PHP getopts() 
+     * Helper: generate the short and long option parameters for PHP getopts() 
      * function by given parameters.
      * 
      * @see getopts()
@@ -206,7 +224,7 @@ class cli
     // ----------------------------------------------------------------------
 
     /**
-     * fore cli mode. The execution stops if php_sapi_name() does not return 
+     * Force cli mode. The execution stops if php_sapi_name() does not return 
      * 'cli'
      * 
      * @return boolean
@@ -220,7 +238,7 @@ class cli
     }
 
     /**
-     * interactive action; read a value and stor as value; the variable must 
+     * Interactive action; read a value and stor as value; the variable must 
      * exist in config; if a pattern was given the input will be verified 
      * against it.
      * 
@@ -254,7 +272,7 @@ class cli
     }
 
     /**
-     * apply a config; used by __constructor ... and can be called separately
+     * Apply a config; used by __constructor ... and can be called separately
      * 
      * @param array $aArgs
      * @return boolean
@@ -293,7 +311,7 @@ class cli
     // ----------------------------------------------------------------------
 
     /**
-     * get label and descriptioon to display as header
+     * Get label and descriptioon to display as header
      * 
      * @param boolean  $bLong  show description too (if available); default: false
      * @return string
@@ -306,7 +324,7 @@ class cli
     }
 
     /**
-     * get all params and values from cli parameters
+     * Get all params and values from cli parameters
      * 
      * @return array
      */
@@ -337,7 +355,7 @@ class cli
     }
 
     /**
-     * get the value based on variable
+     * Get the value based on variable
      * 
      * @param string  $sKey  name of variable
      * @return mixed
@@ -364,7 +382,7 @@ class cli
     }
 
     /**
-     * get generated text for help to explain all valid parameters
+     * Get generated text for help to explain all valid parameters
      * 
      * @return string
      */
@@ -396,7 +414,7 @@ class cli
     // ----------------------------------------------------------------------
 
     /**
-     * set color of a theme with echo; if a string was given, only the
+     * Set color of a theme with echo; if a string was given, only the
      * string will be colored and then the color will be reset 
      * 
      * @param string $sType  type of color in the theme
@@ -419,13 +437,13 @@ class cli
     }
 
     /**
-     * get colorcode for console output
+     * Get colorcode for console output
      * 
      * @param string  $sFgColor  foreground color
      * @param string  $sBgColor  background color
      * @return string
      */
-    public function getColor(string $sFgColor = '', string $sBgColor = ''): string
+    public function getColor(string|null $sFgColor = '', string|null $sBgColor = ''): string
     {
 
         $sReturn = '';
@@ -445,7 +463,7 @@ class cli
     }
 
     /**
-     * add a Theme
+     * Add a theme
      * 
      * @param array  $aColors  array with colorset - see $this->_aThemes
      * @param string $sTheme   name of the theme
@@ -472,7 +490,7 @@ class cli
     }
 
     /**
-     * set a new Theme
+     * Set a new theme
      * 
      * @param string $sTheme  name of the theme
      * @return boolean
@@ -488,7 +506,7 @@ class cli
     }
 
     /**
-     * write text to stderr
+     * Write text to stderr
      * 
      * @param string $sText  text to write to stderr
      * @return void
