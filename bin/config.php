@@ -115,7 +115,7 @@ $oCli=new axelhahn\cli($aParamDefs);
 /**
  * prevent that root executes this script - requires php posix module on *nix
  */
-function denyRoot(){
+function denyRoot(): void{
     if (function_exists("posix_getpwuid")) {
         $processUser = posix_getpwuid(posix_geteuid());
         wd("detected user: ".print_r($processUser, 1));
@@ -131,7 +131,7 @@ function denyRoot(){
  * @param string $sVarname
  * @return string|boolean
  */
-function getCfgDescription($sVarname){
+function getCfgDescription(string $sVarname): bool|string{
     global $aLangTxt;
     $aTmp=preg_split('/\\./', $sVarname);
     $sFirstKey=array_shift($aTmp);
@@ -143,16 +143,17 @@ function getCfgDescription($sVarname){
     // return '; remark '.$sKey1." not found\n";
     return false;
 }
+
 /**
  * handle JSON response for groups and servers 
  * @param array   $aJson   result array of an action
  */
-function handleJsonResult($aJson){
+function handleJsonResult(array $aJson){
     global $oCli;
     if (isset($aJson['result']) && $aJson['result']===false) {
         quit($aJson['error']);
     }
-    $oCli->color('cli');
+    // $oCli->color('cli');
     echo json_encode($aJson, JSON_PRETTY_PRINT)."\n";
     return true;
 }
@@ -162,7 +163,8 @@ function handleJsonResult($aJson){
  * @param string  $sMessage  text to show
  * @param integer $iExit     optional: exitcode; default=1
  */
-function quit($sMessage, $iExit=1){
+function quit(string $sMessage, int $iExit=1): never
+{
     global $oCli;
     $oCli->color('error');
     echo "ERROR: $sMessage\n";
@@ -172,11 +174,11 @@ function quit($sMessage, $iExit=1){
 
 /**
  * write debug output
- * @param type $s
+ * @param string $s
  */
-function wd($s){
-    global $bDebug;
-    echo $bDebug ? "DEBUG: $s\n" : '';
+function wd(string $s){
+    global $bDebug, $oCli;
+    $oCli->stderr($bDebug ? "DEBUG: $s\n" : '');
 }
 // ----------------------------------------------------------------------
 // MAIN
@@ -192,7 +194,7 @@ if ($oCli->getvalue("help") ||!count($oCli->getopt())){
 ; _________________________________________________________________________________________
 ;
 ';
-    $oCli->color('info');
+    $oCli->color('reset');
     echo $oCli->showhelp();
     $sBase='php ./'.basename(__FILE__);
     echo '
@@ -275,16 +277,17 @@ SYNTAX:
       '.$sBase.' --action delete --group=NAME
       WARNING: this deletes a group even if it contains servers.
 
-Output lines starting with ; (semikolon) are comments only.
+Lines starting with ; (semikolon) are comments only written to stderr.
+The output on stdout can be piped to json tools like jq.
+
 See the docs for more details: '.$sCliDocsUrl.'
+
 ';
     exit(0);
 }
 
 
-$oCli->color('head');
-echo '; '.$aParamDefs['label']."\n";
-$oCli->color('reset');
+$oCli->stderr('; '.$aParamDefs['label']."\n");
 denyRoot();
 
 // ----- get prameters
@@ -312,18 +315,18 @@ if ($oCli->getvalue("config")){
 
     $sVar=$oCli->getvalue("config");
     $sValue=$oCli->getvalue("value");
-    $oCli->color('info');
+    // $oCli->color('info');
     switch ($sAction){
         case 'create':
             $oCfg->configSet("internal-config_default");
-            $oCli->color('error');
+            // $oCli->color('error');
             $aDefault=$oCfg->get($sVar);
-            $oCli->color('info');
+            // $oCli->color('info');
             
-            echo "; create custom var [$sVar]:\n"
+            $oCli->stderr("; create custom var [$sVar]:\n"
                 ."; default: ".json_encode($aDefault)."\n"
                 ."; your value: ".json_encode($sValue)."\n"
-                ;
+            );
             
             // your reach this point if a default of $sVar exists
 
@@ -335,30 +338,30 @@ if ($oCli->getvalue("config")){
             if(is_array($aDefault) && !is_array($sValue)){
                 quit("Creation abortet. The default value is an array. You must set a JSON in the --value parameter.\n");
             }
-            $oCli->color('cli');
+            // $oCli->color('cli');
             echo ($oCfg->set($sValue, $sVar) ? 'OK': 'Failed') . "\n";
             // /FIXME
             
             break;
         case 'read':
             if($sVar===true){
-                echo "; read all custom settings:\n";
-                $oCli->color('cli');
+                $oCli->stderr("; read all custom settings:\n");
+                // $oCli->color('cli');
                 echo json_encode($oCfg->get(false), JSON_PRETTY_PRINT)."\n";
             } else {
-                echo "; read custom settings [$sVar]:\n";
-                $oCli->color('cli');
+                $oCli->stderr("; read custom settings [$sVar]:\n");
+                // $oCli->color('cli');
                 echo json_encode($oCfg->get($sVar), JSON_PRETTY_PRINT)."\n";
             }
             break;
             
         case 'update':
-            echo "; update custom var [$sVar]:\n";
+            $oCli->stderr("; update custom var [$sVar]:\n");
             if ($oCfg->keyExists($sVar)){
-                echo "; current custom value: ".json_encode($oCfg->get($sVar))."\n"
+                $oCli->stderr("; current custom value: ".json_encode($oCfg->get($sVar))."\n"
                     ."; new value: ".json_encode($sValue)."\n"
-                    ;
-                $oCli->color('cli');
+                );
+                // $oCli->color('cli');
                 echo ($oCfg->set($sValue, $sVar) ? 'OK': 'Failed') . "\n";
             } else {
                 quit("Update aborted. The custom variable does not exist (yet).");
@@ -366,9 +369,9 @@ if ($oCli->getvalue("config")){
             break;
             
         case 'delete':
-            echo "; delete custom var [$sVar]:\n";
+            $oCli->stderr("; delete custom var [$sVar]:\n");
             if ($oCfg->keyExists($sVar)){
-                $oCli->color('cli');
+                // $oCli->color('cli');
                 echo ($oCfg->delete($sVar) ? 'OK': 'Failed') . "\n";
             } else {
                 quit("Delete aborted. The custom variable does not exist (yet).");
@@ -376,11 +379,11 @@ if ($oCli->getvalue("config")){
             break;
 
         default:
-            quit("Not implemented action: ".$sAction."\n");
+            quit("Not implemented action: $sAction\n");
             break;
     }
-    $oCli->color('info');
-    echo getCfgDescription($sVar);
+    // $oCli->color('info');
+    $oCli->stderr(getCfgDescription($sVar));
 }
 elseif ($oCli->getvalue("defaults")){
     // ----------------------------------------------------------------------
@@ -389,17 +392,17 @@ elseif ($oCli->getvalue("defaults")){
     $oCfg->configSet("internal-config_default");
 
     $sVar=$oCli->getvalue("defaults");
-    $oCli->color('info');
+    // $oCli->color('info');
     switch ($sAction){
         case 'read':
             if($sVar===true){
-                echo "; read all default settings:\n";
-                $oCli->color('cli');
+                $oCli->stderr("; read all default settings:\n");
+                // $oCli->color('cli');
                 echo json_encode($oCfg->get(false), JSON_PRETTY_PRINT)."\n";
             } else {
-                echo "; read default settings [$sVar]:\n";
+                $oCli->stderr("; read default settings [$sVar]:\n");
                 if ($oCfg->keyExists($sVar)){
-                    $oCli->color('cli');
+                    // $oCli->color('cli');
                     echo json_encode($oCfg->get($sVar), JSON_PRETTY_PRINT)."\n";
                 } else {
                     quit("Read aborted. The variable does not exist.");
@@ -410,8 +413,8 @@ elseif ($oCli->getvalue("defaults")){
             quit("Wrong action. Default values are read only but you can override them by using a custom setting.\n --action add --config".($sVar ? '='.$sVar : '')."\n");
             break;
     }
-    $oCli->color('info');    
-    echo getCfgDescription($sVar);
+    // $oCli->color('info');    
+    $oCli->stderr(getCfgDescription($sVar));
 } elseif ($oCli->getvalue("group")){
     // ----------------------------------------------------------------------
     // handle server config
@@ -419,7 +422,7 @@ elseif ($oCli->getvalue("defaults")){
     $sGroup=$oCli->getvalue("group");
     $sServer=$oCli->getvalue("server");
 
-    $oCli->color('info');
+    // $oCli->color('info');
     switch ($sAction){
         case 'create':
             if($sServer){
@@ -434,9 +437,9 @@ elseif ($oCli->getvalue("defaults")){
                     'status-url'=>$sUrl,
                     'userpwd'=>$sUserPwd,
                 );
-                echo "; create server [$sGroup] -> [$sServer]:\n"
+                $oCli->stderr("; create server [$sGroup] -> [$sServer]:\n"
                     ."; host data: ".json_encode($aItem)."\n"
-                    ;
+                );
                 handleJsonResult($oServer->addServer($aItem));
             } elseif($sGroup && $sGroup!==true){
                 // --------------------------------------------------
@@ -445,7 +448,7 @@ elseif ($oCli->getvalue("defaults")){
                 $aItem=array(
                     'label'=>$sGroup,
                 );
-                echo "; create group [$sGroup]:\n";
+                $oCli->stderr("; create group [$sGroup]:\n");
                 handleJsonResult($oServer->addGroup($aItem));
             } else {
                 quit("A group name is required. use --group='[Name]'\n");
@@ -456,22 +459,22 @@ elseif ($oCli->getvalue("defaults")){
                 // --------------------------------------------------
                 // @example --action read --group=[name] --server [hostname]
                 // --------------------------------------------------
-                echo "; read server [$sGroup] -> [$sServer]:\n";
+                $oCli->stderr("; read server [$sGroup] -> [$sServer]:\n");
                 handleJsonResult($oServer->getServerDetails($sGroup, $sServer));
             } elseif($sGroup && $sGroup!==true){
                 // --------------------------------------------------
                 // @example --action read --group=[name]
                 // --------------------------------------------------
-                echo "; read servernames of group [$sGroup]:\n";
+                $oCli->stderr("; read servernames of group [$sGroup]:\n");
                 handleJsonResult($oServer->getServers($sGroup));
-                $oCli->color('info');
-                echo "; Hint: use as additional param --server '[NAME]' to show its settings.\n";
+                // $oCli->color('info');
+                $oCli->stderr("; Hint: use as additional param --server='[NAME]' to show its settings.\n");
             } else {
-                echo "; read existing groups:\n";
-                $oCli->color('cli');
+                $oCli->stderr("; read existing groups:\n");
+                // $oCli->color('cli');
                 handleJsonResult($oServer->getGroups());
-                $oCli->color('info');
-                echo "; Hint: use as additional param --group='[NAME]' to list its servers.\n";
+                // $oCli->color('info');
+                $oCli->stderr("; Hint: use as additional value --group='[NAME]' to list its servers.\n");
             }
             break;
         case 'update':
@@ -490,17 +493,17 @@ elseif ($oCli->getvalue("defaults")){
                         'status-url'=>$sUrl,
                         'userpwd'=>$sUserPwd,
                     );
-                    echo "; update server [$sGroup] -> [$sServer]:\n"
+                    $oCli->stderr("; update server [$sGroup] -> [$sServer]:\n"
                         ."; host data: ".json_encode($aItem)."\n"
-                        ;
-                    handleJsonResult($oServer->setServer($aItem), JSON_PRETTY_PRINT);
+                    );
+                    handleJsonResult($oServer->setServer($aItem));
                 } else {
                     // --------------------------------------------------
                     // @example --action update --group=[name] --server [hostname] --newname [new-hostname]
                     // --------------------------------------------------
-                    echo "; rename server [$sGroup] -> [$sServer]:\n"
+                    $oCli->stderr("; rename server [$sGroup] -> [$sServer]:\n"
                         ."; new hostname: $sNewName\n"
-                        ;
+                    );
                     $aItem=$oServer->getServerDetails($sGroup, $sServer);
                     if(!count($aItem)){
                         quit("A server [$sGroup] -> [$sServer] does not exist.\n");
@@ -521,9 +524,9 @@ elseif ($oCli->getvalue("defaults")){
                 // --------------------------------------------------
                 // @example --action update --group=[name] --newname [new-groupname]
                 // --------------------------------------------------
-                echo "; rename group [$sGroup]:\n"
+                $oCli->stderr("; rename group [$sGroup]:\n"
                     ."; new groupname: $sNewName\n"
-                    ;
+                );
                 if(array_search($sNewName, $oServer->getGroups())!==false){
                     quit("The group $sNewName exists already. Use a non existing group name.\n");
                 }
@@ -543,7 +546,7 @@ elseif ($oCli->getvalue("defaults")){
                     'group'=>$sGroup,
                     'oldlabel'=>$sServer,
                 );
-                echo "; delete server [$sGroup] -> [$sServer]:\n";
+                $oCli->stderr("; delete server [$sGroup] -> [$sServer]:\n");
                 handleJsonResult($oServer->deleteServer($aItem));
             } elseif($sGroup && $sGroup!==true){
                 // --------------------------------------------------
@@ -552,7 +555,7 @@ elseif ($oCli->getvalue("defaults")){
                 $aItem=array(
                     'oldlabel'=>$sGroup,
                 );
-                echo "; delete group [$sGroup]:\n";
+                $oCli->stderr("; delete group [$sGroup]:\n");
                 handleJsonResult($oServer->deleteGroup($aItem));
             } else {
                 quit("A group name and optional servername is required. use --group='[name]' --server '[hostname]'\n");
@@ -564,6 +567,6 @@ elseif ($oCli->getvalue("defaults")){
     }    
 }
 
-$oCli->color('reset');
+// $oCli->color('reset');
 wd("finishing with status OK");
 exit(0);
