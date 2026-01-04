@@ -239,7 +239,7 @@ class ServerStatus {
             
             $aReturn[$sHostname]['counter']['slots_total']=$aScore['slots_total'];
             // $aReturn[$sHostname]['counter']['slots_busy']=$aScore['slots_busy'];
-            $aReturn[$sHostname]['counter']['slots_unused']=$aScore['slots_total'] - $aScore['slots_busy'];
+            $aReturn[$sHostname]['counter']['slots_unused']=$aScore['slots_total'] - $aScore['slots_busy'] - $aScore['slots_waiting'];
             $aReturn[$sHostname]['counter']['requests_active']=$aScore['slots_busy'];
             $aReturn[$sHostname]['counter']['requests_waiting']=$aScore['slots_waiting'];
         }
