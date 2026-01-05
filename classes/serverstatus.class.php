@@ -10,10 +10,10 @@
 
 class ServerStatus {
 
-    private $a = array();
-    private $aServer = array();
+    private $a = [];
+    private $aServer = [];
     private $_fResponsetime = false;
-    private static $curl_opts = array(
+    private static $curl_opts = [
         CURLOPT_HEADER => true,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_TIMEOUT => 5,
@@ -22,14 +22,12 @@ class ServerStatus {
         CURLOPT_SSL_VERIFYPEER => 0,
         CURLOPT_USERAGENT => 'pimped apache status',
         // CURLMOPT_MAXCONNECTS => 10
-    );
+    ];
 
     /**
      * constructor (it does nothing)
-     * @return boolean (true)
      */
     public function __construct() {
-        return true;
     }
     
     /**
@@ -39,7 +37,7 @@ class ServerStatus {
      * @param  string $sLevel    warnlevel of the given message
      * @return bool
      */
-    private function log($sMessage, $sLevel = "info") {
+    private function log($sMessage, $sLevel = "info"): bool {
         global $oLog;
         if (!$oLog ||! is_object($oLog) || !method_exists($oLog, "add")){
             return false;
@@ -56,7 +54,7 @@ class ServerStatus {
     private function _getCountervalue($value){
         $iReturn=false;
         $aTmp=explode(' ', $value);
-        if($aTmp && isset($aTmp[0])){
+        if($aTmp[0]??false){
             if (preg_replace('/[0-9\.]/', '', $aTmp[0]) > ''){
                 return false;
             }
@@ -67,14 +65,14 @@ class ServerStatus {
             $iReturn=($iReturn[0]==='.' ? '0'.$iReturn : $iReturn);
             // echo "DEBUG: __METHOD__($value) value: $iReturn .. unit ".$aTmp[1]."<br>";
             
-            if (isset($aTmp[1])){
+            if ($aTmp[1]??false){
                 switch ($aTmp[1]) {
                     case "B":
                     case "ms/request":
                         // byte ... no multiplicator
                         break;
                     case "kB":
-                        $iReturn=$iReturn*1024;
+                        $iReturn*=1024;
                         break;
                     case "MB":
                         $iReturn=$iReturn*1024*1024;
@@ -92,16 +90,16 @@ class ServerStatus {
      * parse response of original apachestatus and put it to an array
      * @param string $sStatus    response from serverstatus request (html code)
      * @param string $sHostname  host is used as key for the result array
-     * @return array
+     * @return array|bool
      */
-    private function _getServerData($sStatus, $sHostname = '') {
+    private function _getServerData($sStatus, $sHostname = ''): array|bool {
         $this->log('start '. __FUNCTION__ ."([sStatus], $sHostname)");
         if (!$sStatus || !$sHostname || strpos($sStatus, "Apache Server Status for")<0){
             return false;
         }
 
         $sStatusNobr = str_replace("\n", "", $sStatus);
-        $aReturn = array();
+        $aReturn = [];
 
         // regex to fetch server infos
         $sRegexStatus = '/\<dt\>(.*)\<\/dt\>/U'; // status data are in dt tags
@@ -180,7 +178,7 @@ class ServerStatus {
                 foreach ($matches[0] as $sRequestData) {
                     $formatOk = preg_match_all($sRegexRequests2, str_replace("\n", "", $sRequestData), $matches2);
 
-                    $aTmp = array();
+                    $aTmp = [];
                     $aTmp['Webserver'] = $sHostname;
                     foreach ($matches2[0] as $iKey => $aEntry) {
                         $aTmp[strip_tags($aStatusfields[$iKey])] = strip_tags($aEntry);
@@ -198,21 +196,21 @@ class ServerStatus {
             }
         }
         // ----- scoreboard
-        $aScoreKeys=array(
-            "S"=>array('label'=>'Starting up', 'count'=>0),
-            "R"=>array('label'=>'Reading Request', 'count'=>0),
-            "W"=>array('label'=>'Sending Reply', 'count'=>0),
-            "K"=>array('label'=>'Keepalive (read)', 'count'=>0),
-            "D"=>array('label'=>'DNS Lookup', 'count'=>0),
-            "C"=>array('label'=>'Closing connection', 'count'=>0),
-            "L"=>array('label'=>'Logging', 'count'=>0),
-            "G"=>array('label'=>'Gracefully finishing', 'count'=>0),
-            "I"=>array('label'=>'Idle cleanup of worker', 'count'=>0),
+        $aScoreKeys=[
+            "S"=>['label'=>'Starting up', 'count'=>0],
+            "R"=>['label'=>'Reading Request', 'count'=>0],
+            "W"=>['label'=>'Sending Reply', 'count'=>0],
+            "K"=>['label'=>'Keepalive (read)', 'count'=>0],
+            "D"=>['label'=>'DNS Lookup', 'count'=>0],
+            "C"=>['label'=>'Closing connection', 'count'=>0],
+            "L"=>['label'=>'Logging', 'count'=>0],
+            "G"=>['label'=>'Gracefully finishing', 'count'=>0],
+            "I"=>['label'=>'Idle cleanup of worker', 'count'=>0],
             // at the end: inactive slots
-            "."=>array('label'=>'Open slot with no current process', 'count'=>0),
-            "_"=>array('label'=>'Waiting for Connection', 'count'=>0),
-        );
-        $aScore=array();
+            "."=>['label'=>'Open slot with no current process', 'count'=>0],
+            "_"=>['label'=>'Waiting for Connection', 'count'=>0],
+        ];
+        $aScore=[];
 
         $dummy = preg_match_all($sRegexScoreboard, $sStatusNobr, $aTmpTable);
         if ($dummy) {
@@ -221,21 +219,24 @@ class ServerStatus {
 
             foreach(count_chars($sScoreString,1) as $iChar=>$iCharcount){
                 $sChar=chr($iChar);
-                $aScore['keys'][$sChar]=array(
-                    'label'=> isset($aScoreKeys[$sChar]['label']) ? $aScoreKeys[$sChar]['label'] : 'char '.$sChar.' (unknown)', 
+                $aScore['keys'][$sChar]=[
+                    'label'=> $aScoreKeys[$sChar]['label'] ?? "char $sChar (unknown)", 
                     'count'=>$iCharcount
-                );
+                ];
             }
             
-            $iSlotsWaiting=isset($aScore['keys']['_']['count']) ? $aScore['keys']['_']['count'] : 0;
-            $iSlotsFree= isset($aScore['keys']['.']['count']) ? $aScore['keys']['.']['count'] : 0;
+            $iSlotsWaiting=$aScore['keys']['_']['count'] ?? 0;
+            $iSlotsFree= $aScore['keys']['.']['count']?? 0;
 
             $aScore['value']=$sScoreString;
 
             $aScore['slots_total']=strlen($sScoreString);
+
             $aScore['slots_busy']=$aScore['slots_total'] - $iSlotsWaiting - $iSlotsFree;
-            $aScore['slots_waiting']=$iSlotsWaiting;
-            $aScore['slots_free']=$iSlotsFree;
+            // Slots with letters                          count of "_"     count of "."
+
+            $aScore['slots_waiting']=$iSlotsWaiting; // count of "_"
+            $aScore['slots_free']=$iSlotsFree;       // count of "."
             
             $aReturn[$sHostname]['counter']['slots_total']=$aScore['slots_total'];
             // $aReturn[$sHostname]['counter']['slots_busy']=$aScore['slots_busy'];
@@ -399,7 +400,7 @@ class ServerStatus {
         // $this->log(__FUNCTION__ . "([data], <pre>".print_r($aFilter,1).")</pre> - start");
 
         global $aLangTxt;
-        $aReturn = array();
+        $aReturn = [];
         if (!$a) {
             $a = $this->a;
         }
@@ -466,7 +467,7 @@ class ServerStatus {
         // sort array by a given key
         // http://php.net/manual/en/function.array-multisort.php
         // ------------------------------------------------------------
-        $aSortCol = array();
+        $aSortCol = [];
         if (array_key_exists('sSortkey', $aFilter)) {
             foreach ($aReturn as $key => $row) {
                 $aSortCol[$key] = $row[$aFilter['sSortkey']];
@@ -484,7 +485,7 @@ class ServerStatus {
         // group a column
         // ------------------------------------------------------------
         if (array_key_exists('bGroup', $aFilter)) {
-            $aGroup = array();
+            $aGroup = [];
             foreach ($aReturn as $key => $row) {
                 // $aGroup[$row[$aFilter['sSortkey']]]++;
                 if (array_key_exists($row[$aFilter['sSortkey']], $aGroup)) {
@@ -498,12 +499,12 @@ class ServerStatus {
 
             // create a new return array: count and grouped column
             // $aReturn=array("count"=>true, $aFilter['sSortkey']=>true);
-            $aReturn = array();
+            $aReturn = [];
             foreach ($aGroup as $key => $value) {
-                $aReturn[] = array(
+                $aReturn[] = [
                     $aLangTxt['thCount'] => $value,
                     $aFilter['sSortkey'] => $key,
-                );
+                ];
             }
         }
 
@@ -543,9 +544,9 @@ class ServerStatus {
      * @param string $servername
      * @param array $serveropts
      */
-    public function addServer($servername, $serveropts = array()) {
+    public function addServer($servername, $serveropts = []) {
         if ($serveropts === null) {
-            $serveropts = array();
+            $serveropts = [];
         }
         if (!array_key_exists('status-url', $serveropts)) {
             $serveropts['status-url'] = "http://$servername/server-status";
@@ -579,8 +580,8 @@ class ServerStatus {
      */
     public function getStatus() {
 
-        $this->a = array();
-        $aErrors = array();
+        $this->a = [];
+        $aErrors = [];
         $running = false;
 
         $this->_fResponsetime = false;
@@ -596,7 +597,7 @@ class ServerStatus {
             // curl_multi_setopt($master, CURLMOPT_MAXCONNECTS, 50);
         }
 
-        $curl_arr = array();
+        $curl_arr = [];
         $i = 0;
         foreach ($this->aServer as $sServer => $aData) {
             $sUrl = $aData['status-url'];
@@ -641,14 +642,14 @@ class ServerStatus {
                 $aServerdata = $this->_getServerData($sResponseBody, $sServer);
                 // echo '<pre>'.print_r($aServerdata, 1).'</pre>';
                 // if (isset($aServerdata[$sServer]['requests']) &&$aServerdata[$sServer]['requests']) {
-                if (isset($aServerdata[$sServer]['counter'])) {
+                if ($aServerdata[$sServer]['counter']??false) {
                     $aServerdata[$sServer]['header']=$sResponseHeader;
                     // echo "<pre>" . print_r($aServerdata[$sServer], 1).'</pre>';
                     if (array_key_exists("requests", $aServerdata[$sServer])) {
                         $this->a = array_merge($this->a, $aServerdata);
                     } else {
                         $this->a = array_merge($this->a, $aServerdata);
-                        $aErrors[] = 'Url ' . $sUrl . ' was found and is a server-status page - but you need to enable "Extended Status On".';
+                        $aErrors[] = "Url $sUrl was found and is a server-status page - but you need to enable 'Extended Status On'.";
                     }
                 } else {
                     $aErrors[] = 'Url ' . $sUrl . ' was found but this is not a server-status page.';
@@ -659,14 +660,14 @@ class ServerStatus {
         }
         curl_multi_close($master);
         $this->_fResponsetime = microtime(true) - $iStart;
-        return array(
+        return [
             'data' => $this->a,
             'errors' => $aErrors,
-            'meta' => array(
+            'meta' => [
                 'servers' => $i,
                 'responsetime' => $this->_fResponsetime,
-            )
-        );
+            ]
+        ];
     }
 
 }
