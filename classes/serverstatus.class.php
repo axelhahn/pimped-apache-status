@@ -177,6 +177,8 @@ class ServerStatus {
             if ($formatOk) {
                 foreach ($matches[0] as $sRequestData) {
                     $formatOk = preg_match_all($sRegexRequests2, str_replace("\n", "", $sRequestData), $matches2);
+                    // ignore requests in states _ and . as these are already completed and closed
+                    if (strip_tags($matches2[0][3]) == '_' || strip_tags($matches2[0][3]) == '.') continue;
 
                     $aTmp = [];
                     $aTmp['Webserver'] = $sHostname;
