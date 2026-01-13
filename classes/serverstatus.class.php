@@ -10,10 +10,32 @@
 
 class ServerStatus {
 
-    private $a = [];
-    private $aServer = [];
-    private $_fResponsetime = false;
-    private static $curl_opts = [
+    /**
+     * Array of all server status data
+     * @var array
+     */
+    private array $a = [];
+
+    /**
+     * Array of server settings
+     * - key is servername
+     * - value is an array with curl config data for a status-server request
+     * 
+     * @var array
+     */
+    private array $aServer = [];
+
+    /**
+     * Response time of http request for server-status
+     * @var float
+     */
+    private float $_fResponsetime = 0;
+
+    /**
+     * Array of curl default options
+     * @var array
+     */
+    private static array $curl_opts = [
         CURLOPT_HEADER => true,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_TIMEOUT => 5,
@@ -23,6 +45,8 @@ class ServerStatus {
         CURLOPT_USERAGENT => 'pimped apache status',
         // CURLMOPT_MAXCONNECTS => 10
     ];
+
+    // --------------------------------------------------------------------
 
     /**
      * constructor (it does nothing)
@@ -37,7 +61,7 @@ class ServerStatus {
      * @param  string $sLevel    warnlevel of the given message
      * @return bool
      */
-    private function log($sMessage, $sLevel = "info"): bool {
+    private function log(string $sMessage, string $sLevel = "info"): bool {
         global $oLog;
         if (!$oLog ||! is_object($oLog) || !method_exists($oLog, "add")){
             return false;
@@ -49,9 +73,9 @@ class ServerStatus {
      * helper function transform byte/ kB/ MB into an integer
      * 
      * @param string $value  value i.e. "1.32 kB"
-     * @return integer
+     * @return bool|float
      */
-    private function _getCountervalue($value){
+    private function _getCountervalue(string $value): bool|float{
         $iReturn=false;
         $aTmp=explode(' ', $value);
         if($aTmp[0]??false){
@@ -62,7 +86,7 @@ class ServerStatus {
             if($iReturn===''){
                 return false;
             }
-            $iReturn=($iReturn[0]==='.' ? '0'.$iReturn : $iReturn);
+            // $iReturn=($iReturn[0]==='.' ? '0'.$iReturn : $iReturn);
             // echo "DEBUG: __METHOD__($value) value: $iReturn .. unit ".$aTmp[1]."<br>";
             
             if ($aTmp[1]??false){
@@ -92,7 +116,7 @@ class ServerStatus {
      * @param string $sHostname  host is used as key for the result array
      * @return array|bool
      */
-    private function _getServerData($sStatus, $sHostname = ''): array|bool {
+    private function _getServerData(string $sStatus, string $sHostname = ''): array|bool {
         $this->log('start '. __FUNCTION__ ."([sStatus], $sHostname)");
         if (!$sStatus || !$sHostname || strpos($sStatus, "Apache Server Status for")<0){
             return false;
@@ -185,7 +209,7 @@ class ServerStatus {
                     }
 
                     // START extract Method from column "Request"
-                    if (array_key_exists("Request", $aTmp)) {
+                    if ($aTmp['Request']??false) {
                         $sR = preg_replace('/([A-Z]*)\ .*/', "$1", $aTmp['Request']);
                     }
                     $aTmp['Method'] = $sR;
@@ -258,61 +282,61 @@ class ServerStatus {
 
     /**
      * filter lt - returns bool $a lower than $b
-     * @param type $a
-     * @param type $b
+     * @param mixed $a
+     * @param mixed $b
      * @return boolean
      */
-    private function _filter_lt($a, $b) {
+    private function _filter_lt(mixed $a, mixed $b) {
         return $a < $b;
     }
 
     /**
      * filter le - returns bool $a lower equal $b
-     * @param type $a
-     * @param type $b
+     * @param mixed $a
+     * @param mixed $b
      * @return boolean
      */
-    private function _filter_le($a, $b) {
+    private function _filter_le(mixed $a, mixed $b) {
         return $a <= $b;
     }
 
     /**
      * filter eq - returns bool $a equal $b
-     * @param type $a
-     * @param type $b
+     * @param mixed $a
+     * @param mixed $b
      * @return boolean
      */
-    private function _filter_eq($a, $b) {
+    private function _filter_eq(mixed $a, mixed $b) {
         return $a == $b;
     }
 
     /**
      * filter ne - returns bool $a not equal $b
-     * @param type $a
-     * @param type $b
+     * @param mixed $a
+     * @param mixed $b
      * @return boolean
      */
-    private function _filter_ne($a, $b) {
+    private function _filter_ne(mixed $a, mixed $b) {
         return $a != $b;
     }
 
     /**
      * filter ge - returns bool $a greater or equal $b
-     * @param type $a
-     * @param type $b
+     * @param mixed $a
+     * @param mixed $b
      * @return boolean
      */
-    private function _filter_ge($a, $b) {
+    private function _filter_ge(mixed $a, mixed $b) {
         return $a >= $b;
     }
 
     /**
      * filter gt - returns bool $a greater than $b
-     * @param type $a
-     * @param type $b
+     * @param mixed $a
+     * @param mixed $b
      * @return boolean
      */
-    private function _filter_gt($a, $b) {
+    private function _filter_gt(mixed $a, mixed $b) {
         return $a > $b;
     }
 
@@ -322,19 +346,19 @@ class ServerStatus {
      * @param string $b
      * @return boolean
      */
-    private function _filter_regex($a, $b) {
+    private function _filter_regex(string $a, string $b) {
         return preg_match($b, $a);
     }
 
     /**
      * check a line in tabledata and apply the filter rules to a table
      * this function is a helper function for dataFilter()
-     * @param type $aSingleRow
-     * @param type $aFilter array    rules to reduce visible data
+     * @param array $aSingleRow
+     * @param array $aFilter array    rules to reduce visible data
      *     array( add/ remove , columnname , operator , value to compare )
      */
-    private function _dataFilterCheckRow($aSingleRow, $aFilter = false) {
-        if (!$aFilter) {
+    private function _dataFilterCheckRow(array $aSingleRow, array $aFilter = []) {
+        if (!count($aFilter)) {
             return $aSingleRow;
         }
         $bAdd = false;
@@ -396,7 +420,7 @@ class ServerStatus {
      *         'iLimit'       integer  max count of returned rows
      * @return array
      */
-    function dataFilter($a = false, $aFilter = []) {
+    function dataFilter(array $a = [], array $aFilter = []) {
         // $this->log(__FUNCTION__ . "([data], <pre>".print_r($aFilter,1).")</pre> - start");
 
         global $aLangTxt;
@@ -410,19 +434,19 @@ class ServerStatus {
         // ------------------------------------------------------------
 
 
-        if (!array_key_exists('sType', $aFilter)) {
+        if (!($aFilter['sType']??false)) {
             die("ERROR: " . __FUNCTION__ . " requires sType.");
         }
-        if (!array_key_exists('aRows', $aFilter)) {
+        if (!($aFilter['aRows']??false)) {
             die("ERROR: " . __FUNCTION__ . " requires aRows.");
         }
 
         if ($aFilter['sType'] != "status" && $aFilter['sType'] != "requests") {
             die("ERROR: function " . __FUNCTION__ . " does not support value in sType=>" . $aFilter['sType'] . ".");
         }
-        if (array_key_exists('sortorder', $aFilter)) {
+        if ($aFilter['sortorder']??false) {
             if (
-                    $aFilter['sortorder'] != SORT_ASC && $aFilter['sortorder'] != SORT_DESC && $aFilter['sortorder'] != SORT_DESC && $aFilter['sortorder'] != SORT_REGULAR && $aFilter['sortorder'] != SORT_NUMERIC && $aFilter['sortorder'] != SORT_STRING
+                    $aFilter['sortorder'] != SORT_ASC && $aFilter['sortorder'] != SORT_DESC && $aFilter['sortorder'] != SORT_REGULAR && $aFilter['sortorder'] != SORT_NUMERIC && $aFilter['sortorder'] != SORT_STRING
             )
                 die("ERROR: function " . __FUNCTION__ . " does not support value in sortorder=>" . $aFilter['sortorder'] . ".");
         }
@@ -432,15 +456,15 @@ class ServerStatus {
         // ------------------------------------------------------------
         foreach ($a as $sHost => $aData) {
             if (
-                    (array_key_exists('sServer', $aFilter) && $aFilter['sServer'] == $sHost) ||
-                    (!array_key_exists('sServer', $aFilter))
+                    ($aFilter['sServer']??false == $sHost) 
+                    || (!array_key_exists('sServer', $aFilter))
             ) {
                 if ($aFilter['sType'] == "status") {
                     $aSingleRow = ['Webserver' => $sHost ];
                     foreach ($aFilter['aRows'] as $key) {
-                        $aSingleRow[$key] = array_key_exists($key, $aData[$aFilter['sType']]) ? $aData[$aFilter['sType']][$key] : false;
+                        $aSingleRow[$key] = $aData[$aFilter['sType']][$key]??false;
                     }
-                    $aFilteredRow = $this->_dataFilterCheckRow($aSingleRow, array_key_exists('aRules', $aFilter) ? $aFilter['aRules'] : false);
+                    $aFilteredRow = $this->_dataFilterCheckRow($aSingleRow, $aFilter['aRules']??[]);
                     if ($aFilteredRow) {
                         $aReturn[] = $aFilteredRow;
                     }
@@ -451,9 +475,9 @@ class ServerStatus {
                         $aSingleRow = ['Webserver' => $sHost ];
                         $aSingleRow['Webserver'] = $sHost;
                         foreach ($aFilter['aRows'] as $key) {
-                            $aSingleRow[$key] = array_key_exists($key, $aRequest) ? $aRequest[$key] : '';
+                            $aSingleRow[$key] = $aRequest[$key]??'';
                         }
-                        $aFilteredRow = $this->_dataFilterCheckRow($aSingleRow, array_key_exists('aRules', $aFilter) ? $aFilter['aRules'] : false);
+                        $aFilteredRow = $this->_dataFilterCheckRow($aSingleRow, $aFilter['aRules']??[]);
                         if ($aFilteredRow) {
                             $aReturn[] = $aFilteredRow;
                         }
@@ -468,12 +492,12 @@ class ServerStatus {
         // http://php.net/manual/en/function.array-multisort.php
         // ------------------------------------------------------------
         $aSortCol = [];
-        if (array_key_exists('sSortkey', $aFilter)) {
+        if ($aFilter['sSortkey']??false) {
             foreach ($aReturn as $key => $row) {
                 $aSortCol[$key] = $row[$aFilter['sSortkey']];
             }
             $sortorder = SORT_ASC;
-            if (array_key_exists('sortorder', $aFilter)) {
+            if ($aFilter['sortorder']??false) {
                 $sortorder = $aFilter['sortorder'];
             }
             if ($aSortCol && count($aSortCol)) {
@@ -484,11 +508,11 @@ class ServerStatus {
         // ------------------------------------------------------------
         // group a column
         // ------------------------------------------------------------
-        if (array_key_exists('bGroup', $aFilter)) {
+        if ($aFilter['bGroup']??false) {
             $aGroup = [];
             foreach ($aReturn as $key => $row) {
                 // $aGroup[$row[$aFilter['sSortkey']]]++;
-                if (array_key_exists($row[$aFilter['sSortkey']], $aGroup)) {
+                if ($aGroup[$row[$aFilter['sSortkey']]]??false) {
                     $aGroup[$row[$aFilter['sSortkey']]] ++;
                 } else {
                     $aGroup[$row[$aFilter['sSortkey']]] = 1;
@@ -511,7 +535,7 @@ class ServerStatus {
         // ------------------------------------------------------------
         // limit
         // ------------------------------------------------------------
-        if (array_key_exists('iLimit', $aFilter)) {
+        if ($aFilter['iLimit']??false) {
             while (count($aReturn) > $aFilter['iLimit']) {
                 array_pop($aReturn);
             }
@@ -526,9 +550,9 @@ class ServerStatus {
     /**
      * get response time to fetch all statuspages of all webservers
      * @see $this->getStatus()
-     * @return integer
+     * @return float
      */
-    public function getResponseTime() {
+    public function getResponseTime(): float {
         return $this->_fResponsetime;
     }
 
@@ -543,12 +567,13 @@ class ServerStatus {
      * 
      * @param string $servername
      * @param array $serveropts
+     * @return void
      */
-    public function addServer($servername, $serveropts = []) {
+    public function addServer(string $servername, array $serveropts = []): void {
         if ($serveropts === null) {
             $serveropts = [];
         }
-        if (!array_key_exists('status-url', $serveropts)) {
+        if (!($serveropts['status-url']??false)) {
             $serveropts['status-url'] = "http://$servername/server-status";
         }
         $this->aServer[$servername] = $serveropts;
@@ -561,9 +586,9 @@ class ServerStatus {
      * 
      * @param CurlMultiHandle  $mh             multicurl master handle
      * @param boolean          $still_running  flag: is curl is still running
-     * @return type
+     * @return int
      */
-    private function full_curl_multi_exec($mh, &$still_running) {
+    private function full_curl_multi_exec(CurlMultiHandle $mh,bool &$still_running): int {
         do {
             $rv = curl_multi_exec($mh, $still_running);
         } while ($rv == CURLM_CALL_MULTI_PERFORM);
@@ -578,13 +603,14 @@ class ServerStatus {
      * parse them and and merge all data of all servers to a single array
      * @return array with keys "data" (results) and "error" (error messages)
      */
-    public function getStatus() {
+    public function getStatus(): array 
+    {
 
         $this->a = [];
         $aErrors = [];
         $running = false;
 
-        $this->_fResponsetime = false;
+        $this->_fResponsetime = 0;
         $iStart = microtime(true);
 
         // prepare curl object
@@ -603,7 +629,7 @@ class ServerStatus {
             $sUrl = $aData['status-url'];
             $curl_arr[$i] = curl_init($sUrl);
             curl_setopt_array($curl_arr[$i], self::$curl_opts);
-            if (array_key_exists('userpwd', $aData)) {
+            if ($aData['userpwd']??false) {
                 curl_setopt($curl_arr[$i], CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
                 curl_setopt($curl_arr[$i], CURLOPT_USERPWD, $aData['userpwd']);
             }
@@ -645,7 +671,7 @@ class ServerStatus {
                 if ($aServerdata[$sServer]['counter']??false) {
                     $aServerdata[$sServer]['header']=$sResponseHeader;
                     // echo "<pre>" . print_r($aServerdata[$sServer], 1).'</pre>';
-                    if (array_key_exists("requests", $aServerdata[$sServer])) {
+                    if ($aServerdata[$sServer]['requests']??false) {
                         $this->a = array_merge($this->a, $aServerdata);
                     } else {
                         $this->a = array_merge($this->a, $aServerdata);
