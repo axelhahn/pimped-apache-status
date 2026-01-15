@@ -19,7 +19,7 @@ class confighandler {
      * all items in the loaded config
      * @var array
      */
-    protected $_aCfg=array();
+    protected $_aCfg=[];
     
     /**
      * current config id
@@ -66,12 +66,13 @@ class confighandler {
         }
         return $sDir;
     }
+
     /**
      * get config file with full path .. it is in [class dir]/../config/
-     * @param type $sId  
+     * @param string $sId  
      * @return string
      */
-    private function _getCfgFile($sId) {
+    private function _getCfgFile(string $sId): string {
         return $this->_getCfgDir().$sId.'.json';
     }
     
@@ -79,7 +80,7 @@ class confighandler {
      * save all elements of the current config
      * @return boolean
      */
-    public function _save() {
+    public function _save(): bool|int {
         if($this->_aCfg===false){
             return false;
         }
@@ -96,7 +97,7 @@ class confighandler {
      * get current config id
      * @return string
      */
-    public function configGetId() {
+    public function configGetId(): string {
         return $this->_sCfgId;
     }
     
@@ -104,8 +105,8 @@ class confighandler {
      * get all available config files as flat array
      * @return array
      */
-    public function configGetList(){
-        $aReturn=array();
+    public function configGetList(): array{
+        $aReturn=[];
         $sDir=$this->_getCfgDir();
         foreach (glob($sDir."*.json") as $sFile){
             $aReturn[]=str_replace(".json", "", basename($sFile));
@@ -116,13 +117,14 @@ class confighandler {
     /**
      * set a config id and load its items
      * @param string  $sId  id of config (without extension)
+     * @return bool
      */
-    public function configSet($sId=false) {
+    public function configSet($sId=false): bool {
         if(!$sId){
             return false;
         }
         $sCfgFile=$this->_getCfgFile($sId);
-        $this->_aCfg=array();
+        $this->_aCfg=[];
         $this->_sCfgId=$sId;
         if(!file_exists($sCfgFile)){
             // echo "WARNING: file " . $sCfgFile . " does not exist.";
@@ -142,9 +144,9 @@ class confighandler {
     /**
      * turn on / off autosave of config items
      * @param bool  $bool   true = auto save ON
-     * @return current value
+     * @return bool current value
      */
-    public function autosave($bool){
+    public function autosave(bool $bool): bool{
         $this->_bAutosave=(bool)$bool;
         return $this->_bAutosave;
     }
@@ -155,9 +157,9 @@ class confighandler {
      * 
      * @param string  $sKey    keystructure - levels are divided by _sDivider
      * @param array   $aArray  optional array; default is false (=$this->_aCfg)
-     * @return boolean
+     * @return boolean|int success of save action
      */
-    function delete($sKey, $aArray=false){
+    function delete($sKey, $aArray=false): bool|int{
         if(!$this->keyExists($sKey, $aArray)){
             die("ERROR: a varname [$sKey] does not exist in the config [".$this->configGetId()."].\n");
         }
@@ -169,9 +171,9 @@ class confighandler {
         if(count($aTmp)){
             foreach($aTmp as $sKeyname){
                 if(!isset($aArray[$sKeyname])){
-                    $aArray[$sKeyname]=array();
+                    $aArray[$sKeyname]=[];
                 }
-                $aArray=&$aArray[$sKeyname];
+                $aArray=&$aArray[$sKeyname];    
             }
         }
         unset($aArray[$sLastKey]);
@@ -181,7 +183,7 @@ class confighandler {
     /**
      * dump config array
      */
-    public function dump() {
+    public function dump(): void {
         echo __METHOD__ . '<br><pre>' . print_r($this->_aCfg, 1) . '</pre>';
     }
     
@@ -195,7 +197,7 @@ class confighandler {
      * @param string  $sId  optional: id of config (without extension)
      * @return array
      */
-    public function getFullConfig($sId=false) {
+    public function getFullConfig($sId=false): array {
         if ($sId){
             $this->configSet($sId);
         }
@@ -207,9 +209,9 @@ class confighandler {
      * 
      * @param string  $sKey    keystructure - levels are divided by _sDivider
      * @param array   $aArray  optional array; default is false (=$this->_aCfg)
-     * @return any
+     * @return mixed
      */
-    function get($sKey=false, $aArray=false){
+    function get($sKey=false, $aArray=false): mixed{
         if(!$this->keyExists($sKey, $aArray)){
             die("ERROR: a varname [$sKey] does not exist in the config [".$this->configGetId()."].\n");
         }
@@ -222,9 +224,9 @@ class confighandler {
      * 
      * @param string  $sKey    keystructure - levels are divided by _sDivider
      * @param array   $aArray  optional array; default is false (=$this->_aCfg)
-     * @return boolean
+     * @return mixed
      */
-    public function getPointer($sKey, $aArray=false){
+    public function getPointer($sKey, $aArray=false): mixed{
         return $this->keyExists($sKey, $aArray, true);
     }
     /**
@@ -233,9 +235,9 @@ class confighandler {
      * 
      * @param string  $sKey    keystructure - levels are divided by _sDivider
      * @param array   $aArray  optional array; default is false (=$this->_aCfg)
-     * @return boolean
+     * @return mixed
      */
-    public function keyExists($sKey, $aArray=false, $bReturnPointer=false){
+    public function keyExists(string $sKey, $aArray=false, $bReturnPointer=false): mixed{
         if(!$aArray){
             $aArray=&$this->_aCfg;
         }
@@ -253,15 +255,16 @@ class confighandler {
         }
         return $bReturnPointer ? $aArray[$sSubkey] : true;
     }
+
     /**
      * set a complete config (be careful!) or just a subitem of the config
      * The config array will be saved
      * 
      * @param array  $value     value
      * @param string $sKey      optional: key of the config - can contain _sDivider to divide levels
-     * @return boolean
+     * @return int|boolean success of save action
      */
-    function set($value, $sKey=false){
+    public function set($value, $sKey=false): int|bool{
         if(!$sKey){
             $this->_aCfg=$value;
         } else {
@@ -271,7 +274,7 @@ class confighandler {
             if(count($aTmp)){
                 foreach($aTmp as $sKeyname){
                     if(!isset($aArray[$sKeyname])){
-                        $aArray[$sKeyname]=array();
+                        $aArray[$sKeyname]=[];
                     }
                     $aArray=&$aArray[$sKeyname];
                 }

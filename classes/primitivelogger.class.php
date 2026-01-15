@@ -9,42 +9,42 @@
  */
 class PrimitiveLogger {
 
-    private $aLogs = array();
+    private $aLogs = [];
 
     /**
      * constructor
      * @return boolean (true)
      */
     public function __construct() {
-        return $this->flush();
+        $this->flush();
     }
 
     /**
      * add a log line
      * @param string $sMsg    message text
      * @param string $sLevel  loglevel like "info", "warning", "error" (css classname for output)
-     * @return boolean
+     * @return array
      */     
-    public function add($sMsg, $sLevel='info') {
-        return $this->aLogs[] = array(
+    public function add($sMsg, $sLevel='info'): array {
+        return $this->aLogs[] = [
             'level'=>$sLevel, 
             'msg'=>$sMsg
-        );
+        ];
     }
     
     /**
      * flush all logs
-     * @return boolean
+     * @return array
      */
-    public function flush() {
-        return $this->aLogs = array();
+    public function flush(): array {
+        return $this->aLogs = [];
     }
 
     /**
     * print log as html and flush log entries
     * @return string
     */
-    function render() {
+    public function render(): string {
         $sReturn = '';
         foreach ($this->aLogs as $aLogentry) {
             $sReturn.='<div class="' . $aLogentry['level'] . '"><span class="type">' . $aLogentry['level'] . ' </span>' . $aLogentry['msg'] . '</div>';

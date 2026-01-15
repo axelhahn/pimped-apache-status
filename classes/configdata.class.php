@@ -10,35 +10,53 @@ require_once 'confighandler.class.php';
  */
 class configData {
 
-    
     /**
      * id of the default config file
      * @var string 
      */
-    protected $_sIdUser = "config_user";
+    protected string $_sIdUser = "config_user";
     /**
      * id of the default config file
      * @var string 
      */
-    protected $_sIdForm = "internal-config_form";
+    protected string $_sIdForm = "internal-config_form";
     
     /**
      * id of the user config file
      * @var string 
      */
-    protected $_sIdDefaults = "internal-config_default";
-
-
-    protected $_aDefaults = array();
-    protected $_aUser = array();
-    protected $_aForm = array();
+    protected string $_sIdDefaults = "internal-config_default";
 
 
     /**
-     * internally used confighandler object
-     * @var object 
+     * Arrray with config defaults
+     * @var array
      */
-    protected $_oCfg = false;
+    protected array $_aDefaults = [];
+
+    /**
+     * Array with user config
+     * @var array
+     */
+    protected array $_aUser = [];
+
+    /**
+     * Array with form default config
+     * @var array
+     */
+    protected array $_aForm = [];
+
+    /**
+     * Array with fetched serverstatus data
+     * @var array
+     */
+    protected array $_aServer = [];
+
+    /**
+     * internally used confighandler object
+     * @var confighandler
+     */
+    protected confighandler $_oCfg;
 
     // ----------------------------------------------------------------------
     // CONSTRUCTOR
@@ -58,9 +76,9 @@ class configData {
     
     /**
      * load serverver config
-     * @return type
+     * @return bool
      */
-    private function _load() {
+    private function _load(): bool {
         $this->_aUser     = $this->_oCfg->getFullConfig($this->_sIdUser);
         $this->_aDefaults = $this->_oCfg->getFullConfig($this->_sIdDefaults);
         $this->_aForm     = $this->_oCfg->getFullConfig($this->_sIdForm);
@@ -69,9 +87,9 @@ class configData {
     
     /**
      * save user data
-     * @return type
+     * @return int|boolean
      */
-    private function _save() {
+    private function _save(): mixed {
         $this->_sort();
         
         $this->_oCfg->configSet($this->_sIdUser);
@@ -83,7 +101,7 @@ class configData {
      * sort user config
      * @return boolean
      */
-    private function _sort() {
+    private function _sort(): bool {
         if(!count($this->_aUser)){
             return true;
         }
@@ -91,10 +109,14 @@ class configData {
         return true;
     }
 
-    private function _getFormKeys() {
-        $aReturn=array();
+    /**
+     * get names of known keys of defined forms as a list
+     * @return array
+     */
+    private function _getFormKeys(): array {
+        $aReturn=[];
         foreach($this->getDefaultkeys() as $sKey){
-            if(array_key_exists($sKey, $this->_aForm)){
+            if($this->_aForm[$sKey]??false){
                 $aReturn[]=$sKey;
             }
         }
@@ -116,43 +138,21 @@ class configData {
      */
     public function getDefault($sKey=false) {
         if($sKey){
-            if (array_key_exists($sKey, $this->_aDefaults)){
-                return $this->_aDefaults[$sKey];
-            } else {
-                return false;
-            }
+            return ($this->_aDefaults[$sKey]??false) 
+                ? $this->_aDefaults[$sKey] 
+                : false
+            ;
         }
         return $this->_aDefaults;
     }
     
     /**
      * return all valid array keys for config values
-     * @return type
+     * @return array
      */
-    public function getDefaultkeys() {
+    public function getDefaultkeys(): array {
         return array_keys($this->_aDefaults);
     }
-
-    /**
-     * get an item or full array of config (merged from defaults and user config)
-     * 
-     * @see  $this->getDefaultkeys()
-     * 
-     * @param  string  $sKey  optional: key of a single item
-     * @return mixed
-    public function getConfig_OLD($sKey=false) {
-        $aCfg=array_merge($this->_aDefaults, $this->_aUser);
-        if($sKey){
-            if (array_key_exists($sKey, $aCfg)){
-                return $aCfg[$sKey];
-            } else {
-                return false;
-            }
-        }
-        return $aCfg;
-    }
-     */
-    
     
     /**
      * get an item or full array of config (merged from defaults and user config)
@@ -160,12 +160,10 @@ class configData {
      * @see  $this->getDefaultkeys()
      * 
      * @param  string  $sKey    optional: key of a single item
-     * @param  string  $aArray  optional: array to search in; default is false (=merge of aDefaults and user settings)
+     * @param  array  $aArray  optional: array to search in; default is false (=merge of aDefaults and user settings)
      * @return mixed
-     */
-    function getConfig($sKey=false, $aArray=false){
-        $sDivider='.';
-        if(!$aArray){
+    function getConfig(string $sKey='', array $aArray=[]): mixed{
+        if(!count($aArray)){
             $aArray=array_merge($this->_aDefaults, $this->_aUser);
         }
         if(!$sKey){
@@ -173,6 +171,7 @@ class configData {
         }
         return $this->_oCfg->get($sKey, $aArray);
     }
+     */
 
     // ----------------------------------------------------------------------
     // public functions setter
@@ -186,17 +185,17 @@ class configData {
      * @param array $aItem
      * @return array
      */
-    public function addGroup($aItem){
-        if(array_key_exists($aItem['label'], $this->_aServer)){
-            return array('result'=>false,'error'=>'group already exists.');
+    public function addGroup(array $aItem): array{
+        if( $this->_aServer[$aItem['label']]??false){
+            return ['result'=>false,'error'=>'group already exists.'];
         }
         
         // --- create new group item
-        $this->_aServer[$aItem['label']]=array('servers'=>array());
+        $this->_aServer[$aItem['label']]=['servers'=>[]];
         
         // --- save
         $this->_save();
-        return array('result'=>true);
+        return ['result'=>true];
     }
     
     /**
@@ -206,12 +205,12 @@ class configData {
      * @param bool  $bSave  flag save or not; is set to false in set() method
      * @return array
      */
-    public function deleteGroup($aItem, $bSave=true){
-        if(!array_key_exists('oldlabel', $aItem)){
-            return array('result'=>false, 'error'=>'old label is required');
+    public function deleteGroup(array $aItem, bool $bSave=true){
+        if(!($aItem['oldlabel']??false)){
+            return ['result'=>false, 'error'=>'old label is required'];
         }
-        if(!array_key_exists($aItem['oldlabel'], $this->_aServer)){
-            return array('result'=>false, 'error'=>'old label does not exist');
+        if(!( $this->_aServer[$aItem['oldlabel']]??false)){
+            return ['result'=>false, 'error'=>'old label does not exist'];
         }
         
         // remove key
@@ -221,18 +220,18 @@ class configData {
         if ($bSave){
             $this->_save();
         }
-        return array('result'=>true);
+        return ['result'=>true];
         
     }
     /**
      * update server; it returns an array with the keys
-     * return (true/ false) and error (error message)
+     * 
      * @param array $aItem
      * @return array
      */
-    public function setGroup($aItem){
-        if(!array_key_exists('oldlabel', $aItem)){
-            return array('result'=>false, 'error'=>'old label is required');
+    public function setGroup(array $aItem): array{
+        if(!($aItem['oldlabel']??false)){
+            return ['result'=>false, 'error'=>'old label is required'];
         }
         
         $aTmp=$this->_aServer[$aItem['oldlabel']];
@@ -248,7 +247,7 @@ class configData {
         
         // --- save
         $this->_save();
-        return array('result'=>true);
+        return ['result'=>true];
     }
     
     // ----- SERVER
@@ -256,25 +255,23 @@ class configData {
     /**
      * helper function to check item array ; it returns an array with the keys
      * return (true/ false) and error (error message)
-     * @param type $aItem
-     * @return type
+     * @param array $aItem
+     * @return array
      */
-    private function _checkServerItem($aItem){
+    private function _checkServerItem(array $aItem): array{
         // --- checks
-        if(!array_key_exists('group', $aItem)
-          || !array_key_exists('label', $aItem)
-          || !$aItem['group']
-          || !$aItem['label']
+        if(!($aItem['group']??false)
+          || !($aItem['label']??false)
         ){
-            return array('result'=>false,'error'=>'group and label are required');
+            return ['result'=>false,'error'=>'group and label are required'];
         }
-        if(!array_key_exists($aItem['group'], $this->_aServer)){
-            return array('result'=>false,'error'=>'given group is invalid.');
+        if(!($this->_aServer[$aItem['group']]??false)){
+            return ['result'=>false,'error'=>'given group is invalid.'];
         }
         if(!array_key_exists('servers', $this->_aServer[$aItem['group']])){
-            $this->_aServer[$aItem['group']]['servers']=array();
+            $this->_aServer[$aItem['group']]['servers']=[];
         }
-        return array('result'=>true);
+        return ['result'=>true];
     }
     
     /**
@@ -283,13 +280,13 @@ class configData {
      * @param array $aItem
      * @return array
      */
-    public function addServer($aItem){
-        $aResult=$this->_checkServerItem($aItem, 1);
+    public function addServer(array $aItem): array{
+        $aResult=$this->_checkServerItem($aItem);
         if (!$aResult['result']){
             return $aResult;
         }
         if(array_key_exists($aItem['label'], $this->_aServer[$aItem['group']]['servers'])){
-            return array('result'=>false,'error'=>'given server label already exists.');
+            return ['result'=>false,'error'=>'given server label already exists.'];
         }
         
         // --- create new server item
@@ -302,7 +299,7 @@ class configData {
         
         // --- save
         $this->_save();
-        return array('result'=>true);
+        return ['result'=>true];
     }
     
     /**
@@ -311,12 +308,12 @@ class configData {
      * @param array $aItem
      * @return array
      */
-    public function deleteServer($aItem){
-        if(!array_key_exists('oldlabel', $aItem)){
-            return array('result'=>false, 'error'=>'old label is required');
+    public function deleteServer(array $aItem): array{
+        if(!($aItem['oldlabel']??false)){
+            return ['result'=>false, 'error'=>'old label is required'];
         }
         if(!array_key_exists($aItem['oldlabel'], $this->_aServer[$aItem['group']]['servers'])){
-            return array('result'=>false, 'error'=>'old label does not exist');
+            return ['result'=>false, 'error'=>'old label does not exist'];
         }
         
         // remove key
@@ -324,7 +321,7 @@ class configData {
         
         // --- save
         $this->_save();
-        return array('result'=>true);
+        return ['result'=>true];
         
     }
 
@@ -334,7 +331,7 @@ class configData {
      * @param array $aItem
      * @return array
      */
-    public function setServer($aItem){
+    public function setServer(array $aItem): array{
         // --- checks
         $aResult=$this->_checkServerItem($aItem);
         if (!$aResult['result']){
@@ -348,8 +345,8 @@ class configData {
         }
         
         // --- create new server item
-        foreach (array("label", "status-url", "userpwd") as $sKey){
-            if(array_key_exists($sKey, $aItem) && $aItem[$sKey]){
+        foreach (["label", "status-url", "userpwd"] as $sKey){
+            if($aItem[$sKey]??false){
                 $aServer[$sKey]=$aItem[$sKey];
             }
         }
@@ -357,7 +354,7 @@ class configData {
         
         // --- save
         $this->_save();
-        return array('result'=>true);
+        return ['result'=>true];
     }
     
     
@@ -366,14 +363,20 @@ class configData {
     // public functions render output
     // ----------------------------------------------------------------------
     
-    private function _renderItem($aForm, $sKey){
+    /**
+     * render a form item
+     * @param array $aForm
+     * @param string $sKey
+     * @return bool|string
+     */
+    private function _renderItem(array $aForm, string $sKey): bool|string{
         global $aLangTxt;
         $sHtml='';
         
         if(!count($aForm[$sKey])){
             return false;
         }
-        if (!array_key_exists('_type', $aForm[$sKey])){
+        if (!($aForm[$sKey]['_type']??false)){
             foreach(array_keys($aForm[$sKey]) as $sKey2){
                 $sHtml.=$this->_renderItem($aForm[$sKey], $sKey2);
             }
@@ -407,100 +410,7 @@ class configData {
         }
         return $sHtml;
     }
-    
-    public function renderForm4UserConfig(){
-        global $aLangTxt;
-        $sHtml='';
-        foreach ($this->_getFormKeys() as $sKey){
-            if (array_key_exists($sKey, $this->_aForm)){
-                $sHtml.='<form action="'.getNewQs(array()).'" class="form-horizontal" method="POST" >'
-                . '<input type="hidden" name="appaction" value="setUservalue"/>'
-                .'<div class="form-group">'
-                .'<h4>'.$sKey.'</h4><div class="hintbox">'.$aLangTxt['cfg-'.$sKey].'</div>';
-                $sHtml.=$this->_renderItem($this->_aForm, $sKey);
-                $sHtml.='</div>';
-                $sHtml.='</form>';
-            }
-        }
-        return $sHtml;
-    }
-    
-    /**
-     * get html code for a form for new/ update a group
-     * 
-     * @param string $sGroup  name of the group
-     * @param string $sId     id of the server; leave empty for NEW
-     * @return string
-     */
-    public function renderFormGroup($sGroup=false){
-        global $aLangTxt;
-        $bNew=!($sGroup>'');
-        
-        $sHtml='';
-        $sFormId='divfrm-group-'.md5($sGroup );
-        
 
-        $sSubmitClass= $bNew ? 'btn-success' : 'btn-default';
-        $sAppAction=   $bNew ? 'addgroup' : 'updategroup';
-        
-        if($sGroup){
-            $sHtml.='<div class="divGroup" id="'.$this->getDivId($sGroup).'">'
-                    . '<h3>'
-                    . '<button class="btn btn-default" onclick="$(\'#'.$sFormId.'\').slideToggle();">'
-                    . '<i class="fa-solid fa-pencil-alt"></i> ' . $aLangTxt['ActionEdit']
-                    . '</button> '
-                    . '<i class="fa-solid fa-cubes"></i> '
-                    . $sGroup .' <span class="badge">'.count($this->getServers($sGroup)).'</span>'
-                    . '</h3>'
-                    ;
-        }
-        $sHtml.='<div id="'.$sFormId.'" class="divFrm"'
-            . ($sGroup ? ' style="display: none;"' : '')
-            . '>'
-            // . '<br>'
-            . '<form action="'.getNewQs(array()).'" class="form-inline" method="POST" style="float: left;">'
-            . '<input type="hidden" name="appaction" value="'.$sAppAction.'"/>'
-            . ($sGroup ? '<input type="hidden" name="oldlabel" value="'.$sGroup.'"/>' : '')
-            ;
-
-        $sKey='label';
-        $sFieldId='group-'.md5($sGroup );
-        $sHtml.='<div class="form-group">'
-                . '<label for="'.$sFieldId.'" >'.$aLangTxt['AdminLblGroup-'.$sKey].'</label> '
-                . '<input type="text" class="form-control" id="'.$sFieldId.'" name="label" size="40" value="'.$sGroup.'" placeholder="" />'
-                . '</div>';
-        
-        $sHtml.='<button type="submit" class="btn '.$sSubmitClass.'" title="'.$aLangTxt['ActionOKHint'].'"'
-                . '><i class="fa-solid fa-check"></i> '.$aLangTxt['ActionOK'].'</button>'
-                . '</form>'
-                ;
-        
-        // delete button for a group: only if the group has no servers below
-        if($sGroup && !count($this->getServers($sGroup))){
-            $sHtml.='<form action="'.getNewQs(array()).'" class="form-inline" method="POST">'
-            . '<input type="hidden" name="appaction" value="deletegroup"/>'
-            . '<input type="hidden" name="oldlabel" value="'.$sGroup.'"/>'
-            . '<button type="submit" class="btn btn-danger" title="'.$aLangTxt['ActionDeleteHint'].'"'
-            . '><i class="fa-solid fa-trash"></i> '.$aLangTxt['ActionDelete'].'</button>'
-            . '</form>'
-            ;            
-        } 
-        if($sGroup){
-            $sHtml.='<br><br></div>';
-        }
-        else {
-            $sHtml.='<div style="clear: both;"></div>';
-        }
-        $sHtml.='</div>';
-        /*
-        echo htmlentities($sHtml); 
-        echo $sHtml;
-        die();
-         * 
-         */
-        return $sHtml;
-    }
-    
     /**
      * get html code for a form for new/ update a single server
      * @see getGroups() 
@@ -510,14 +420,14 @@ class configData {
      * @param string $sId     id of the server; leave empty for NEW
      * @return string
      */
-    public function renderFormServer($sGroup, $sId=false){
+    public function renderFormServer__UNUSED($sGroup, $sId=false){
         global $aLangTxt;
         $bNew=!($sId>'');
         
         $sHtml='';
         $sFormId='divfrm-'.md5($sGroup ).'-'.md5($sId);
         
-        $aSrv=         $bNew ? array(): $this->getServerDetails($sGroup, $sId);
+        $aSrv=         $bNew ? [] : $this->getServerDetails($sGroup, $sId);
         $sSubmitClass= $bNew ? 'btn-success' : 'btn-default';
         // $sSubmitClass= 'btn-success';
         $sAppAction=   $bNew ? 'addserver' : 'updateserver';
@@ -525,7 +435,7 @@ class configData {
         if($sId){
             $sHtml.='<div class="divServer" id="'.$this->getDivId($sGroup, $sId).'">'
                     
-                    .'<form action="'.getNewQs(array()).'" class="form-inline" method="POST" style="float: right;">'
+                    .'<form action="'.getNewQs([]).'" class="form-inline" method="POST" style="float: right;">'
                     . '<input type="hidden" name="appaction" value="deleteserver"/>'
                     . '<input type="hidden" name="group" value="'.$sGroup.'"/>'
                     . '<input type="hidden" name="oldlabel" value="'.$sId.'"/>'
@@ -547,7 +457,7 @@ class configData {
             . ($sId ? ' style="display: none;"' : '')
             . '>'
             // . '<br>'
-            . '<form action="'.getNewQs(array()).'" class="form-horizontal" method="POST" >'
+            . '<form action="'.getNewQs([]).'" class="form-horizontal" method="POST" >'
             . '<input type="hidden" name="appaction" value="'.$sAppAction.'"/>'
             . '<input type="hidden" name="group" value="'.$sGroup.'"/>'
             . ($sId ? '<input type="hidden" name="oldlabel" value="'.$sId.'"/>' : '')
@@ -575,7 +485,7 @@ class configData {
         
         if($sId){
             /*
-            $sHtml.='<form action="'.getNewQs(array()).'" class="form-inline" method="POST" style="float: left;">'
+            $sHtml.='<form action="'.getNewQs([]).'" class="form-inline" method="POST" style="float: left;">'
             . '<input type="hidden" name="appaction" value="deleteserver"/>'
             . '<input type="hidden" name="group" value="'.$sGroup.'"/>'
             . '<input type="hidden" name="oldlabel" value="'.$sId.'"/>'

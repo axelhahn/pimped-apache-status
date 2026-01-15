@@ -14,7 +14,7 @@ class configServer {
      * all Servers
      * @var array
      */
-    protected $_aServer = array();
+    protected $_aServer = [];
     
     /**
      * id of the config file
@@ -44,20 +44,20 @@ class configServer {
     // private functions
     // ----------------------------------------------------------------------
 
-    private function _initMinimalConfig() {
-        $this->_aServer=array();
+    private function _initMinimalConfig(): void {
+        $this->_aServer=[];
         $sDefaultGroup='default';
         $sDefaultServer='localhost';
         
-        $aResult=$this->addGroup(array('label'=>$sDefaultGroup));
+        $aResult=$this->addGroup(['label'=>$sDefaultGroup]);
         if (isset($aResult['error'])){
             die($aResult['error']);
         }
 
-        $aResult=$this->addServer(array(
+        $aResult=$this->addServer([
             'label'=>$sDefaultServer,
             'group'=>$sDefaultGroup
-            ));
+            ]);
         if (isset($aResult['error'])){
             die($aResult['error']);
         }
@@ -68,7 +68,7 @@ class configServer {
      * load serverver config
      * @return boolean
      */
-    private function _load() {
+    private function _load(): bool {
         $this->_aServer = $this->_oCfg->getFullConfig();
         if (!$this->_aServer || !count($this->_aServer)){
             $this->_initMinimalConfig();
@@ -81,7 +81,7 @@ class configServer {
      * save 
      * @return boolean
      */
-    private function _save() {
+    private function _save(): mixed {
         $this->_sort();
         
         return $this->_oCfg->set($this->_aServer);
@@ -92,14 +92,14 @@ class configServer {
      * sort 
      * @return boolean
      */
-    private function _sort() {
+    private function _sort(): bool {
         if(!count($this->_aServer)){
             $this->_initMinimalConfig();
             return true;
         }
         ksort($this->_aServer);
         foreach(array_keys($this->_aServer) as $sGroup){
-            if(array_key_exists('servers', $this->_aServer[$sGroup])){
+            if($this->_aServer[$sGroup]['servers']??false){
                 ksort($this->_aServer[$sGroup]['servers']);
             }
         }
@@ -114,11 +114,11 @@ class configServer {
      * get full array of server config with groups and servers
      * @return array
      */
-    public function get() {
+    public function get(): array {
         return $this->_aServer;
     }
 
-    public function getDivId($sGroup, $sServername=false){
+    public function getDivId($sGroup, $sServername=false): string{
         return $sServername ? 'div-server-'.md5($sGroup . $sServername)
                 :'div-group-'.md5($sGroup)
                 ;
@@ -128,7 +128,7 @@ class configServer {
      * get the existing group ids as a flat array
      * @return array
      */
-    public function getGroups() {
+    public function getGroups(): array {
         return array_keys($this->_aServer);
     }
 
@@ -139,13 +139,12 @@ class configServer {
      * @param string $sGroup  name of group
      * @return array
      */
-    public function getServers($sGroup) {
-        if (!array_key_exists($sGroup, $this->_aServer) ) {            
-            return array('result'=>false,'error'=>'group '.$sGroup.' does not exist.');
+    public function getServers(string $sGroup): array {
+        if (!($this->_aServer[$sGroup]??false) ) {
+            return ['result'=>false,'error'=>'group '.$sGroup.' does not exist.'];
         }
-        if (!array_key_exists('servers', $this->_aServer[$sGroup])
-        ) {
-            return array();
+        if (!($this->_aServer[$sGroup]['servers']??false)) {
+            return [];
         }
         return array_keys($this->_aServer[$sGroup]['servers']);
     }
@@ -159,27 +158,22 @@ class configServer {
      * @param string $sId     name of server
      * @return array
      */
-    public function getServerDetails($sGroup,$sId) {
-        if (!array_key_exists($sGroup, $this->_aServer) ) {            
-            return array('result'=>false,'error'=>'group '.$sGroup.' does not exist.');
+    public function getServerDetails($sGroup,$sId): array {
+        if (!($this->_aServer[$sGroup]??false) ) {
+            return ['result'=>false,'error'=>'group '.$sGroup.' does not exist.'];
         }
-        if (!array_key_exists('servers', $this->_aServer[$sGroup])
-                || !array_key_exists($sId, $this->_aServer[$sGroup]['servers'])
+        if (!($this->_aServer[$sGroup]['servers']??false)
+                || !($this->_aServer[$sGroup]['servers'][$sId]??false)
         ) {
-            return array('result'=>false,'error'=>'server '.$sId.' does not exist.');
+            return ['result'=>false,'error'=>'server '.$sId.' does not exist.'];
         }
 
         $aReturn=$this->_aServer[$sGroup]['servers'][$sId];
         
-        if (!array_key_exists('label', $aReturn)){
-            $aReturn['label']=$sId;
-        }
-        if (!array_key_exists('status-url', $aReturn)){
-            $aReturn['status-url']='http://'.$sId.'/server-status';
-        }
-        if (!array_key_exists('userpwd', $aReturn)){
-            $aReturn['userpwd']='';
-        }
+        $aReturn['label']??=$sId;
+        $aReturn['status-url']??='http://'.$sId.'/server-status';
+        $aReturn['userpwd']??='';
+
         return $aReturn;
     }
     // ----------------------------------------------------------------------
@@ -194,9 +188,9 @@ class configServer {
      * @param array $aItem
      * @return array
      */
-    public function addGroup($aItem){
-        if(array_key_exists($aItem['label'], $this->_aServer)){
-            return array('result'=>false,'error'=>'group already exists.');
+    public function addGroup($aItem): array{
+        if($this->_aServer[$aItem['label']]??false){
+            return ['result'=>false,'error'=>'group already exists.'];
         }
         
         // --- create new group item
@@ -204,7 +198,7 @@ class configServer {
         
         // --- save
         $this->_save();
-        return array('result'=>true);
+        return ['result'=>true];
     }
     
     /**
@@ -214,12 +208,12 @@ class configServer {
      * @param bool  $bSave  flag save or not; is set to false in set() method
      * @return array
      */
-    public function deleteGroup($aItem, $bSave=true){
-        if(!array_key_exists('oldlabel', $aItem)){
-            return array('result'=>false, 'error'=>'old label is required');
+    public function deleteGroup(array $aItem, $bSave=true): array{
+        if(!$aItem['oldlabel']??false){
+            return ['result'=>false, 'error'=>'old label is required'];
         }
-        if(!array_key_exists($aItem['oldlabel'], $this->_aServer)){
-            return array('result'=>false, 'error'=>'group ['.$aItem['oldlabel'].'] does not exist');
+        if(!($this->_aServer[$aItem['oldlabel']]??false)){
+            return ['result'=>false, 'error'=>'group ['.$aItem['oldlabel'].'] does not exist'];
         }
         
         // remove key
@@ -229,7 +223,7 @@ class configServer {
         if ($bSave){
             $this->_save();
         }
-        return array('result'=>true);
+        return ['result'=>true];
         
     }
     /**
@@ -238,12 +232,12 @@ class configServer {
      * @param array $aItem
      * @return array
      */
-    public function setGroup($aItem){
+    public function setGroup($aItem): array{
         if(!isset($aItem['oldlabel'])){
-            return array('result'=>false, 'error'=>'old label is required');
+            return ['result'=>false, 'error'=>'old label is required'];
         }
         if(!isset($this->_aServer[$aItem['oldlabel']])){
-            return array('result'=>false, 'error'=>'server '.$aItem['oldlabel'].' does not exist');
+            return ['result'=>false, 'error'=>'server '.$aItem['oldlabel'].' does not exist'];
         }
         
         $aTmp=$this->_aServer[$aItem['oldlabel']];
@@ -259,7 +253,7 @@ class configServer {
         
         // --- save
         $this->_save();
-        return array('result'=>true);
+        return ['result'=>true];
     }
     
     // ----- SERVER
@@ -270,22 +264,16 @@ class configServer {
      * @param array $aItem
      * @return array
      */
-    private function _checkServerItem($aItem){
+    private function _checkServerItem(array $aItem): array{
         // --- checks
-        if(!array_key_exists('group', $aItem)
-          || !array_key_exists('label', $aItem)
-          || !$aItem['group']
-          || !$aItem['label']
-        ){
-            return array('result'=>false,'error'=>'group and label are required');
+        if(!($aItem['group']??false) || !($aItem['label']??false) ){
+            return ['result'=>false,'error'=>'group and label are required'];
         }
-        if(!array_key_exists($aItem['group'], $this->_aServer)){
-            return array('result'=>false,'error'=>'given group is invalid.');
+        if(!($this->_aServer[$aItem['group']??false])){
+            return ['result'=>false,'error'=>'given group is invalid.'];
         }
-        if(!array_key_exists('servers', $this->_aServer[$aItem['group']])){
-            $this->_aServer[$aItem['group']]['servers']=array();
-        }
-        return array('result'=>true);
+        $this->_aServer[$aItem['group']]['servers']??=[];
+        return ['result'=>true];
     }
     
     /**
@@ -298,26 +286,24 @@ class configServer {
      *                      - userpwd       optional basic authentication in syntax "user:password"
      * @return array
      */
-    public function addServer($aItem){
-        $aResult=$this->_checkServerItem($aItem, 1);
+    public function addServer(array $aItem): array{
+        $aResult=$this->_checkServerItem($aItem);
         if (!$aResult['result']){
             return $aResult;
         }
-        if(array_key_exists($aItem['label'], $this->_aServer[$aItem['group']]['servers'])){
-            return array('result'=>false,'error'=>'given server label already exists.');
+        if(( $this->_aServer[$aItem['group']]['servers'][$aItem['label']]??false )){
+            return ['result'=>false,'error'=>'given server label already exists.'];
         }
         
         // --- create new server item
-        foreach (array("label", "status-url", "userpwd") as $sKey){
-            if(array_key_exists($sKey, $aItem) && $aItem[$sKey]){
-                $aServer[$sKey]=$aItem[$sKey];
-            }
+        foreach (["label", "status-url", "userpwd"] as $sKey){
+            $aServer[$sKey]=$aItem[$sKey]??null;
         }
         $this->_aServer[$aItem['group']]['servers'][$aItem['label']]=$aServer;
         
         // --- save
         $this->_save();
-        return array('result'=>true);
+        return ['result'=>true];
     }
     
     /**
@@ -327,12 +313,12 @@ class configServer {
      *                      "oldlabel"
      * @return array
      */
-    public function deleteServer($aItem){
-        if(!array_key_exists('oldlabel', $aItem)){
-            return array('result'=>false, 'error'=>'old label is required');
+    public function deleteServer(array $aItem): array{
+        if(!($aItem['oldlabel']??false)){
+            return ['result'=>false, 'error'=>'old label is required'];
         }
-        if(!array_key_exists($aItem['oldlabel'], $this->_aServer[$aItem['group']]['servers'])){
-            return array('result'=>false, 'error'=>'old label does not exist');
+        if(!( $this->_aServer[$aItem['group']]['servers'][$aItem['oldlabel']]??false )){
+            return ['result'=>false, 'error'=>'old label does not exist'];
         }
         
         // remove key
@@ -340,8 +326,7 @@ class configServer {
         
         // --- save
         $this->_save();
-        return array('result'=>true);
-        
+        return ['result'=>true];
     }
 
     /**
@@ -350,7 +335,7 @@ class configServer {
      * @param array $aItem
      * @return array
      */
-    public function setServer($aItem){
+    public function setServer(array $aItem): array{
         // --- checks
         $aResult=$this->_checkServerItem($aItem);
         if (!$aResult['result']){
@@ -365,15 +350,13 @@ class configServer {
         
         // --- create new server item
         foreach (array("label", "status-url", "userpwd") as $sKey){
-            if(array_key_exists($sKey, $aItem) && $aItem[$sKey]){
-                $aServer[$sKey]=$aItem[$sKey];
-            }
+            $aServer[$sKey]=$aItem[$sKey]??null;
         }
         $this->_aServer[$aItem['group']]['servers'][$aItem['label']]=$aServer;
         
         // --- save
         $this->_save();
-        return array('result'=>true);
+        return ['result'=>true];
     }
     
     
@@ -386,10 +369,9 @@ class configServer {
      * get html code for a form for new/ update a group
      * 
      * @param string $sGroup  name of the group
-     * @param string $sId     id of the server; leave empty for NEW
-     * @return string
+     * @return string html code
      */
-    public function renderFormGroup($sGroup=false){
+    public function renderFormGroup(string $sGroup=''): string{
         global $aLangTxt, $aCfg;
         $bNew=!($sGroup>'');
         
@@ -471,14 +453,14 @@ class configServer {
      * @param string $sId     id of the server; leave empty for NEW
      * @return string
      */
-    public function renderFormServer($sGroup, $sId=false){
+    public function renderFormServer($sGroup, $sId=false): string{
         global $aLangTxt, $aCfg;
         $bNew=!($sId>'');
         
         $sHtml='';
         $sFormId='divfrm-'.md5($sGroup ).'-'.md5($sId);
         
-        $aSrv=         $bNew ? array(): $this->getServerDetails($sGroup, $sId);
+        $aSrv=         $bNew ? []: $this->getServerDetails($sGroup, $sId);
         $sSubmitClass= $bNew ? 'btn-success' : 'btn-default';
         // $sSubmitClass= 'btn-success';
         $sAppAction=   $bNew ? 'addserver' : 'updateserver';
@@ -521,7 +503,7 @@ class configServer {
 
         foreach (array("label", "status-url", "userpwd") as $sKey){
             $sFieldId='srv-'.md5($sGroup ).'-'.md5($sId).'-'.md5($sKey);
-            $sValue=(array_key_exists($sKey, $aSrv) ? $aSrv[$sKey] : '') ;
+            $sValue=$aSrv[$sKey]??'';
             $iSize=$sKey=="status-url" ? 40 : 20;
             $sHtml.='<div class="form-group">'
                         . '<label for="'.$sFieldId.'" class="col-sm-2 ">'.$aLangTxt['AdminLblServers-'.$sKey].'</label>'

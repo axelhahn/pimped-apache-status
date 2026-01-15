@@ -12,41 +12,40 @@ class Page {
 
     /**
      * output type of content
-     * @var array
+     * @var string
      */
-    private $sType = 'html';
+    private string $sType = 'html';
 
     /**
      * array of strings for http response header
      * @var array
      */
-    private $aResponseHeader = array();
+    private array $aResponseHeader = [];
 
     /**
      * Replacements in the template
      * @var array
      */
-    private $aReplace = array(
+    private array $aReplace = [
         '{{HEADER}}' => '',
         '{{CONTENT}}' => '',
         '{{FOOTER}}' => '',
         '{{JSONREADY}}' => '',
-    );
+    ];
 
     /**
      * constructor (it does nothing)
-     * @return boolean (true)
+     * @return void
      */
     public function __construct() {
         $this->setOutputtype();
-        return true;
     }
 
     /**
      * wrap on document ready instructions in jQuery style
-     * @return type 
+     * @return string 
      */
-    private function _finalizeJsOnReady() {
+    private function _finalizeJsOnReady(): string {
         return $this->aReplace["{{JSONREADY}}"] = '
             <script>
                 $(document).ready(function() {
@@ -63,31 +62,31 @@ class Page {
      * get current page content
      * @return string
      */
-    public function getContent() {
+    public function getContent(): string {
         return $this->aReplace['{{CONTENT}}'];
     }
     
     /**
      * get current footer
-     * @return type
+     * @return string
      */
-    public function getFooter() {
+    public function getFooter(): string {
         return $this->aReplace['{{FOOTER}}'];
     }
 
     /**
      * get current header in response body
-     * @return type
+     * @return string
      */
-    public function getHeader() {
+    public function getHeader(): string {
         return $this->aReplace['{{HEADER}}'];
     }
 
     /**
      * get on ready javascript instructions
-     * @return type¨
+     * @return string
      */
-    public function getJsOnReady() {
+    public function getJsOnReady(): string {
         return $this->aReplace['{{JSONREADY}}'];
     }
         
@@ -96,7 +95,7 @@ class Page {
      * get output type
      * @return string
      */
-    public function getOutputtype() {
+    public function getOutputtype(): string {
         return $this->sType;
     }
 
@@ -107,79 +106,79 @@ class Page {
     /**
      * add content
      * @param string $s  additional html code for the body
-     * @return boolean
+     * @return string
      */
-    public function addContent($s) {
+    public function addContent(string $s): string {
         return $this->aReplace['{{CONTENT}}'] .= $s;
     }
     
     /**
      * add javascript for on ready execution
      * @param string $s  javascript code
-     * @return boolean
+     * @return string
      */
-    public function addJsOnReady($s) {
+    public function addJsOnReady(string $s): string {
         return $this->aReplace['{{JSONREADY}}'] .= $s;
     }
 
     /**
      * add a http response header line
      * @param string $s
-     * @return boolean
+     * @return string
      */
-    public function addResponseHeader($s) {
+    public function addResponseHeader(string $s): string {
         return $this->aResponseHeader[] = $s;
     }
 
     /**
      * set rel dir of an application
      * @param string $s  html code
-     * @return boolean
+     * @return string
      */
-    public function setAppDir($s) {
+    public function setAppDir(string $s): string {
         return $this->aReplace['{{APPDIR}}'] = $s;
     }
     /**
      * set html body; it replaces old content
      * @param string $s  html code
-     * @return boolean
+     * @return string
      */
-    public function setContent($s) {
+    public function setContent(string $s): string {
         return $this->aReplace['{{CONTENT}}'] = $s;
     }
     /**
      * set footer in html body; it replaces old content
      * @param string $s  html code
-     * @return boolean
+     * @return string
      */
-    public function setFooter($s) {
+    public function setFooter(string $s): string {
         return $this->aReplace['{{FOOTER}}'] = $s;
     }
 
     /**
      * set html header; it replaces old content
      * @param string $s  html code
-     * @return boolean
+     * @return string
      */
-    public function setHeader($s) {
+    public function setHeader(string $s): string {
         return $this->aReplace['{{HEADER}}'] = $s;
     }
 
     /**
      * set javascript code on ready; it replaces old content
      * @param string $s  javascript code
-     * @return boolean
+     * @return string
      */
-    public function setJsOnReady($s) {
+    public function setJsOnReady(string $s): string {
         return $this->aReplace['{{JSONREADY}}'] = $s;
     }
     
     /**
      * set output type of response
      * @param string $sOutputType
-     * @return boolean
+     * @return string
      */
-    public function setOutputtype($sOutputType = 'html') {
+    public function setOutputtype(string $sOutputType = 'html'): string {
         return $this->sType = $sOutputType;
     }
 
@@ -187,9 +186,9 @@ class Page {
      * set a (new) replacement
      * @param string  $s         search text, i.e. "{{EXAMPLE}}"
      * @param string  $sReplace  replacement
-     * @return boolean
+     * @return string
      */
-    public function setReplacement($s, $sReplace) {
+    public function setReplacement(string $s, string $sReplace): string {
         return $this->aReplace[$s] = $sReplace;
     }
 
@@ -200,11 +199,11 @@ class Page {
 
     /**
      * send http reponse headers and built the response body
-     * @return type
+     * @return string
      */
-    public function render() {
-        $aS = array(); // search
-        $aR = array(); // replace
+    public function render(): string {
+        $aS = []; // search
+        $aR = []; // replace
 
         $this->_finalizeJsOnReady();
 
