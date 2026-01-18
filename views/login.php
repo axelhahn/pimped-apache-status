@@ -18,7 +18,7 @@ if (!isset($_SERVER['HTTPS'])){
 }
 
 $sHtml=''
-        .(isset($_SESSION['lastUser']) && $_SESSION['lastUser']
+        .($_SESSION['lastUser']??false
             ? 
                 '<div class="hintbox">' . $aLangTxt['lblLoginIsAuthenticated'] . '</div>'
                 .'<br><a href="?logout" class="btn btn-danger">'

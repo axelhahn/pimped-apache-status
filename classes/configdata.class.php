@@ -54,9 +54,9 @@ class configData {
 
     /**
      * internally used confighandler object
-     * @var confighandler
+     * @var axelhahn\confighandler
      */
-    protected confighandler $_oCfg;
+    protected axelhahn\confighandler $_oCfg;
 
     // ----------------------------------------------------------------------
     // CONSTRUCTOR
@@ -66,7 +66,7 @@ class configData {
      * init method; it loads the server config
      */
     public function __construct() {
-        $this->_oCfg = new confighandler();
+        $this->_oCfg = new axelhahn\confighandler();
         $this->_load();
     }
 
@@ -410,98 +410,5 @@ class configData {
         }
         return $sHtml;
     }
-
-    /**
-     * get html code for a form for new/ update a single server
-     * @see getGroups() 
-     * @see getServers($sGroup)
-     * 
-     * @param string $sGroup  name of the group
-     * @param string $sId     id of the server; leave empty for NEW
-     * @return string
-     */
-    public function renderFormServer__UNUSED($sGroup, $sId=false){
-        global $aLangTxt;
-        $bNew=!($sId>'');
-        
-        $sHtml='';
-        $sFormId='divfrm-'.md5($sGroup ).'-'.md5($sId);
-        
-        $aSrv=         $bNew ? [] : $this->getServerDetails($sGroup, $sId);
-        $sSubmitClass= $bNew ? 'btn-success' : 'btn-default';
-        // $sSubmitClass= 'btn-success';
-        $sAppAction=   $bNew ? 'addserver' : 'updateserver';
-        
-        if($sId){
-            $sHtml.='<div class="divServer" id="'.$this->getDivId($sGroup, $sId).'">'
-                    
-                    .'<form action="'.getNewQs([]).'" class="form-inline" method="POST" style="float: right;">'
-                    . '<input type="hidden" name="appaction" value="deleteserver"/>'
-                    . '<input type="hidden" name="group" value="'.$sGroup.'"/>'
-                    . '<input type="hidden" name="oldlabel" value="'.$sId.'"/>'
-                    . '<button type="submit" class="btn btn-danger" title="'.$aLangTxt['ActionDeleteHint'].'" '
-                        . 'onclick="return confirm(\''.sprintf($aLangTxt['AdminLblServers-ConfirmDelete'], $aSrv['label'].'; '. $aSrv['status-url']) .'\');"'
-                        . '><i class="fa-solid fa-trash"></i> '.$aLangTxt['ActionDelete']
-                    . '</button>'
-                    . '</form>'
-                    
-                    . '<button class="btn btn-default" onclick="$(\'#'.$sFormId.'\').slideToggle();">'
-                    . '<i class="fa-solid fa-pencil-alt"></i> ' . $aLangTxt['ActionEdit']
-                    . '</button>'
-                    . ' <strong><i class="fa-regular fa-hdd"></i> '.$aSrv['label'].'</strong>'
-                    . ' ('.$aSrv['status-url'].')'
-                    . ''
-                    ;
-        }
-        $sHtml.='<div id="'.$sFormId.'" class="divFrm"'
-            . ($sId ? ' style="display: none;"' : '')
-            . '>'
-            // . '<br>'
-            . '<form action="'.getNewQs([]).'" class="form-horizontal" method="POST" >'
-            . '<input type="hidden" name="appaction" value="'.$sAppAction.'"/>'
-            . '<input type="hidden" name="group" value="'.$sGroup.'"/>'
-            . ($sId ? '<input type="hidden" name="oldlabel" value="'.$sId.'"/>' : '')
-            ;
-
-        foreach (array("label", "status-url", "userpwd") as $sKey){
-            $sFieldId='srv-'.md5($sGroup ).'-'.md5($sId).'-'.md5($sKey);
-            $sValue=(array_key_exists($sKey, $aSrv) ? $aSrv[$sKey] : '') ;
-            $iSize=$sKey=="status-url" ? 40 : 20;
-            $sHtml.='<div class="form-group">'
-                        . '<label for="'.$sFieldId.'" class="col-sm-2 ">'.$aLangTxt['AdminLblServers-'.$sKey].'</label>'
-                        . '<div class="col-sm-3">'
-                            . '<input type="text" class="form-control" id="'.$sFieldId.'" name="'.$sKey.'" size="'.$iSize.'" value="'.$sValue.'" placeholder="" />'
-                        . '</div>'
-                        . '<div class="col-sm-7">'
-                            . $aLangTxt['AdminLblServers-'.$sKey.'-Hint']
-                        . '</div>'
-                    . '</div>';
-        }
-        
-        $sHtml.='<button type="submit" class="btn '.$sSubmitClass.'" title="'.$aLangTxt['ActionOKHint'].'"'
-                . '><i class="fa-solid fa-check"></i> '.$aLangTxt['ActionOK'].'</button>'
-                . '</form>'
-                ;
-        
-        if($sId){
-            /*
-            $sHtml.='<form action="'.getNewQs([]).'" class="form-inline" method="POST" style="float: left;">'
-            . '<input type="hidden" name="appaction" value="deleteserver"/>'
-            . '<input type="hidden" name="group" value="'.$sGroup.'"/>'
-            . '<input type="hidden" name="oldlabel" value="'.$sId.'"/>'
-            . '<button type="submit" class="btn btn-danger" title="'.$aLangTxt['ActionDeleteHint'].'"'
-            . '><i class="fa-solid fa-trash"></i> '.$aLangTxt['ActionDelete'].'</button>'
-            . '</form></div>'
-            ; 
-             * 
-             */           
-            $sHtml.='</div>';
-        } else {
-            $sHtml.='<div style="clear: both;"></div>';
-        }
-        $sHtml.='</div>';
-        return $sHtml;
-    }
-
 
 }

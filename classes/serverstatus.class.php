@@ -209,6 +209,7 @@ class ServerStatus {
                     }
 
                     // START extract Method from column "Request"
+                    $sR = '';
                     if ($aTmp['Request']??false) {
                         $sR = preg_replace('/([A-Z]*)\ .*/', "$1", $aTmp['Request']);
                     }

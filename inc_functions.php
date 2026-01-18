@@ -16,9 +16,9 @@
  * @param array $aQueryParams
  * @return string
  */
-function getNewQs($aQueryParams = array()) {
+function getNewQs(array $aQueryParams = []): string {
     $s = false;
-    $aDelParams = array("doinstall");
+    $aDelParams = ["doinstall"];
 
     if ($_GET) {
         $aDefaults = $_GET;
@@ -31,22 +31,23 @@ function getNewQs($aQueryParams = array()) {
     }
 
     foreach ($aQueryParams as $var => $value) {
-        if ($value)
+        if ($value) {
             $s .= "&amp;" . $var . "=" . urlencode($value);
+        }
     }
-    $s = "?" . $s;
-    return $s;
+    return "?$s";
 }
 
 
 /**
  * make an http get request and return the response body
- * @global array   $oLog         logger class
+ * @global object   $oLog         logger class
+ * 
  * @param string   $url          url to fetch
  * @param boolean  $bHeaderOnly  send header only
- * @return string
+ * @return bool|string
  */
-function httpGet($url, $bHeaderOnly = false) {
+function httpGet(string $url, bool $bHeaderOnly = false): bool|string {
     global $oLog;
     $ch = curl_init($url);
     $oLog->add(__FUNCTION__ . "($url, $bHeaderOnly) - START");
@@ -64,13 +65,14 @@ function httpGet($url, $bHeaderOnly = false) {
     $res = curl_exec($ch);
     curl_close($ch);
     $oLog->add(__FUNCTION__ . "($url, $bHeaderOnly) - done.");
-    return ($res);
+    return $res;
 }
 
 /**
  * check authentication if a user and password were configured
  * @global array $aCfg      configuration settings
  * @global array $aLangTxt  language specific texts
+ * 
  * @return boolean
  */
 function checkAuth() {
@@ -117,12 +119,13 @@ function checkAuth() {
 /**
  * search temp directory using tmpdir in config. if false then use system
  * temp dir
- * @global array $aCfg      configuration settings
- * @global array $oLog      logger class
+ * @global array  $aCfg      configuration settings
+ * @global object $oLog      logger class
+ * 
  * @param bool  $bForce  force check and ignore ttl
- * @return type
+ * @return string
  */
-function getTempdir(){
+function getTempdir(): string{
     global $aCfg;
     global $oLog;
     $oLog->add(__FUNCTION__ . '() start');
@@ -152,13 +155,15 @@ function getTempdir(){
  *     [download] => https://sourceforge.net/projects/pimpapachestat/files/latest/download
  * )
  * 
- * @global array $aCfg      configuration settings
- * @global array $aEnv      environment
- * @global array $aLangTxt  language specific texts
- * @global array $oLog      logger class
+ * @global array  $aCfg      configuration settings
+ * @global array  $aEnv      environment
+ * @global array  $aLangTxt  language specific texts
+ * @global object $oLog      logger class
+ * 
+ * @param bool  $bForce  force check and ignore ttl
  * @return array
  */
-function getUpdateInfos($bForce = false){
+function getUpdateInfos(bool $bForce = false): array{
     global $aCfg;
     global $aEnv;
     global $aLangTxt;    
@@ -224,14 +229,15 @@ function getUpdateInfos($bForce = false){
 }
 /**
  * check for an update of the product
- * @global array $aCfg      configuration settings
- * @global array $aEnv      environment
- * @global array $aLangTxt  language specific texts
- * @global array $oLog      logger class
+ * @global array  $aCfg      configuration settings
+ * @global array  $aEnv      environment
+ * @global array  $aLangTxt  language specific texts
+ * @global object $oLog      logger class
+ * 
  * @param bool  $bForce  force check and ignore ttl
- * @return type
+ * @return string
  */
-function checkUpdate($bForce = false) {
+function checkUpdate(bool $bForce = false) {
     global $aCfg;
     global $aEnv;
     global $aLangTxt;
@@ -269,16 +275,17 @@ function checkUpdate($bForce = false) {
                 . '</span>';
     }
 
-    return '<div id="checkversion">' . $sResult . '</div>';
+    return "<div id=\"checkversion\">$sResult</div>";
 }
 
 /**
  * render head section of html page
  * @global array $aEnv      environment
- * @param type $aLangTxt
+ * 
+ * @param array  $aLangTxt
  * @return string
  */
-function getHtmlHead($aLangTxt) {
+function getHtmlHead(array $aLangTxt): string {
     global $aEnv;
     
     require_once(__DIR__ . '/classes/cdnorlocal.class.php');

@@ -1,5 +1,5 @@
 <?php
-$aLangTxt = array(
+$aLangTxt = [
 
     'id'=>'deutsch',
     
@@ -541,4 +541,4 @@ $aLangTxt = array(
         'cfg-wrongitem'=>'!!falscher Key!!',
         'cfg-'=>'',
     
-);
+];

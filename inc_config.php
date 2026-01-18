@@ -17,7 +17,7 @@ global $sJsOnReady;
 global $aLangTxt;
 
 $sJsOnReady = '';
-$aServers2Collect = array();
+$aServers2Collect = [];
 $sGetStarted = '<br>see documentation <a href="https://www.axel-hahn.de/docs/apachestatus/get_started.htm">get started<a>.';
 
 

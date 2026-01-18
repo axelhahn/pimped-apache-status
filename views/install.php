@@ -8,18 +8,18 @@
 $sUser=($_POST && isset($_POST['username'])) ? $_POST['username'] : false;
 $sContent='';
 $sDummyUser='nouserprotection';
-$aTC = array();
+$aTC = [];
 if(file_exists(__DIR__ . '/../config/config_user.php')){
-    $aTC[] = array(
+    $aTC[] = [
         'tab'=>$aLangTxt['lblInitialSetupTab0'],
         'content'=>$aLangTxt['lblHelplblInitialSetupTab0']
-    );
+    ];
 }
 if (!isset($_SERVER['HTTPS'])){
     $oMsg->add($aLangTxt['error-no-ssl'], 'error');
 }
 
-$aTC[] = array(
+$aTC[] = [
     'tab'=>$aLangTxt['lblInitialSetupTab1'],
     'content'=>$aLangTxt['lblHelplblInitialSetupTab1']
         . '<br><br>'
@@ -46,8 +46,8 @@ $aTC[] = array(
     . '<div style="clear: both"></div>'
     . '</form>'
     ,
-);
-$aTC[] = array(
+];
+$aTC[] = [
     'tab'=>$aLangTxt['lblInitialSetupTab2'],
     'content'=>$aLangTxt['lblHelplblInitialSetupTab2']
         . '<br><br>'
@@ -57,7 +57,7 @@ $aTC[] = array(
                 . '<input name="pw2" type="hidden" value="" >'
         . '<button class="btn btn-primary" type="submit"><i class="fa-solid fa-check"></i> '.$aLangTxt['lblInitialSetupTab2'].'</button>'
     . '</form>'
-);
+];
 
 $sForm=(is_array($aUserCfg) && count($aUserCfg)) 
     ? $aLangTxt['lblInitialSetupAbort'] // Sorry, the initial setup was executed already. 
@@ -75,12 +75,12 @@ if(is_array($_POST) && count($_POST)){
         )
     ){
         $dummy=$oCfg->getFullConfig("config_user");
-        $aUsersetup=array(
-            'auth'=>array(
+        $aUsersetup=[
+            'auth'=>[
                 'user'=>$_POST['username']
-            )
-        );
-        if ($_POST['pw1']){
+            ]
+        ];
+        if ($_POST['pw1']??false){
             $aUsersetup['auth']['password']=md5($_POST['pw1']);
         } else {
             $aUsersetup['auth']=false;
