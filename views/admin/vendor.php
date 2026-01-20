@@ -6,11 +6,11 @@ if (!isset($adminindex)){
     require_once(__DIR__ . '/../../classes/cdnorlocal-admin.class.php');
     
     $sVendorUrl=(strpos($_SERVER['REQUEST_URI'], '/admin/?') ? '.' : '') . './vendor/';
-    $oCdn = new axelhahn\cdnorlocaladmin(array(
+    $oCdn = new axelhahn\cdnorlocaladmin([
         'vendordir'=>__DIR__ . '/../../vendor', 
         'vendorurl'=>$sVendorUrl, 
         'debug'=>0
-    ));
+    ]);
     $oCdn->setLibs($aEnv['vendor']);
     
     // --- donwload or delete a library?
@@ -22,7 +22,7 @@ if (!isset($adminindex)){
         <div class="subh3">
             <div class="hintbox">' . $aLangTxt["AdminHintVendor"] . '</div>'
             
-            . ($sLib2delete.$sLib2download ? '<a href="?'. getNewQs(array('delete'=>'', 'download'=>'')).'" class="btn btn-default">OK</a>' : '')
+            . ($sLib2delete.$sLib2download ? '<a href="?'. getNewQs(['delete'=>'', 'download'=>'']).'" class="btn btn-default">OK</a>' : '')
 
             . '<table class="dataTable table-hover">'
             . '<thead>'
@@ -64,13 +64,13 @@ if (!isset($adminindex)){
                 .'<td>'
                 .($aLib['islocal']
                 
-                    ? '</td><td><button onclick="location.href=\''. getNewQs(array('delete'=>$aLib['lib'], 'version'=>$aLib['version'])).'\';" class="btn btn-danger"'
+                    ? '</td><td><button onclick="location.href=\''. getNewQs(['delete'=>$aLib['lib'], 'version'=>$aLib['version']]).'\';" class="btn btn-danger"'
                         . ' title="'.$aLangTxt['ActionDeleteHint'].'"'
                         . '>'.$aCfg['icons']['actionDelete'].$aLangTxt['ActionDelete'].'</button></td>'
                         .'</td>'
                 
                     : ''
-                            .'<button onclick="location.href=\''. getNewQs(array('download'=>$aLib['lib'])).'\';" class="btn btn-success"'
+                            .'<button onclick="location.href=\''. getNewQs(['download'=>$aLib['lib']]).'\';" class="btn btn-success"'
                         . ' title="'.$aLangTxt['ActionDownloadHint'].'"'
                         . '>'.$aCfg['icons']['actionDownload'].$aLangTxt['ActionDownload'].'</a></td><td></td>'
                 )

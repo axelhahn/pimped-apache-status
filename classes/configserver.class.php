@@ -194,7 +194,7 @@ class configServer {
         }
         
         // --- create new group item
-        $this->_aServer[$aItem['label']]=array('servers'=>array());
+        $this->_aServer[$aItem['label']]=['servers'=>[]];
         
         // --- save
         $this->_save();
@@ -405,7 +405,7 @@ class configServer {
         $sHtml.='<div id="'.$sFormId.'" class="divFrm'.($sGroup ? '' : ' divNew').'"'. '>'
                 .($sGroup ? '' : '<p>' . $aLangTxt['AdminServersLblAddGroup'] . '</p>')
             // . '<br>'
-            . '<form action="'.getNewQs(array()).'" class="form-inline" method="POST" style="float: left;">'
+            . '<form action="'.getNewQs([]).'" class="form-inline" method="POST" style="float: left;">'
             . '<input type="hidden" name="appaction" value="'.$sAppAction.'"/>'
             . ($sGroup ? '<input type="hidden" name="oldlabel" value="'.$sGroup.'"/>' : '')
             . '<div class="form-group">'
@@ -420,7 +420,7 @@ class configServer {
         
         // delete button for a group: only if the group has no servers below
         if($sGroup && !count($this->getServers($sGroup))){
-            $sHtml.='<form action="'.getNewQs(array()).'" class="form-inline" method="POST">'
+            $sHtml.='<form action="'.getNewQs([]).'" class="form-inline" method="POST">'
             . '<input type="hidden" name="appaction" value="deletegroup"/>'
             . '<input type="hidden" name="oldlabel" value="'.$sGroup.'"/>'
             . '<button type="submit" class="btn btn-danger" title="'.$aLangTxt['ActionDeleteHint'].'"'
@@ -468,7 +468,7 @@ class configServer {
         if($sId){
             $sHtml.='<div class="divServer" id="'.$this->getDivId($sGroup, $sId).'">'
                     
-                    .'<form action="'.getNewQs(array()).'" class="form-inline" method="POST" style="float: right;">'
+                    .'<form action="'.getNewQs([]).'" class="form-inline" method="POST" style="float: right;">'
                     . '<input type="hidden" name="appaction" value="deleteserver"/>'
                     . '<input type="hidden" name="group" value="'.$sGroup.'"/>'
                     . '<input type="hidden" name="oldlabel" value="'.$sId.'"/>'
@@ -495,7 +495,7 @@ class configServer {
         $sHtml.='<div id="'.$sFormId.'" class="divFrm'.($sId ? '' : ' divNew').'">'
                 .($sId ? '' : '<p>' . $aLangTxt['AdminServersLblAddServer'] . '</p>')
             // . '<br>'
-            . '<form action="'.getNewQs(array()).'" class="form-horizontal" method="POST" >'
+            . '<form action="'.getNewQs([]).'" class="form-horizontal" method="POST" >'
             . '<input type="hidden" name="appaction" value="'.$sAppAction.'"/>'
             . '<input type="hidden" name="group" value="'.$sGroup.'"/>'
             . ($sId ? '<input type="hidden" name="oldlabel" value="'.$sId.'"/>' : '')

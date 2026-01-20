@@ -6,14 +6,14 @@ if (!isset($adminindex)) {
 
 $oCfg=new axelhahn\confighandler("config_user");
 // $aUserCfg=$oCfg->get();
-$aTC = array();
+$aTC = [];
 
 // ----------------------------------------------------------------------
 // actions
 // ----------------------------------------------------------------------
 
 if($sAppAction){
-    $aResult=array();
+    $aResult=[];
     switch ($sAppAction){
         
         case 'updateconfig':
@@ -53,14 +53,14 @@ if (!isset($_SERVER['HTTPS'])){
 // 2 tabs for raw data
 // ----------------------------------------------------------------------
 
-foreach (array(
-    "config_user" => array("edit" => true),
+foreach ([
+    "config_user" => ["edit" => true],
     // "internal-config_default" => array("edit" => false),
-) as $sCfgfile => $aSettings) {
+] as $sCfgfile => $aSettings) {
     $myvar = $sCfgfile;
     $sData = file_get_contents(dirname(__DIR__) . '../../config/' . $sCfgfile . '.json');
     $sOut=$aSettings['edit']
-            ? '<form class="form" method="post" action="'.getNewQs(array()).'">'
+            ? '<form class="form" method="post" action="'.getNewQs([]).'">'
                 . '<input name="appaction" value="updateconfig" type="hidden">'
                 . '<input name="appconfig" value="'.$sCfgfile.'" type="hidden">'
                 . '<textarea id="ta" name="rawdata" class="form-control raw" rows="15">' . htmlentities($sData) . '</textarea><br>'
@@ -70,7 +70,7 @@ foreach (array(
             : '<pre>' . htmlentities($sData) . '</pre>'
             ;
     
-    $aTC[] = array(
+    $aTC[] = [
         'tab' => $aCfg['icons']['tab_'.$myvar] . $myvar,
         'content' => '<h4>' . $aCfg['icons']['tab_'.$myvar] . $sCfgfile . '</h4>
             <div class="subh3">'
@@ -80,7 +80,7 @@ foreach (array(
             . $sOut
           . '</div>
         '
-    );
+    ];
     
 }
 
@@ -128,7 +128,7 @@ foreach ($aDefaultCfg as $sKey => $val) {
     $sTable.='<tr class="' . $sClass . '">' . "\n"
             . '<td>' . $sKey . '</td>' . "\n"
             . '<td>' 
-                . (isset($aLangTxt['cfg-' . $sKey]) ? $aLangTxt['cfg-' . $sKey] : $aLangTxt['cfg-wrongitem'] ) 
+                . $aLangTxt['cfg-' . $sKey] ?? $aLangTxt['cfg-wrongitem']
                 . (isset($aLangTxt['cfg-values-' . $sKey]) ? '<div class="values"><strong>'.$aLangTxt['AdminMenuSettings-value'].'</strong>:<br>'.$aLangTxt['cfg-values-' . $sKey] . '</div>' : '' ) 
             . '</td>' . "\n"
             
@@ -139,7 +139,7 @@ foreach ($aDefaultCfg as $sKey => $val) {
             . '<td><pre' . (!$bHasUserCfg ? ' class="default"': '' ) 
                 . '>"'.$sKey.'": '.htmlentities(json_encode($val, (defined('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : false ))) 
                 .($sNewCfg
-                    ?  '<form class="form" method="post" action="'.getNewQs(array()).'">'
+                    ?  '<form class="form" method="post" action="'.getNewQs([]).'">'
                         . '<input name="appaction" value="updateconfig" type="hidden">'
                         . '<input name="appconfig" value="'.$sCfgfile.'" type="hidden">'
                         . '<textarea id="ta" name="rawdata" class="form-control raw" rows="15" style="display: none;">' . htmlentities($sNewCfg) . '</textarea><br>'
@@ -153,13 +153,13 @@ foreach ($aDefaultCfg as $sKey => $val) {
     ;
 }
 $sTable.='<tbody></table><div style="clear: both;"></div>';
-$aOptions = array_merge($aCfg['datatableOptions'], array(
+$aOptions = array_merge($aCfg['datatableOptions'], [
     "bPaginate"=>false,"bLengthChange"=>false,"bFilter"=>true,"bSort"=>false,"bAutoWidth"=>false,"bStateSave"=>false
-));
+]);
 
 // $sJsOnReady = '$("#' . $sTableId . '").dataTable('.json_encode($aOptions, 1).');';
 
-$aTC[] = array(
+$aTC[] = [
         'tab' => $aCfg['icons']['tab_Compare'] . $aLangTxt['AdminMenuSettingsCompare'],
         'content' => '<h4>' . $aCfg['icons']['tab_Compare'] . $aLangTxt["AdminMenuSettingsCompare"] . '</h4>
             <div class="subh3">'
@@ -168,7 +168,7 @@ $aTC[] = array(
             . '</div>'
             . $sTable
         . '</div>'
-    );
+    ];
 
 // ----------------------------------------------------------------------
 // output

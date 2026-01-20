@@ -28,7 +28,7 @@ if($bIsAuthenticated){
         $sTestUrl = $_GET["url"];
     }
     $i = 0;
-    if (isset($sTestUrl)) {
+    if ($sTestUrl??false) {
         $oServerStatus->addServer('url-'.md5($sTestUrl), array('status-url' => $sTestUrl));
     } else if ($aServers2Collect) {
         foreach ($aServers2Collect as $sWebserver) {

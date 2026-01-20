@@ -16,7 +16,7 @@ $sHtml = '';
 // ----------------------------------------------------------------------
 
 if ($sAppAction) {
-    $aResult = array();
+    $aResult = [];
     switch ($sAppAction) {
 
         case 'addgroup':
@@ -45,7 +45,7 @@ if ($sAppAction) {
     }
 
     if (count($aResult)) {
-        $sLabel = array_key_exists('label', $_POST) ? $_POST['label'] : $_POST['oldlabel'];
+        $sLabel = $_POST['label'] ?: $_POST['oldlabel'];
         if ($aResult['result']) {
             $oMsg->add(sprintf($aLangTxt['AdminMessageServer-' . $sAppAction . '-ok'], $sLabel), 'success');
         } else {

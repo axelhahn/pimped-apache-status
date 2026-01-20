@@ -90,18 +90,18 @@ function checkAuth() {
     ]);
     
     // logout on [anyurl]?logout
-    if(isset($_SESSION['lastUser']) && $_SESSION['lastUser']){
+    if($_SESSION['lastUser']??false){
         if ($_SERVER['QUERY_STRING']==='logout'){
             session_destroy();
             header('location: ?');
         }
     }
-    if(isset($_POST['username'])){
-        $_SESSION['lastUser']=isset($_POST['username']) ? $_POST['username'] : '';
+    if($_POST['username']??false){
+        $_SESSION['lastUser']=$_POST['username'] ?? '';
         $_SESSION['lastPasswordhash']=isset($_POST['password']) ? md5($_POST['password']) : '';
     } else {
-        $_SESSION['lastUser']=isset($_SESSION['lastUser']) ? $_SESSION['lastUser'] : '';
-        $_SESSION['lastPasswordhash']=isset($_SESSION['lastPasswordhash']) ? $_SESSION['lastPasswordhash'] : '';
+        $_SESSION['lastUser']=$_SESSION['lastUser'] ?? '';
+        $_SESSION['lastPasswordhash']=$_SESSION['lastPasswordhash'] ?? '';
     }
     // react if the user or pw were changed in the config
     if (
@@ -129,7 +129,7 @@ function getTempdir(): string{
     global $aCfg;
     global $oLog;
     $oLog->add(__FUNCTION__ . '() start');
-    $sTmpDir=(isset($aCfg['tmpdir']) && $aCfg['tmpdir']) ? $aCfg['tmpdir'] : sys_get_temp_dir();
+    $sTmpDir=$aCfg['tmpdir'] ?? sys_get_temp_dir();
 
     if($sTmpDir && !($sTmpDir[0]==='/' || $sTmpDir[1]===':')){
         $sTmpDir=__DIR__ . '/' . $sTmpDir;
@@ -208,7 +208,7 @@ function getUpdateInfos(bool $bForce = false): array{
         if (!$sResult) {
             $sResult = ' <span class="version-updateerror">' . $aLangTxt['versionError'] . '</span>';
             $oLog->add(__FUNCTION__ . " unable to check version.");
-            $aUpdateInfos=array();
+            $aUpdateInfos=[];
         } else {
             $oLog->add(__FUNCTION__ . " <pre>$sResult</pre>");
             
