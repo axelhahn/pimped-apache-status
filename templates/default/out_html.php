@@ -15,7 +15,7 @@ $sHead = '<link rel="stylesheet" type="text/css" href="' . $sSelfURL . '/templat
         ;
 
 // add a meta refresh tag if needed
-if ($aEnv["active"]["reload"]) {
+if ($aEnv["active"]["reload"] && !($adminindex??false)) {
     $sHead.='<meta http-equiv="refresh" content="' . $aEnv["active"]["reload"] . '">';
 }
 

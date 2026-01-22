@@ -49,7 +49,7 @@ function showItem($sIconClass, $sVal='', $sMore=''){
 // ----------------------------------------------------------------------
 
 // tabbed content
-$aTC = array();
+$aTC = [];
 if (count($aSrvStatus) > 0) {
     foreach ($aSrvStatus as $sHost => $aData) {
         $sWorker='';
@@ -142,10 +142,10 @@ if (count($aSrvStatus) > 0) {
             
         
         // --------------------------------------------------------------------------------
-        $aTC[] = array(
+        $aTC[] = [
             'tab' => $oDatarenderer->renderHostTab($aSrvStatus, $sHost),
             'content' => $sOverview . $sWorker
-        );
+        ];
     }
 }
 

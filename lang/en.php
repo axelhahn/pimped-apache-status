@@ -1,5 +1,5 @@
 <?php
-$aLangTxt = array(
+$aLangTxt = [
     
     'id'=>'english',
     
@@ -533,4 +533,4 @@ $aLangTxt = array(
             'cfg-values-viewsadmin'=>'(array) with strings',
         'cfg-wrongitem'=>'!!wrong key!!',
         'cfg-'=>'',
-);
+];

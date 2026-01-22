@@ -13,7 +13,7 @@ class Datarenderer {
      * allowed tilenames - these keys have predefined filter rules
      * @var array
      */
-    private $aValidTiles = array(
+    private array $aValidTiles = [
         // removed in 2.00.21 beta
         // 'server_count',
         'server_responsetime',
@@ -22,13 +22,13 @@ class Datarenderer {
         'requests_clients',
         'requests_mostrequested',
         'requests_longest',
-    );
+    ];
 
     /**
      * allowed tablenames - these keys have predefined filter rules
      * @var array
      */
-    private $aValidTables = array(
+    private array $aValidTables = [
         'status',
         'requests_all',
         'requests_running',
@@ -38,7 +38,7 @@ class Datarenderer {
         'requests_clients',
         'requests_longest',
         'worker_status',
-    ); // allowed tables
+    ]; // allowed tables
 
     /**
      * list of filterarrays; these are filter rules for tiles and tables
@@ -46,106 +46,106 @@ class Datarenderer {
      * a view to the server status data
      * @var array
      */
-    private $aFilterPresets = array(
-        'status' => array('sType' => 'status'),
-        'requests_all' => array('sType' => 'requests'),
-        'requests_running' => array(
+    private array $aFilterPresets = [
+        'status' => ['sType' => 'status'],
+        'requests_all' => ['sType' => 'requests'],
+        'requests_running' => [
             'sType' => 'requests',
-            'aRules' => array(
-                array("add", "M", "gt", " "),
-                array("remove", "M", "eq", "_"),
-                array("remove", "M", "eq", "."),
-            ),
-        ),
-        'requests_mostrequested' => array(
+            'aRules' => [
+                ["add", "M", "gt", " "],
+                ["remove", "M", "eq", "_"],
+                ["remove", "M", "eq", "."],
+            ],
+        ],
+        'requests_mostrequested' => [
             'sType' => 'requests',
             // 'sSortkey' => array('Request', 'VHost'),
             'sSortkey' => 'Request',
             'bGroup' => true,
-        ),
-        'requests_hostlist' => array(
+        ],
+        'requests_hostlist' => [
             'sType' => 'requests',
             'sSortkey' => 'VHost',
             'bGroup' => true,
-        ),
-        'requests_methods' => array(
+        ],
+        'requests_methods' => [
             'sType' => 'requests',
             'sSortkey' => 'Method',
             'bGroup' => true,
-        ),
-        'requests_clients' => array(
+        ],
+        'requests_clients' => [
             'sType' => 'requests',
             'sSortkey' => 'Client',
             'bGroup' => true,
-        ),
-        'requests_longest' => array(
+        ],
+        'requests_longest' => [
             'sType' => 'requests',
-            'aRows' => array("Req", "M", "VHost", "Request", "Webserver", "Comment"),
+            'aRows' => ["Req", "M", "VHost", "Request", "Webserver", "Comment"],
             'sSortkey' => 'Req',
             'sortorder' => SORT_DESC,
             'iLimit' => 25,
-        ),
-        'server_count' => array(
+        ],
+        'server_count' => [
             'sType' => 'meta',
-        ),
-        'server_responsetime' => array(
+        ],
+        'server_responsetime' => [
             'sType' => 'meta',
-        ),
-        'workers_table' => array(
+        ],
+        'workers_table' => [
             'callfunction' => "_getWorkersData",
-        ),
-    );
+        ],
+    ];
 
     /**
      * list of css classnames for request methods, http methods and exectime
      * that will be used for all tables with request data
-     * @var type 
+     * @var array
      */
-    private $aCssRows = array(
-        'M' => array(
-            '_' => array('class' => 'actunderscore'),
-            'S' => array('class' => 'actS'),
-            'R' => array('class' => 'actR'),
-            'W' => array('class' => 'actW'),
-            'K' => array('class' => 'actK'),
-            'D' => array('class' => 'actD'),
-            'C' => array('class' => 'actC'),
-            'L' => array('class' => 'actL'),
-            'G' => array('class' => 'actG'),
-            'I' => array('class' => 'actI'),
-            '.' => array('class' => 'actdot'),
-        ),
-        'Request' => array(
+    private array $aCssRows = [
+        'M' => [
+            '_' => ['class' => 'actunderscore'],
+            'S' => ['class' => 'actS'],
+            'R' => ['class' => 'actR'],
+            'W' => ['class' => 'actW'],
+            'K' => ['class' => 'actK'],
+            'D' => ['class' => 'actD'],
+            'C' => ['class' => 'actC'],
+            'L' => ['class' => 'actL'],
+            'G' => ['class' => 'actG'],
+            'I' => ['class' => 'actI'],
+            '.' => ['class' => 'actdot'],
+        ],
+        'Request' => [
             // http methods:
             // http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html
-            'GET' => array('class' => 'methodget'),
-            'HEAD' => array('class' => 'methodhead'),
-            'POST' => array('class' => 'methodpost'),
-            'PUT' => array('class' => 'methodput'),
-            'DELETE' => array('class' => 'methoddelete'),
-            'TRACE' => array('class' => 'methodtrace'),
-            'CONNECT' => array('class' => 'methodconnect'),
+            'GET' => ['class' => 'methodget'],
+            'HEAD' => ['class' => 'methodhead'],
+            'POST' => ['class' => 'methodpost'],
+            'PUT' => ['class' => 'methodput'],
+            'DELETE' => ['class' => 'methoddelete'],
+            'TRACE' => ['class' => 'methodtrace'],
+            'CONNECT' => ['class' => 'methodconnect'],
             // other things in apache server-status:
-            'NULL' => array('class' => 'methodnull'),
-            'OPTIONS' => array('class' => 'methodoptions'),
-            'PROPFIND' => array('class' => 'methodpropfind'),
-        ),
-        'exectime' => array(
-            'warning' => array('class' => 'exectimewarn'),
-            'critical' => array('class' => 'exectimecritical'),
-        ),
-    );
+            'NULL' => ['class' => 'methodnull'],
+            'OPTIONS' => ['class' => 'methodoptions'],
+            'PROPFIND' => ['class' => 'methodpropfind'],
+        ],
+        'exectime' => [
+            'warning' => ['class' => 'exectimewarn'],
+            'critical' => ['class' => 'exectimecritical'],
+        ],
+    ];
 
     /**
      * export types for tables
      * @var array
      */
-    private $aExports = array(
-        'csv' => array('mime' => 'text/csv', 'ext' => 'csv'),
-        'json' => array('mime' => 'application/json', 'ext' => 'json'),
-        'serialize' => array('mime' => 'text/plain', 'ext' => 'data'),
-        'xml' => array('mime' => 'text/xml', 'ext' => 'xml'),
-    );
+    private array $aExports = [
+        'csv' => ['mime' => 'text/csv', 'ext' => 'csv'],
+        'json' => ['mime' => 'application/json', 'ext' => 'json'],
+        'serialize' => ['mime' => 'text/plain', 'ext' => 'data'],
+        'xml' => ['mime' => 'text/xml', 'ext' => 'xml'],
+    ];
 
     // ----------------------------------------------------------------------
     // 
@@ -153,7 +153,7 @@ class Datarenderer {
 
     /**
      * constructor (it does nothing)
-     * @return boolean (true)
+     * @return void
      */
     public function __construct() {
 
@@ -162,17 +162,18 @@ class Datarenderer {
             unset($this->aExports["xml"]);
         }
         // $this->_oA=new renderadminlte();
-        return true;
     }
 
     /**
      * add a log messsage
+     * 
      * @global object $oLog
+     * 
      * @param  string $sMessage  messeage text
      * @param  string $sLevel    warnlevel of the given message
      * @return bool
      */
-    private function log($sMessage, $sLevel = "info") {
+    private function log(string $sMessage, string $sLevel = "info"): bool {
         global $oLog;
         if (!$oLog || !is_object($oLog) || !method_exists($oLog, "add")) {
             return false;
@@ -187,12 +188,14 @@ class Datarenderer {
     /**
      * helper function: get the position of a key in an 
      * associated array
+     * 
      * @global array $aCfg  user configuration
+     * 
      * @param string $keyname
      * @param array $array
      * @return int 
      */
-    private function _getNumberOfArraykey($keyname, $array) {
+    private function _getNumberOfArraykey(string $keyname, array $array) {
         global $aCfg;
         if (!count($array)) {
             return false;
@@ -216,8 +219,8 @@ class Datarenderer {
      * @param array $aTable
      * @return array
      */
-    private function _getMaxima($aTable) {
-        $aReturn = array();
+    private function _getMaxima(array $aTable) {
+        $aReturn = [];
         foreach ($aTable as $row) {
             foreach (array_keys($row) as $key) {
                 if (!array_key_exists($key, $aReturn)) {
@@ -240,9 +243,10 @@ class Datarenderer {
      * @param  array   $aRows     data for the current row
      * @param  array   $aHeader   columns in apache status header
      * @param  string  $sTableID  table id; it is set of we have a datatable with a table field
+     * @param  array   $aMax      optional array to render bar
      * @return string
      */
-    private function _getReqLine($aRows, $aHeader, $sTableID = false, $aMax = array()) {
+    private function _getReqLine(array $aRows, array $aHeader, string $sTableID = '', array $aMax = []): string {
 
         global $aLangTxt; // texts
         global $aCfg; // configuration
@@ -250,7 +254,7 @@ class Datarenderer {
         $bSpeedUp = false;
 
         $bHasTdBars = array_key_exists("tdbars", $aCfg) && is_array($aCfg['tdbars']) && count($aCfg['tdbars']);
-        $aClick2Filter = array("Client", "VHost", "Request", "Method", "Comment");
+        $aClick2Filter = ["Client", "VHost", "Request", "Method", "Comment"];
         $sHtml = '';
         $sClass = '';
         $sComment = '';
@@ -394,10 +398,10 @@ class Datarenderer {
      * @param string $sType     type; one of status|requests
      * @return array
      */
-    private function _getTableheads($aSrvData, $sType) {
-        $aTmp = array();
+    private function _getTableheads(array $aSrvData, string $sType): array {
+        $aTmp = [];
         if (!count($aSrvData)) {
-            return array();
+            return [];
         }
         foreach ($aSrvData as $sHost => $aData) {
             if (array_key_exists("status", $aData) && count($aData['status'])) {
@@ -415,14 +419,16 @@ class Datarenderer {
         $aTmp['requests']['Method'] = true;
         $aTmp['requests']['Comment'] = true;
 
-        return array_key_exists($sType, $aTmp) ? array_keys($aTmp[$sType]) : array();
+        return array_key_exists($sType, $aTmp) ? array_keys($aTmp[$sType]) : [];
     }
 
     /**
      * get list of valid filters
+     * 
+     * @param array $aSrvData 
      * @return array
      */
-    public function getValidFilters($aSrvData) {
+    public function getValidFilters(array $aSrvData): array {
         $aTmp = $this->aFilterPresets;
 
         foreach ($aTmp as $f => $data) {
@@ -437,7 +443,7 @@ class Datarenderer {
      * get list of valid keys of tiles
      * @return array
      */
-    public function getValidTiles() {
+    public function getValidTiles(): array {
         return $this->aValidTiles;
     }
 
@@ -447,7 +453,7 @@ class Datarenderer {
      * that will be used for all tables with request data
      * @return array
      */
-    public function getCssClasses() {
+    public function getCssClasses(): array {
         return $this->aCssRows;
     }
 
@@ -455,7 +461,7 @@ class Datarenderer {
      * get available export formats 
      * @return array
      */
-    public function getExportFormats() {
+    public function getExportFormats(): array {
         return $this->aExports;
     }
 
@@ -468,9 +474,12 @@ class Datarenderer {
 
     /**
      * create bookmarklet with the current installation of pimped apachestatus
+     * 
+     * @param string  $sLabel
+     * @param string  $sTitle
      * @return string
      */
-    public function genBookmarklet($sLabel = 'Pimped Apache Status', $sTitle='') {
+    public function genBookmarklet(string $sLabel = 'Pimped Apache Status', string $sTitle=''): string {
         $sMyUrl = $_SERVER["REQUEST_SCHEME"]
                 . "://"
                 . $_SERVER["HTTP_HOST"]
@@ -485,10 +494,10 @@ class Datarenderer {
 
     /**
      * get Export links of a table with a given filter
-     * @param type $sFiltername
-     * @return boolean|string
+     * @param string $sFiltername
+     * @return boolean|array
      */
-    public function genExportLinks($sFiltername) {
+    public function genExportLinks(string $sFiltername): array|bool {
         if (!$sFiltername)
             return false;
 
@@ -505,22 +514,23 @@ class Datarenderer {
         if (array_key_exists("lang", $_GET)) {
             $sBaseUrl.='&amp;lang=' . urlencode($_GET["lang"]);
         }
+        $aExportLinks=[];
         foreach ($this->getExportFormats() as $sFormat => $data) {
-            $aExportLinks[$sFormat] = array(
+            $aExportLinks[$sFormat] = [
                 'url' => $sBaseUrl . '&amp;format=' . $sFormat,
                 'label' => $sFormat,
-            );
+            ];
         }
         return $aExportLinks;
     }
 
     /**
      * create a local Link
-     * @param string $sTarget
-     * @param string $sLabel (optional)
+     * @param string $sTarget url of link target
+     * @param string $sLabel  optional: label: default: target url
      * @return string
      */
-    public function genLink($sTarget, $sLabel = '') {
+    public function genLink(string $sTarget, string $sLabel = ''): string {
         if (!$sLabel) {
             $sLabel = $sTarget;
         }
@@ -532,15 +542,15 @@ class Datarenderer {
      * @param array $aSrvStatus
      * @return boolean|string
      */
-    public function storeLocally($aSrvStatus){
+    public function storeLocally(array $aSrvStatus): bool|string{
         $sReturn='';
-        $aKeys2Store=array(
+        $aKeys2Store=[
             'dummyJust2WriteSomething',
             // 'requests/sec',
             // 'size/sec',
             'requests_active',
             'slots_busy',
-        );
+        ];
         
         // in admin area it has no data
         if(!$aSrvStatus || !is_array($aSrvStatus)){
@@ -567,7 +577,7 @@ class Datarenderer {
      * @param array $aList flat list
      * @return string
      */
-    public function renderDatalist($aList) {
+    public function renderDatalist(array $aList): string {
         $sReturn = '';
         $sId = "list" . md5(date("U"));
         foreach ($aList as $sValue) {
@@ -583,20 +593,20 @@ class Datarenderer {
      * @param array $aLink
      * @return string
      */
-    public function renderA($aLink) {
+    public function renderA(array $aLink) {
         $sReturn = '<a ';
 
-        foreach (array("class", "id", "onclick", "target", "title") as $sAttribute) {
-            if (array_key_exists($sAttribute, $aLink)) {
+        foreach (["class", "id", "onclick", "target", "title"] as $sAttribute) {
+            if ($aLink[$sAttribute]??false) {
                 $sReturn.=$sAttribute . '="' . $aLink[$sAttribute] . '" ';
             }
         }
-        if (array_key_exists("url", $aLink)) {
+        if ($aLink['url']??false) {
             $sReturn.='href="' . $aLink["url"] . '" ';
         }
         $sReturn.='>';
 
-        if (array_key_exists("label", $aLink)) {
+        if ($aLink['label']??false) {
             $sReturn.=$aLink["label"];
         }
 
@@ -611,12 +621,12 @@ class Datarenderer {
      * @param boolean $bDrawSelect
      * @return string
      */
-    public function renderDropdown($aLinks, $bDrawSelect = true) {
+    public function renderDropdown(array $aLinks, bool $bDrawSelect = true): string {
         $sReturn = '';
         foreach ($aLinks as $aLink) {
             $sReturn.='<option ';
             $sCssClass = '';
-            foreach (array(/* "class", */ "id") as $sAttribute) {
+            foreach ([/* "class", */ "id"] as $sAttribute) {
                 if (array_key_exists($sAttribute, $aLink)) {
                     $sReturn.=$sAttribute . '="' . $aLink[$sAttribute] . '" ';
                 }
@@ -657,10 +667,9 @@ class Datarenderer {
      * generate a nested menu with li elements; use $aEnv["links"]["name"] as
      * first parameter
      * @param array $aLinks
-     * @param boolean $bDrawSelect
      * @return string
      */
-    public function renderLI($aLinks) {
+    public function renderLI(array $aLinks): bool|string {
         $sReturn = '';
         if (!is_array($aLinks) || !count($aLinks)) {
             return false;
@@ -682,7 +691,14 @@ class Datarenderer {
         }
         return $sReturn;
     }
-    private function _genChart($aTable, $sTableId){
+
+    /**
+     * Generate chart
+     * @param array $aTable  table data with 2 values per row
+     * @param string $sTableId table id to generate id for canvas 
+     * @return bool|string
+     */
+    private function _genChart(array $aTable, string $sTableId): bool|string{
         $sReturn='';
         $sJs='';
         $iMaxJsValues=10;
@@ -698,8 +714,8 @@ class Datarenderer {
             }
          
          */
-        $aValX=array();
-        $aValY=array();
+        $aValX=[];
+        $aValY=[];
         foreach ($aTable as $row) {
             if(count($row) != 2){
                 return false;
@@ -793,12 +809,14 @@ class Datarenderer {
      * 
      * @global array $aCfg  user configuration
      * @global string $sJsOnReady
+     * 
      * @staticvar int $iTableCounter to generate uniq id for the table
+     * 
      * @param array $aTable  data from function dataFilter 
-     * @param type $sDatatableOptions additional options for jquery plugin datatable 
+     * @param string $sDatatableOptions additional options for jquery plugin datatable 
      * @return string html code
      */
-    function renderRequestTable($aTable, $sDatatableOptions = '') {
+    function renderRequestTable(array $aTable, string $sDatatableOptions = ''): string {
         $this->log(__FUNCTION__ . "(aTable, sDatatableOptions) start");
         global $aCfg;
         global $aEnv;
@@ -808,10 +826,10 @@ class Datarenderer {
         $sJs = '';
         static $iTableCounter = 0;
         $iTableCounter++;
-        $aHeader = array();
+        $aHeader = [];
         $sTableId = 'tableRendered' . preg_replace('#[^a-z0-9]#', "", $aEnv["active"]["view"]) . $iTableCounter;
 
-        $aHasBar = array();
+        $aHasBar = [];
         if (array_key_exists("tdbars", $aCfg)) {
             foreach ($aCfg["tdbars"] as $sKey) {
                 $aHasBar[$sKey] = true;
@@ -877,17 +895,7 @@ class Datarenderer {
         return $sHtml;
     }
 
-    protected function _getTableFilter($sKey){
-        /*
-        'requests_running' => array(
-            'sType' => 'requests',
-            'aRules' => array(
-                array("add", "M", "gt", " "),
-                array("remove", "M", "eq", "_"),
-                array("remove", "M", "eq", "."),
-            ),
-        ),
-         */
+    protected function _getTableFilter(string $sKey): array{
         global $aCfg;
         $this->log(__FUNCTION__ . "($sKey) start");
         $aFilter=$this->aFilterPresets[$sKey];
@@ -895,7 +903,7 @@ class Datarenderer {
             $aCustom=$aCfg['hideRows']['*'] ? array_merge($aCfg['hideRows']['*'],$aCfg['hideRows'][$sKey]) : $aCfg['hideRows'][$sKey];
             foreach($aCustom as $aFilteritem){
                 if(!$aFilter['aRules']){
-                    $aFilter['aRules']=array();
+                    $aFilter['aRules']=[];
                 }
                 if(count($aFilteritem)===4){
                     $this->log(__FUNCTION__ . "($sKey) adding filter item <pre>".print_r($aFilteritem, 1)."</pre>");
@@ -909,15 +917,16 @@ class Datarenderer {
         return $aFilter;
     }
 
-        /**
+    /**
      * create a section with header, hint and tabledata
      * @global array $aSrvStatus    array with server status data
      * @global array $aLangTxt      array with translated texts
-     * @global array $aCfg      user configuration
-     * @param type $sKey            key for preset 
+     * @global array $aCfg          user configuration
+     * 
+     * @param string $sKey            key for preset 
      * @return string               html code
      */
-    public function renderTable($sKey = false) {
+    public function renderTable($sKey = false): bool|string {
         global $aCfg;
         $this->log(__FUNCTION__ . "($sKey) start");
         global $aSrvStatus, $aLangTxt, $aCfg;
@@ -958,7 +967,6 @@ class Datarenderer {
                     )
                 : false
                 ;
-            return false;
         }
 
         $sTableOptions = '';
@@ -1002,7 +1010,7 @@ class Datarenderer {
         return $this->themeTable($sTitle, $this->renderRequestTable($aTData, $sTableOptions), $sHint, $sExport);
     }
 
-    public function renderHostTab($aSrvStatus, $sHost){
+    public function renderHostTab(array $aSrvStatus, string $sHost){
         global $aCfg;
         return $aCfg['icons']['server'].' '.$sHost
             . ' <span class="badge">'.$aSrvStatus[$sHost]['counter']['requests_active'].'</span>'
@@ -1018,7 +1026,7 @@ class Datarenderer {
      * @param array $aTabbedData  array with items with keys tab and content
      * @return string
      */
-    public function renderTabbedContent($aTabbedData) {
+    public function renderTabbedContent(array $aTabbedData): string {
         static $iTabid;
         if($iTabid){
             $iTabid=0;
@@ -1053,12 +1061,13 @@ class Datarenderer {
 
     /**
      * render a tile
-     * @global array $aSrvStatus             array with server status data
+     * @global array $aSrvStatus     array with server status data
      * @global array $aLangTxt       array with translated texts
-     * @param string $sTilename       key for preset
-     * @return string               html code
+     * 
+     * @param string $sTilename      key for preset
+     * @return string                html code
      */
-    public function renderTile($sTilename = false) {
+    public function renderTile(string $sTilename = '') {
         $this->log(__FUNCTION__ . "($sTilename) - start");
         global $aSrvStatus, $aSrvMeta, $aLangTxt, $aCfg;
         
@@ -1215,22 +1224,23 @@ class Datarenderer {
         return false;
     }
 
-    private function _getTypes($aSrvStatus) {
+    private function _getTypes__UNUSED($aSrvStatus) {
         global $aLangTxt;
-        $aReturn = array();
+        $aReturn = [];
     }
 
     /**
      * get Metadata for workers (total, active, wait) as an array
      * @global array  $aLangTxt     language dependent texts
+     * 
      * @param array   $aSrvStatus   server status array
      * @param bool    $bGenerateBar flag: get html code for a bar for active workers
      * @param integer $iMaxWith     width of status bar in px; default: 600
      * @return array
      */
-    public function _getWorkersData($aSrvStatus, $bGenerateBar = false, $iMaxWith=600) {
+    public function _getWorkersData(array $aSrvStatus, bool $bGenerateBar = false, int $iMaxWith=600): array {
         global $aLangTxt, $aEnv;
-        $aReturn = array();
+        $aReturn = [];
 
         $aLinkPCheck = (array_key_exists('performance-check.php', $aEnv['links']['views']) && count($aSrvStatus) > 0
                 ) ? $aEnv['links']['views']['performance-check.php'] : false
@@ -1262,16 +1272,16 @@ class Datarenderer {
             $iActive = $aData['counter']['requests_active'];
             $iWait = $aData['counter']['requests_waiting'];
 
-            $aTmp = array(
+            $aTmp = [
                 $aLangTxt['thWorkerServer'] => $sHost,
                 $aLangTxt['thWorkerTotal'] => $iProcesses,
                 $aLangTxt['thWorkerActive'] => $iActive,
                 $aLangTxt['thWorkerWait'] => $iWait,
                 $aLangTxt['thWorkerUnused'] => $iSlotsUnused,
-            );
+            ];
 
             if ($bGenerateBar) {
-                $aTmp[$aLangTxt['thWorkerBar']] = $this->renderWorkersBar($aSrvStatus, $sHost, min(array($iMaxWith, $iProcesses)).'px');
+                $aTmp[$aLangTxt['thWorkerBar']] = $this->renderWorkersBar($aSrvStatus, $sHost, min([$iMaxWith, $iProcesses]).'px');
             }
 
             $aTmp[$aLangTxt['thWorkerActions']]='';
@@ -1306,11 +1316,11 @@ class Datarenderer {
      */
     private function _tryFlip($aTData){
         if(count($aTData)==1){
-            $aTmp=array();
+            $aTmp=[];
             $iCount=0;
             foreach($aTData[0] as $sKey=>$value){
                 $iCount++;
-                $aTmp[]=array('key'=>'<span style="display: none;">'.$iCount.'</span>'.$sKey, 'value'=>$value);
+                $aTmp[]=['key'=>'<span style="display: none;">'.$iCount.'</span>'.$sKey, 'value'=>$value];
             }
             // echo '<pre>'; print_r($aTData);print_r($aTmp);die();
             $aTData=$aTmp;
@@ -1323,9 +1333,9 @@ class Datarenderer {
      * @global array $aLangTxt   language dependend texts
      * @global array $aCfg  user configuration
      * @param  array $aSrvStatus data array of apache status
-     * @return string html code
+     * @return bool|string html code
      */
-    public function renderGroupAndServers($aSrvStatus) {
+    public function renderGroupAndServers(array $aSrvStatus): bool|string {
         global $aLangTxt, $aCfg, $aEnv;
 
         if (!count($aSrvStatus)) {
@@ -1343,22 +1353,22 @@ class Datarenderer {
         
         $sHtmlServer.=''
             . ($bHasServerfilter
-                ? $this->renderA(array(
+                ? $this->renderA([
                     'class'=>'btn btn-default btn-danger',
-                    'url'=>getNewQs(array('servers'=>'')), // removes param "servers=..."
+                    'url'=>getNewQs(['servers'=>'']), // removes param "servers=..."
                     // 'title'=>$aCfg['icons']['actionDelete'] . ' '.$aEnv["active"]["servers"],
                     'label'=> $aCfg['icons']['actionDelete'] . ' ' . sprintf($aLangTxt['lblServerInfosRemove'], $aEnv["active"]["servers"]),
-                    ))
+                    ])
                     .'<br><br>'
                 : ''
             )
         ;
-        $aTotal=array(
+        $aTotal=[
             1=>0,
             2=>0,
             3=>0,
             4=>0,
-        );
+        ];
         foreach($aTData as $aSrvdata){
             $aKeys = array_keys($aSrvdata);
             $sServername=$aSrvdata[$aKeys[0]];
@@ -1408,19 +1418,19 @@ class Datarenderer {
                         . '<br><br>'
                      * 
                      */
-                    . $this->renderA(array(
+                    . $this->renderA([
                         'class'=>'btn btn-default',
-                        'url'=>getNewQs(array('servers'=>'', 'view'=>'performance-check.php')),
+                        'url'=>getNewQs(['servers'=>'', 'view'=>'performance-check.php']),
                         'title'=> strip_tags($aEnv['links']['views']['performance-check.php']['label']),
                         'label'=>$aEnv['links']['views']['performance-check.php']['label'],
-                        ))  
+                        ])
                     . ' '
-                    . $this->renderA(array(
+                    . $this->renderA([
                         'class'=>'btn btn-default',
-                        'url'=>getNewQs(array('servers'=>'', 'view'=>'utilization.php')),
+                        'url'=>getNewQs(['servers'=>'', 'view'=>'utilization.php']),
                         'title'=> strip_tags($aEnv['links']['views']['utilization.php']['label']),
                         'label'=>$aEnv['links']['views']['utilization.php']['label'],
-                        ))  
+                        ])
                 .'</div>'
             ;
         }
@@ -1440,7 +1450,7 @@ class Datarenderer {
      * @param string  $sHeight     css height
      * @return string
      */
-    public function renderWorkersBar($aSrvStatus, $sHost, $sWith='100%', $sBarHeight='') {
+    public function renderWorkersBar(array $aSrvStatus, string $sHost, string $sWith='100%', string $sBarHeight=''): string {
         global $aLangTxt;
         $iProcesses = $aSrvStatus[$sHost]['counter']['slots_total'];
         if(!$iProcesses) {
@@ -1462,11 +1472,11 @@ class Datarenderer {
     /**
      * render table with worker status: total/ active/ waiting workers
      * @global array $aLangTxt   language dependend texts
-     * @global array $aCfg  user configuration
-     * @param  array $aSrvStatus data array of apache status
+     * 
+     * @param  array $aSrvStatus  data array of apache status
      * @return string html code
      */
-    public function renderWorkersTable($aSrvStatus) {
+    public function renderWorkersTable(array $aSrvStatus): bool|string {
         global $aLangTxt, $aCfg;
 
         if (!count($aSrvStatus)) {
@@ -1489,6 +1499,7 @@ class Datarenderer {
 
         return $this->themeTable($aLangTxt["lblTable_status_workers"], $this->renderRequestTable($aTData, ""), $aLangTxt["lblTableHint_status_workers"], $sExport);
     }
+
     /**
      * render output box with title, hint and data table
      * @param string $sTitle    title for h3
@@ -1496,7 +1507,7 @@ class Datarenderer {
      * @param string $sHint     hint text (optional)
      * @return string 
      */
-    public function themeBox($sTitle, $sContent, $sHint = false) {
+    public function themeBox(string $sTitle, string $sContent, string $sHint = ''): string {
 
         $sReturn = '<!-- Default box -->
       <div class="box ">
@@ -1536,7 +1547,7 @@ class Datarenderer {
      * @param string $sExport   html content (export Links)
      * @return string 
      */
-    public function themeTable($sTitle, $sTable, $sHint = false, $sExport = false) {
+    public function themeTable(string $sTitle, string $sTable, string $sHint = '', string $sExport = '') {
         global $aLangTxt;
         global $aCfg;
 

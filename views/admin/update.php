@@ -31,16 +31,16 @@ $sLatestUrl=(stripos($aEnv["project"]["version"], "beta"))
 $aUpdateInfos=getUpdateInfos();
 $sLatestUrl=$aUpdateInfos['download'];
 
-$oInstaller=new ahwi(array(
+$oInstaller=new ahwi([
     'product'=>'dummy',
     'source'=>$sLatestUrl,
     'installdir'=>$sApproot,
     'tmpzip'=>$sZipfile,
-    'checks'=>array(
-        'phpversion'=>'5.3',
-        'phpextensions'=>array('curl')
-    ),
-));
+    'checks'=>[
+        'phpversion'=>'8.0',
+        'phpextensions'=>['curl']
+    ],
+]);
 
 if (!array_key_exists('doinstall', $_GET)) {
     // ------------------------------------------------------------
@@ -49,11 +49,11 @@ if (!array_key_exists('doinstall', $_GET)) {
     require_once(__DIR__ . '/../../classes/cdnorlocal-admin.class.php');
     
     $sVendorUrl=(strpos($_SERVER['REQUEST_URI'], '/admin/?') ? '.' : '') . './vendor/';
-    $oCdn2 = new axelhahn\cdnorlocaladmin(array(
+    $oCdn2 = new axelhahn\cdnorlocaladmin([
         'vendordir'=>__DIR__ . '/../../vendor', 
         'vendorurl'=>$sVendorUrl, 
         'debug'=>0
-    ));
+    ]);
     $oCdn2->setLibs($aEnv['vendor']);
     $iCountUnused=count($oCdn2->getFilteredLibs(array('islocal'=>1,'isunused'=>1)));
     
@@ -69,12 +69,12 @@ if (!array_key_exists('doinstall', $_GET)) {
                 . sprintf($aLangTxt["lblUpdateHints"], $sLatestUrl)
                 . sprintf($aLangTxt['lblUpdateInstalldir'], $oInstaller->getInstalldir())
             . '</div>'
-            . '<a href="' . getNewQs(array('doinstall' => 'download')) . '"'
+            . '<a href="' . getNewQs(['doinstall' => 'download']) . '"'
             . ' class="btn btn-default"'
             . '>' . $aLangTxt["lblUpdateContinue"] . '</a>'
             . ($iCountUnused
                     ? '<br><br><br><br>'.sprintf($aLangTxt['lblUpdateUnusedVendorlibs'], '<strong>'.$iCountUnused.'</strong>').' ... '
-                        . '<a href="' . getNewQs(array('action' => 'vendor')) . '"'
+                        . '<a href="' . getNewQs(['action' => 'vendor']) . '"'
                         . ' class="btn btn-default"'
                         . '>' . $aCfg['icons']['adminvendor'] . ' '. $aLangTxt["AdminMenuvendor"] . '</a>'
 
