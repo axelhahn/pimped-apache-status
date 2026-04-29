@@ -63,7 +63,6 @@ function httpGet(string $url, bool $bHeaderOnly = false): bool|string {
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 
     $res = curl_exec($ch);
-    curl_close($ch);
     $oLog->add(__FUNCTION__ . "($url, $bHeaderOnly) - done.");
     return $res;
 }
@@ -122,7 +121,6 @@ function checkAuth() {
  * @global array  $aCfg      configuration settings
  * @global object $oLog      logger class
  * 
- * @param bool  $bForce  force check and ignore ttl
  * @return string
  */
 function getTempdir(): string{

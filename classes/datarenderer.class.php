@@ -881,8 +881,8 @@ class Datarenderer {
             $sHtml = ''
                     .'<table id="' . $sTableId . '" class="table table-hover datatable" style="float: left;">'
                     // . '<tbody>' 
-                    . utf8_encode($sHtml) 
-                    . '</tbody></table>'
+                    . $sHtml
+                    . '</table>'
                     . $this->_genChart($aTable, $sTableId)
                     . '<div style="clear: both;"><br></div>';
         }
@@ -1447,7 +1447,7 @@ class Datarenderer {
      * @param array   $aSrvStatus  server status array
      * @param string  $sHost       hostname
      * @param string  $sWith       css width
-     * @param string  $sHeight     css height
+     * @param string  $sBarHeight  css height
      * @return string
      */
     public function renderWorkersBar(array $aSrvStatus, string $sHost, string $sWith='100%', string $sBarHeight=''): string {

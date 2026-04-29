@@ -29,20 +29,20 @@ class ahwiupdatecheck
      * Url to check for a new version
      * @var string
      */
-    protected string $_sCheckUrl = false;
+    protected string $_sCheckUrl = '';
 
     /**
      * Config array
      * @var array
      */
-    protected array $_aCfg = array(
+    protected array $_aCfg = [
         'product' => false,
         'version' => false,
         'baseurl' => false,
         'url' => false,
         'tmpdir' => false,
         'ttl' => 0,     // 1 day
-    );
+    ];
 
     /**
      * Default array for update infos
@@ -83,7 +83,6 @@ class ahwiupdatecheck
      * Search temp directory using tmpdir in config. if false then use system
      * temp dir
      * 
-     * @param bool  $bForce  force check and ignore ttl
      * @return string
      */
     protected function _getTempdir(): string
@@ -133,7 +132,6 @@ class ahwiupdatecheck
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 
         $res = curl_exec($ch);
-        curl_close($ch);
         return $res;
     }
 
@@ -178,6 +176,7 @@ class ahwiupdatecheck
      * 
      * @global array $aEnv
      * @global array $aCfg
+     * @param bool  $bForce  force check and ignore ttl
      * @return array
      */
     function getUpdateInfos($bForce = false): array|bool
@@ -259,6 +258,18 @@ class ahwiupdatecheck
     public function hasUpdate(): bool
     {
         return $this->_aInfos['flag_update'];
+    }
+
+    public function getError(): string
+    {
+        if ($this->_aInfos['clientversion'] == "unknown" ){
+            return "ERROR: unable to detect your client version as a published version.";
+        }
+        if ($this->_aInfos['latest_version'] == "unknown" ){
+            return "ERROR: unable to detect the latest available version. Try again later.";
+        }
+
+        return '';
     }
 
     /**

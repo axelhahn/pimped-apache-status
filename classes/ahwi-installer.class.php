@@ -32,9 +32,9 @@ class ahwi
 
     /**
      * Starting time
-     * @var int
+     * @var float
      */
-    protected int $iTimeStart = 0;
+    protected float $iTimeStart = 0;
 
     /**
      * Product name as string
@@ -115,7 +115,6 @@ class ahwi
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 
         $res = curl_exec($ch);
-        curl_close($ch);
         return $res;
     }
 

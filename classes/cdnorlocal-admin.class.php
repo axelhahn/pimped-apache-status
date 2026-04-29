@@ -358,7 +358,6 @@ class cdnorlocaladmin extends cdnorlocal
 
             //$returned[$key] = curl_multi_getcontent($request); // Use this if you're not downloading into file, also remove CURLOPT_FILE option and fstreams array
             curl_multi_remove_handle($mh, $request); //assuming we're being responsible about our resource management
-            curl_close($request);                    //being responsible again.  THIS MUST GO AFTER curl_multi_getcontent();
             fclose($fstreams[$sFileId]);
         }
 
